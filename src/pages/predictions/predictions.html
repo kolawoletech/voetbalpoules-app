@@ -1,0 +1,11 @@
+<ion-header class="listing-header">
+  <ion-navbar>
+    <ion-title>{{'PREDICT' | translate}}</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  <ion-list *ngFor="let voorspelling of listing.voorspellingen">
+      <ion-item>{{ voorspelling.thuisteamNaam }} - {{voorspelling.uitteamNaam}}</ion-item>
+  </ion-list>
+</ion-content>
