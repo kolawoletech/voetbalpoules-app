@@ -4,12 +4,45 @@ export class PredictionsModel {
 }
 
 export class Prediction {
-  thuisDoelpunten: number;
-  uitDoelpunten: number;
   punten: number;
-  thuisSpelerId: number;
-  uitSpelerId: number;
-  wedstrijdDatum: Date;
-  thuisteamNaam: string;
-  uitteamNaam: string;
+  thuisdoelpunten: number;
+  thuisspeler: Player;
+  uitdoelpunten: number;
+  uitspeler: Player;
+  wedstrijd: Match;
+}
+
+enum Status {
+  normal = 0
+}
+
+export class Match {
+  datum: Date;
+  hoofdcompetitie: Competition;
+  live: boolean;
+  status: Status;
+  thuisdoelpunten: number;
+  thuisspeler: Player;
+  thuisteam: Team;
+  uitdoelpunten: number;
+  uitspeler: Player;
+  uitteam: Team;
+  wedstrijdVanDeWeek: boolean;
+}
+
+export class Player {
+  id: number;
+  naam: string;
+}
+
+export class Team {
+  id: number;
+  naam: string;
+  logoId: number;
+}
+
+export class Competition {
+  id: number;
+  naam: string;
+  logoId: number;
 }

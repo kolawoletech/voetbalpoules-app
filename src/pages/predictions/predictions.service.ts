@@ -9,7 +9,7 @@ import { PredictionsModel } from './predictions.model';
 export class PredictionsService {
   constructor(public http: Http) {}
 
-  getData(userId: number): Promise<PredictionsModel> {
+  getData(userId: number, date?: Date): Promise<PredictionsModel> {
     return this.http.get('https://api.voetbalpoules.nl/deelnemer/' + userId + '/voorspellingen/get')
      .toPromise()
      .then(response => response.json() as PredictionsModel)

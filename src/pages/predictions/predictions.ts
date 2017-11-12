@@ -5,7 +5,7 @@ import 'rxjs/Rx';
 
 import { PredictionsModel } from './predictions.model';
 import { PredictionsService } from './predictions.service';
-
+import { Team } from './predictions.model';
 
 @Component({
   selector: 'predictions-page',
@@ -34,4 +34,7 @@ export class PredictionsPage {
       });
   }
 
+  getLogo(team : Team) : string {
+    return "https://www.voetbalpoules.nl/foto/" + team.logoId;
+  } 
 }
