@@ -6,6 +6,24 @@
 
 <ion-content>
   <ion-list *ngFor="let voorspelling of listing.voorspellingen">
-      <ion-item>{{ voorspelling.thuisteamNaam }} - {{voorspelling.uitteamNaam}}</ion-item>
+      <ion-item>
+        <ion-grid>
+            <ion-row justify-content-center>
+              <ion-col col-4>
+                <img src="{{getLogo(voorspelling.wedstrijd.thuisteam)}}" />                    
+              </ion-col>
+              <ion-col col-4 text-center align-self-center>
+                <span class="voorspelling">
+                    {{voorspelling.thuisdoelpunten}} - {{voorspelling.uitdoelpunten}}                    
+                </span>
+                <br>
+                {{voorspelling.wedstrijd.thuisdoelpunten}} - {{voorspelling.wedstrijd.uitdoelpunten}}  
+              </ion-col>
+              <ion-col col-4>
+                <img src="{{getLogo(voorspelling.wedstrijd.uitteam)}}" />                    
+              </ion-col>
+            </ion-row>
+          </ion-grid>        
+      </ion-item>
   </ion-list>
 </ion-content>
