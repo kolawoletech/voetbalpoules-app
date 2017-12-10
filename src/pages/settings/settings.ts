@@ -13,6 +13,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { LanguageService } from "../../providers/language/language.service";
 import { LanguageModel } from "../../providers/language/language.model";
 import { AppRate } from '@ionic-native/app-rate';
+import {AuthService } from '../../providers/auth/auth.service';
 
 @Component({
   selector: 'settings-page',
@@ -23,7 +24,7 @@ export class SettingsPage {
   // make WalkthroughPage the root (or first) page
   rootPage: any = LoginPage;
   loading: any;
-
+  //authService: AuthService;
   languages: Array<LanguageModel>;
 
   constructor(
@@ -33,10 +34,11 @@ export class SettingsPage {
     public translate: TranslateService,
     public languageService: LanguageService,
     public appRate: AppRate,
-    public platform: Platform
+    public platform: Platform,
+    public authService: AuthService
   ) {
     this.loading = this.loadingCtrl.create();
-
+    //this.authService = authService;
     this.languages = this.languageService.getLanguages();
 
     this.settingsForm = new FormGroup({
@@ -53,7 +55,7 @@ export class SettingsPage {
     // patchValue: With patchValue, you can assign values to specific controls in a FormGroup by supplying an object of key/value pairs for just the controls of interest.
     // More info: https://angular.io/docs/ts/latest/guide/reactive-forms.html#!#populate-the-form-model-with-_setvalue_-and-_patchvalue_
     this.settingsForm.patchValue({
-      name: 'Jeroen',
+      name: this.authService.user.name,
       description: 'Ik ben Jeroen',
       notifications: true,
       language: this.languages[0]
@@ -67,6 +69,7 @@ export class SettingsPage {
   }
 
   logout() {
+    this.authService.logout();
     // navigate to the new page if it is not the current page
     this.nav.setRoot(this.rootPage);
   }

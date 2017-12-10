@@ -33,6 +33,7 @@ import { LoginService } from '../pages/login/login.service';
 
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpModule } from '@angular/http';
+import { HttpClientModule } from '@angular/common/http';
 
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
@@ -46,6 +47,7 @@ import { AppRate } from '@ionic-native/app-rate';
 import { FacebookLoginPage } from '../pages/facebook-login/facebook-login';
 import { ValidatorsModule } from '../components/validators/validators.module';
 
+import { AuthService } from '../providers/auth/auth.service';
 import { LanguageService } from '../providers/language/language.service';
 
 export function createTranslateLoader(http: Http) {
@@ -65,6 +67,7 @@ export function createTranslateLoader(http: Http) {
   imports: [
     BrowserModule,
     HttpModule,
+    HttpClientModule,
     IonicModule.forRoot(MyApp),
 		TranslateModule.forRoot({
     loader: {
@@ -88,6 +91,7 @@ export function createTranslateLoader(http: Http) {
     PredictionsService,
     FacebookLoginService,
     LoginService,
+    AuthService,
 		LanguageService,
 	  SplashScreen,
 	  StatusBar,

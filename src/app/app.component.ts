@@ -7,6 +7,7 @@ import { Observable } from 'rxjs/Observable';
 import { TabsNavigationPage } from '../pages/tabs-navigation/tabs-navigation';
 import { SettingsPage } from '../pages/settings/settings';
 import { LoginPage } from '../pages/login/login';
+import { PredictionsPage } from '../pages/predictions/predictions';
 import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 
 @Component({
@@ -36,7 +37,6 @@ export class MyApp {
   ) {
     translate.setDefaultLang('nl');
     translate.use('nl');
-
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.

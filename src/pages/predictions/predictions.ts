@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { NavController, LoadingController } from 'ionic-angular';
+import { AuthService } from "../../providers/auth/auth.service";
 
 import 'rxjs/Rx';
 
@@ -14,23 +15,27 @@ import { Team } from './predictions.model';
 export class PredictionsPage {
   listing: PredictionsModel = new PredictionsModel();
   loading: any;
+  user: any;
+  auth: AuthService;
 
   constructor(
     public nav: NavController,
     public predictionsService: PredictionsService,
-    public loadingCtrl: LoadingController
+    public loadingCtrl: LoadingController,
+    public authService: AuthService    
   ) {
-    this.loading = this.loadingCtrl.create();
+    this.auth = authService;
   }
 
 
-  ionViewDidLoad() {
-    this.loading.present();
+  ionViewWillEnter() {
+    this.user = this.auth.user;
+    this.loading = this.loadingCtrl.create();
     this.predictionsService
-      .getData(9)
+      .getData(this.user.sub)
       .then(data => {
         this.listing.voorspellingen = data.voorspellingen;
-        this.loading.dismiss();
+        this.loading. dismiss();
       });
   }
 
