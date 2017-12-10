@@ -76,7 +76,7 @@ export class AuthService {
     return Date.now() < expiresAt;
   }
 
-  public login(email: string, password: string): Observable<boolean> {
+  public login(email: string, password: string): Observable<UserResponse> {
     var headers = new HttpHeaders()
       .set('Content-Type', 'application/x-www-form-urlencoded');
     const body = new HttpParams()
