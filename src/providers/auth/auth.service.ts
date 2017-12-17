@@ -2,14 +2,11 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { HttpHeaders, HttpParams } from '@angular/common/http';
-import { Http } from '@angular/http';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { JwtHelper } from 'angular2-jwt';
 import 'rxjs/add/observable/throw';
-import { map } from 'rxjs/operator/map';
-import { mapTo } from 'rxjs/operators/mapTo';
 
-interface UserResponse {
+export class UserResponse {
   token_type: string;
   access_token: string;
   resource: string;
@@ -17,10 +14,11 @@ interface UserResponse {
   expires_in: number;
 }
 
-interface ErrorMessage {
+export class ErrorMessage {
   error: string;
-  errorDescription: string;
+  error_description: string;
 }
+
 export class JwtToken {
   sub: number;
   name: string;
@@ -60,13 +58,14 @@ export class AuthService {
 
   private handleError(operation: String) {
     return (err: any) => {
-        let errMsg = 'error in ${operation}() retrieving ${this.authUrl}';
+      let errMsg = 'error in ${operation}() retrieving ${this.authUrl}';
         console.log('${errMsg}:', err);
         if(err instanceof HttpErrorResponse) {
             // you could extract more info about the error if you want, e.g.:
             console.log(`status: ${err.status}, ${err.statusText}`);
-            errMsg = JSON.parse(err.error).error_description;
-        }
+            var error : ErrorMessage = JSON.parse(err.error);
+            errMsg = error.error_description;
+          }
         return Observable.throw(errMsg);
     }
   }
@@ -88,7 +87,7 @@ export class AuthService {
     let url = this.authUrl + '/connect/token';
     return this.http.post<UserResponse>(url, body.toString(), { headers })
       .pipe(
-        tap(authResult => {
+        tap<UserResponse>(authResult => {
           //this.setIdToken(authResult.idToken);
           this.setAccessToken(authResult.access_token);  
           const expiresAt = JSON.stringify((authResult.expires_in * 1000) + new Date().getTime());
