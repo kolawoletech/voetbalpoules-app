@@ -1,9 +1,7 @@
 import { Component } from '@angular/core';
 import { NavController, LoadingController } from 'ionic-angular';
 import { AuthService } from "../../providers/auth/auth.service";
-
-import 'rxjs/Rx';
-
+import { Observable } from 'rxjs';
 import { PredictionsModel } from './predictions.model';
 import { PredictionsService } from './predictions.service';
 import { Team } from './predictions.model';
@@ -33,9 +31,9 @@ export class PredictionsPage {
     this.loading = this.loadingCtrl.create();
     this.predictionsService
       .getData(this.user.sub)
-      .then(data => {
+      .subscribe(data => {
         this.listing.voorspellingen = data.voorspellingen;
-        this.loading. dismiss();
+        this.loading.dismiss();
       });
   }
 

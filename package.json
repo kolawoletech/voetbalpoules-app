@@ -19,6 +19,7 @@
     "@angular/http": "^4.4.4",
     "@angular/platform-browser": "4.4.4",
     "@angular/platform-browser-dynamic": "4.4.4",
+    "@auth0/angular-jwt": "^1.0.0-beta.9",
     "@ionic-native/admob-free": "^3.9.2",
     "@ionic-native/app-rate": "3.7.0",
     "@ionic-native/core": "3.12.1",

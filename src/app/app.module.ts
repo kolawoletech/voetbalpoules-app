@@ -33,6 +33,7 @@ import { LoginService } from '../pages/login/login.service';
 
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpModule } from '@angular/http';
+import { JwtModule, JWT_OPTIONS } from '@auth0/angular-jwt';
 import { HttpClientModule } from '@angular/common/http';
 
 import { SplashScreen } from '@ionic-native/splash-screen';
@@ -49,11 +50,20 @@ import { ValidatorsModule } from '../components/validators/validators.module';
 
 import { AuthService } from '../providers/auth/auth.service';
 import { LanguageService } from '../providers/language/language.service';
+import { LocalStorageService} from '../providers/localstorage/localstorage.service';
 
 export function createTranslateLoader(http: Http) {
 	return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }
 
+export function jwtOptionsFactory(localStorageService) {
+  return {
+    tokenGetter: () => {
+      return localStorageService.getStorageVariable('access_token');
+    },
+    whitelistedDomains: ['api.voetbalpoules.nl']
+  }
+}
 
 @NgModule({
   declarations: [
@@ -68,6 +78,13 @@ export function createTranslateLoader(http: Http) {
     BrowserModule,
     HttpModule,
     HttpClientModule,
+    JwtModule.forRoot({
+      jwtOptionsProvider: {
+        provide: JWT_OPTIONS,
+        useFactory: jwtOptionsFactory,
+        deps: [LocalStorageService]
+      },
+    }),    
     IonicModule.forRoot(MyApp),
 		TranslateModule.forRoot({
     loader: {
@@ -92,6 +109,7 @@ export function createTranslateLoader(http: Http) {
     FacebookLoginService,
     LoginService,
     AuthService,
+    LocalStorageService,
 		LanguageService,
 	  SplashScreen,
 	  StatusBar,

@@ -24,7 +24,6 @@ export class SettingsPage {
   // make WalkthroughPage the root (or first) page
   rootPage: any = LoginPage;
   loading: any;
-  //authService: AuthService;
   languages: Array<LanguageModel>;
 
   constructor(
@@ -38,7 +37,6 @@ export class SettingsPage {
     public authService: AuthService
   ) {
     this.loading = this.loadingCtrl.create();
-    //this.authService = authService;
     this.languages = this.languageService.getLanguages();
 
     this.settingsForm = new FormGroup({

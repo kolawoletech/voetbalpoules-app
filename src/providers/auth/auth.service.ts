@@ -4,6 +4,7 @@ import { catchError, tap } from 'rxjs/operators';
 import { HttpHeaders, HttpParams } from '@angular/common/http';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { JwtHelper } from 'angular2-jwt';
+import { LocalStorageService } from '../localstorage/localstorage.service';
 import 'rxjs/add/observable/throw';
 
 export class UserResponse {
@@ -33,17 +34,9 @@ export class AuthService {
   //idToken: string;
   user: any;
 
-  constructor(private http: HttpClient) {
-    this.user = this.getStorageVariable('profile');
+  constructor(private http: HttpClient, private localStorage: LocalStorageService) {
+    this.user = localStorage.getStorageVariable('profile');
     //this.idToken = this.getStorageVariable('id_token');
-  }
-
-  private getStorageVariable(name) {
-    return JSON.parse(window.localStorage.getItem(name));
-  }
-
-  private setStorageVariable(name, data) {
-    window.localStorage.setItem(name, JSON.stringify(data));
   }
 
   // private setIdToken(token) {
@@ -53,7 +46,7 @@ export class AuthService {
 
   private setAccessToken(token) {
     this.accessToken = token;
-    this.setStorageVariable('access_token', token);
+    this.localStorage.setStorageVariable('access_token', token);
   }
 
   private handleError(operation: String) {
@@ -71,7 +64,7 @@ export class AuthService {
   }
 
   public isAuthenticated() {
-    const expiresAt = JSON.parse(localStorage.getItem('expires_at'));
+    const expiresAt = this.localStorage.getStorageVariable('expires_at');
     return Date.now() < expiresAt;
   }
 
@@ -91,17 +84,17 @@ export class AuthService {
           //this.setIdToken(authResult.idToken);
           this.setAccessToken(authResult.access_token);  
           const expiresAt = JSON.stringify((authResult.expires_in * 1000) + new Date().getTime());
-          this.setStorageVariable('expires_at', expiresAt);
+          this.localStorage.setStorageVariable('expires_at', expiresAt);
           var bla = new JwtHelper();
           var token = bla.decodeToken(authResult.access_token) as JwtToken;
-          this.setStorageVariable('profile', token);
+          this.localStorage.setStorageVariable('profile', token);
           this.user = token;
         }), 
         catchError(this.handleError('getData'))
       );    
   }
 
-  public logout() {
+  public logout() {    
     window.localStorage.removeItem('profile');
     window.localStorage.removeItem('access_token');
     window.localStorage.removeItem('id_token');
