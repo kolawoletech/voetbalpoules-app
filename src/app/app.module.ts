@@ -28,8 +28,7 @@ import { Rating } from '../components/rating/rating';
 import { PredictionsService } from '../pages/predictions/predictions.service';
 //import { ProfileService } from '../pages/profile/profile.service';
 //import { ScheduleService } from '../pages/schedule/schedule.service';
-import { FacebookLoginService } from '../pages/facebook-login/facebook-login.service';
-import { LoginService } from '../pages/login/login.service';
+import { FacebookLoginService } from '../providers/facebook/facebook-login.service';
 
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpModule } from '@angular/http';
@@ -45,7 +44,6 @@ import { Keyboard } from '@ionic-native/keyboard';
 import { AppRate } from '@ionic-native/app-rate';
 
 // Functionalities
-import { FacebookLoginPage } from '../pages/facebook-login/facebook-login';
 import { ValidatorsModule } from '../components/validators/validators.module';
 
 import { AuthService } from '../providers/auth/auth.service';
@@ -72,8 +70,7 @@ export function jwtOptionsFactory(localStorageService) {
     PredictionsPage,
     LoginPage,
     TabsNavigationPage,
-    SettingsPage,
-    FacebookLoginPage
+    SettingsPage
   ],
   imports: [
     BrowserModule,
@@ -102,13 +99,11 @@ export function jwtOptionsFactory(localStorageService) {
     PredictionsPage,
     LoginPage,
     TabsNavigationPage,
-    SettingsPage,
-    FacebookLoginPage
+    SettingsPage
   ],
   providers: [
     PredictionsService,
     FacebookLoginService,
-    LoginService,
     AuthService,
     LocalStorageService,
 		LanguageService,

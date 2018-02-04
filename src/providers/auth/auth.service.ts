@@ -4,6 +4,7 @@ import { catchError, tap } from 'rxjs/operators';
 import { HttpHeaders, HttpParams } from '@angular/common/http';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { JwtHelper } from 'angular2-jwt';
+import { Events } from 'ionic-angular';
 import { LocalStorageService } from '../localstorage/localstorage.service';
 import 'rxjs/add/observable/throw';
 
@@ -34,7 +35,7 @@ export class AuthService {
   //idToken: string;
   user: any;
 
-  constructor(private http: HttpClient, private localStorage: LocalStorageService) {
+  constructor(public events: Events, private http: HttpClient, private localStorage: LocalStorageService) {
     this.user = localStorage.getStorageVariable('profile');
     //this.idToken = this.getStorageVariable('id_token');
   }
@@ -63,9 +64,9 @@ export class AuthService {
     }
   }
 
-  public isAuthenticated() {
+  public isAuthenticated() : Boolean {
     const expiresAt = this.localStorage.getStorageVariable('expires_at');
-    return Date.now() < expiresAt;
+    return this.user != null && Date.now() < expiresAt;
   }
 
   public login(email: string, password: string): Observable<UserResponse> {
@@ -77,21 +78,18 @@ export class AuthService {
       .set('username', email)
       .set('password', password);      
 
-    let url = this.authUrl + '/connect/token';
-    return this.http.post<UserResponse>(url, body.toString(), { headers })
-      .pipe(
-        tap<UserResponse>(authResult => {
-          //this.setIdToken(authResult.idToken);
-          this.setAccessToken(authResult.access_token);  
-          const expiresAt = JSON.stringify((authResult.expires_in * 1000) + new Date().getTime());
-          this.localStorage.setStorageVariable('expires_at', expiresAt);
-          var bla = new JwtHelper();
-          var token = bla.decodeToken(authResult.access_token) as JwtToken;
-          this.localStorage.setStorageVariable('profile', token);
-          this.user = token;
-        }), 
-        catchError(this.handleError('getData'))
-      );    
+    return this.getToken(body, headers);
+  }
+
+  public loginWithFacebook(facebookToken: string): Observable<UserResponse> {
+    var headers = new HttpHeaders()
+      .set('Content-Type', 'application/x-www-form-urlencoded');
+    const body = new HttpParams()
+      .set('grant_type', 'facebook_identity_token')
+      .set('scope', '')
+      .set('assertion', facebookToken);      
+
+    return this.getToken(body, headers);
   }
 
   public logout() {    
@@ -103,6 +101,22 @@ export class AuthService {
     //this.idToken = null;
     this.accessToken = null;
     this.user = null;
+
+    this.events.publish('logout', true); //app.component kan nu naar de root page
   }
 
+  private getToken(body: HttpParams, headers: HttpHeaders) : Observable<UserResponse> {
+    let url = this.authUrl + '/connect/token';
+    return this.http.post<UserResponse>(url, body.toString(), { headers })
+      .pipe(tap<UserResponse>(authResult => {
+        //this.setIdToken(authResult.idToken);
+        this.setAccessToken(authResult.access_token);
+        const expiresAt = JSON.stringify((authResult.expires_in * 1000) + new Date().getTime());
+        this.localStorage.setStorageVariable('expires_at', expiresAt);
+        var bla = new JwtHelper();
+        var token = bla.decodeToken(authResult.access_token) as JwtToken;
+        this.localStorage.setStorageVariable('profile', token);
+        this.user = token;
+      }), catchError(this.handleError('getData')));
+  }
 }

@@ -7,7 +7,7 @@ import { PrivacyPolicyPage } from '../privacy-policy/privacy-policy';
 
 import { TabsNavigationPage } from '../tabs-navigation/tabs-navigation';
 
-import { FacebookLoginService } from '../facebook-login/facebook-login.service';
+import { FacebookLoginService } from '../../providers/facebook/facebook-login.service';
 
 @Component({
   selector: 'signup-page',
@@ -43,21 +43,21 @@ export class SignupPage {
     // because we don't want to ask users to log in each time they open the app
     let env = this;
 
-    this.facebookLoginService.getFacebookUser()
-    .then(function(data) {
-       // user is previously logged with FB and we have his data we will let him access the app
-      env.nav.setRoot(env.main_page.component);
-    }, function(error){
-      //we don't have the user data so we will ask him to log in
-      env.facebookLoginService.doFacebookLogin()
-      .then(function(res){
-        env.loading.dismiss();
-        env.nav.setRoot(env.main_page.component);
-      }, function(err){
-        console.log("Facebook Login error", err);
-        env.loading.dismiss();
-      });
-    });
+    // this.facebookLoginService.getFacebookUser()
+    // .then(function(data) {
+    //    // user is previously logged with FB and we have his data we will let him access the app
+    //   env.nav.setRoot(env.main_page.component);
+    // }, function(error){
+    //   //we don't have the user data so we will ask him to log in
+    //   env.facebookLoginService.doFacebookLogin()
+    //   .then(function(res){
+    //     env.loading.dismiss();
+    //     env.nav.setRoot(env.main_page.component);
+    //   }, function(err){
+    //     console.log("Facebook Login error in signup", err);
+         env.loading.dismiss();
+    //   });
+    // });
   }
 
   showTermsModal() {

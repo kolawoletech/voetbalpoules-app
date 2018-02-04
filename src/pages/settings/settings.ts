@@ -13,7 +13,8 @@ import { TranslateService } from '@ngx-translate/core';
 import { LanguageService } from "../../providers/language/language.service";
 import { LanguageModel } from "../../providers/language/language.model";
 import { AppRate } from '@ionic-native/app-rate';
-import {AuthService } from '../../providers/auth/auth.service';
+import { AuthService } from '../../providers/auth/auth.service';
+import { FacebookLoginService } from '../../providers/facebook/facebook-login.service'
 
 @Component({
   selector: 'settings-page',
@@ -34,13 +35,14 @@ export class SettingsPage {
     public languageService: LanguageService,
     public appRate: AppRate,
     public platform: Platform,
-    public authService: AuthService
+    public authService: AuthService,
+    public facebookService: FacebookLoginService
   ) {
     this.loading = this.loadingCtrl.create();
     this.languages = this.languageService.getLanguages();
 
     this.settingsForm = new FormGroup({
-      name: new FormControl(),
+      email: new FormControl(),
       description: new FormControl(),
       notifications: new FormControl(),
       language: new FormControl()
@@ -54,7 +56,7 @@ export class SettingsPage {
     // More info: https://angular.io/docs/ts/latest/guide/reactive-forms.html#!#populate-the-form-model-with-_setvalue_-and-_patchvalue_
     let languageId = this.languages.findIndex(x => x.code == this.translate.currentLang);
     this.settingsForm.patchValue({
-      name: this.authService.user.name,
+      email: this.authService.user.name,
       description: 'Ik ben Jeroen',
       notifications: true,
       language: this.languages[languageId]
@@ -69,8 +71,10 @@ export class SettingsPage {
 
   logout() {
     this.authService.logout();
+    //this.facebookService.doFacebookLogout();
     // navigate to the new page if it is not the current page
-    this.nav.setRoot(this.rootPage);
+    //this.nav.setRoot(this.rootPage);
+    //this.nav.popToRoot();
   }
 
   showTermsModal() {

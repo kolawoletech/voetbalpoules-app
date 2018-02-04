@@ -7,8 +7,9 @@ import { Observable } from 'rxjs/Observable';
 import { TabsNavigationPage } from '../pages/tabs-navigation/tabs-navigation';
 import { SettingsPage } from '../pages/settings/settings';
 import { LoginPage } from '../pages/login/login';
-import { PredictionsPage } from '../pages/predictions/predictions';
 import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
+import { AuthService } from '../providers/auth/auth.service';
+import { Events } from 'ionic-angular';
 
 @Component({
   selector: 'app-root',
@@ -33,7 +34,9 @@ export class MyApp {
     public splashScreen: SplashScreen,
     public statusBar: StatusBar,
     public translate: TranslateService,
-    public toastCtrl: ToastController
+    public authService: AuthService,
+    public toastCtrl: ToastController,
+    public events: Events
   ) {
     translate.setDefaultLang('nl');
     translate.use('nl');
@@ -62,7 +65,13 @@ export class MyApp {
           ];
         });
       });
-
+    this.events.subscribe('logout', (loggedOut) => {
+      console.log('logout: ', loggedOut);
+      if (loggedOut) {
+        this.nav.setRoot(this.rootPage);
+        this.nav.popToRoot();
+      }
+    });  
   }
 
   openPage(page) {

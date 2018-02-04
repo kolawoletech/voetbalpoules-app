@@ -1,4 +1,5 @@
 {
+  "FACEBOOK_ALREADY_LOGGED_IN": "User logged in as different Facebook user.",  
   "SELECT_LANGUAGE": "Select your language",
   "CHANGE_PROFILE_PICTURE": "Change profile picture",
   "SETTINGS": "Settings",
@@ -124,5 +125,8 @@
   "ACCEPT_TERMS_VALIDATIONS": "Accept Terms Validations",
   "PREDICT": "Predict",
   "LOGIN_WITH_FACEBOOK": "Log in with Facebook",
-  "POOL": "Pool"
+  "POOL": "Pool",
+  "NOT_IMPLEMENTED": "Not yet implemented",  
+  "NOT_IMPLEMENTED_SIGN_UP": "Sign up is not yet implemented, please visit www.voetbalpoules.nl to sign up.",
+  "NOT_IMPLEMENTED_PASSWORD": "You cannot recover your password yet, please visit www.voetbalpoules.nl to do so."    
 }
