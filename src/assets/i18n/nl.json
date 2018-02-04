@@ -3,11 +3,18 @@
   "FORGOT_PASSWORD?": "Wachtwoord vergeten?",
   "LOG_IN": "Inloggen",
   "LOGIN_WITH_FACEBOOK": "Log in met Facebook",
+  "FACEBOOK_ALREADY_LOGGED_IN": "Je bent al ingelogd met een andere Facebook gebruiker. Probeer het nog eens.",
   "NAME": "Naam",
   "POOL": "Poule",
   "PREDICT": "Voorspellen",
   "SELECT_LANGUAGE": "Kies taal",
   "SETTINGS": "Instellingen",
   "SIGN_UP": "Aanmelden",
-  "SAVE": "Opslaan"
+  "SAVE": "Opslaan",
+  "CANCEL": "Annuleren",
+  "OK": "Oké",
+  "LOG_OUT": "Afmelden",
+  "NOT_IMPLEMENTED": "Nog niet beschikbaar",  
+  "NOT_IMPLEMENTED_SIGN_UP": "Je kunt je nog niet aanmelden in onze app. Bezoek www.voetbalpoules.nl om je aan te melden.",    
+  "NOT_IMPLEMENTED_PASSWORD": "Je kunt je wachtwoord nog niet opvragen in onze app. Bezoek www.voetbalpoules.nl om je wachtwoord opnieuw in te stellen."    
 }

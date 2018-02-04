@@ -28,14 +28,13 @@ import { Rating } from '../components/rating/rating';
 import { PredictionsService } from '../pages/predictions/predictions.service';
 //import { ProfileService } from '../pages/profile/profile.service';
 //import { ScheduleService } from '../pages/schedule/schedule.service';
-import { FacebookLoginService } from '../pages/facebook-login/facebook-login.service';
-import { LoginService } from '../pages/login/login.service';
+import { FacebookLoginService } from '../providers/facebook/facebook-login.service';
 
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpModule } from '@angular/http';
 import { JwtModule, JWT_OPTIONS } from '@auth0/angular-jwt';
 import { HttpClientModule } from '@angular/common/http';
-
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
 import { NativeStorage } from '@ionic-native/native-storage';
@@ -45,12 +44,12 @@ import { Keyboard } from '@ionic-native/keyboard';
 import { AppRate } from '@ionic-native/app-rate';
 
 // Functionalities
-import { FacebookLoginPage } from '../pages/facebook-login/facebook-login';
 import { ValidatorsModule } from '../components/validators/validators.module';
 
 import { AuthService } from '../providers/auth/auth.service';
 import { LanguageService } from '../providers/language/language.service';
 import { LocalStorageService} from '../providers/localstorage/localstorage.service';
+import { LanguageInterceptor } from '../interceptors/language.interceptor';
 
 export function createTranslateLoader(http: Http) {
 	return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -71,8 +70,7 @@ export function jwtOptionsFactory(localStorageService) {
     PredictionsPage,
     LoginPage,
     TabsNavigationPage,
-    SettingsPage,
-    FacebookLoginPage
+    SettingsPage
   ],
   imports: [
     BrowserModule,
@@ -101,13 +99,11 @@ export function jwtOptionsFactory(localStorageService) {
     PredictionsPage,
     LoginPage,
     TabsNavigationPage,
-    SettingsPage,
-    FacebookLoginPage
+    SettingsPage
   ],
   providers: [
     PredictionsService,
     FacebookLoginService,
-    LoginService,
     AuthService,
     LocalStorageService,
 		LanguageService,
@@ -118,7 +114,12 @@ export function jwtOptionsFactory(localStorageService) {
     Facebook,
     Rating,
     AppRate,
-    Keyboard
+    Keyboard,
+    { 
+      provide: HTTP_INTERCEPTORS,
+      useClass: LanguageInterceptor,
+      multi: true
+    }
   ],
   schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
 })
