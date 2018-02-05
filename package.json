@@ -69,7 +69,6 @@
   },
   "devDependencies": {
     "@ionic/app-scripts": "^3.1.2",
-    "ionic": "3.6.0",
     "typescript": "2.3.4"
   },
   "description": "Voetbalpoules.nl, de leukste voetbalpoule van Nederland!",
