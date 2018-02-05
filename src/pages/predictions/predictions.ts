@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { NavController, LoadingController } from 'ionic-angular';
 import { AuthService } from "../../providers/auth/auth.service";
-import { Observable } from 'rxjs';
 import { PredictionsModel } from './predictions.model';
 import { PredictionsService } from './predictions.service';
 import { Team } from './predictions.model';

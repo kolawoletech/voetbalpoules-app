@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, ToastController, Platform } from 'ionic-angular';
+import { NavController, ToastController } from 'ionic-angular';
 import { AdMobFree, AdMobFreeBannerConfig, AdMobFreeInterstitialConfig } from '@ionic-native/admob-free';
 
 @Component({
@@ -28,8 +28,7 @@ export class AdsPage {
   constructor(
     public nav: NavController,
     private admob: AdMobFree,
-    public toastCtrl: ToastController,
-    private platform: Platform
+    public toastCtrl: ToastController
   ) {}
 
   ionViewWillLoad(){
@@ -69,5 +68,4 @@ export class AdsPage {
     })
     .catch(e => console.log(e));
   }
-
 }
