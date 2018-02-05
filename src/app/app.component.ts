@@ -10,6 +10,7 @@ import { LoginPage } from '../pages/login/login';
 import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 import { AuthService } from '../providers/auth/auth.service';
 import { Events } from 'ionic-angular';
+import { Keyboard } from '@ionic-native/keyboard';
 
 @Component({
   selector: 'app-root',
@@ -36,15 +37,17 @@ export class MyApp {
     public translate: TranslateService,
     public authService: AuthService,
     public toastCtrl: ToastController,
-    public events: Events
+    public events: Events,
+    public keyboard: Keyboard
   ) {
     translate.setDefaultLang('nl');
     translate.use('nl');
     platform.ready().then(() => {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
-      this.splashScreen.hide();
-      this.statusBar.styleDefault();
+      this.splashScreen.show(); //hide();
+      this.statusBar.hide(); //styleDefault();
+      this.keyboard.hideKeyboardAccessoryBar(false);          
     });
 
     this.translate.onLangChange.subscribe((event: LangChangeEvent) =>

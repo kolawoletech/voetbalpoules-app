@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, LoadingController, AlertController, Platform } from 'ionic-angular';
+import { NavController, LoadingController, AlertController } from 'ionic-angular';
 import { Validators, FormGroup, FormControl } from '@angular/forms';
 
 import { TabsNavigationPage } from '../tabs-navigation/tabs-navigation';
@@ -9,8 +9,6 @@ import { FacebookLoginService } from '../../providers/facebook/facebook-login.se
 import { AuthService } from '../../providers/auth/auth.service';
 import { TranslateService } from '@ngx-translate/core';
 import { Observable } from 'rxjs/Observable';
-import { Keyboard } from '@ionic-native/keyboard';
-import { StatusBar } from '@ionic-native/status-bar';
 
 @Component({
   selector: 'login-page',
@@ -28,10 +26,7 @@ export class LoginPage {
     public loadingCtrl: LoadingController,
     public authService: AuthService,
     private alertController: AlertController,
-    private translate: TranslateService,
-    private platform: Platform,
-    private keyboard: Keyboard,
-    private statusBar: StatusBar
+    private translate: TranslateService
   ) 
   {
     this.main_page = { component: TabsNavigationPage };
@@ -44,14 +39,6 @@ export class LoginPage {
     this.login = new FormGroup({
       email: new FormControl('', Validators.required),
       password: new FormControl('test', Validators.required)
-    });
-  }
-  ngOnInit() {
-    this.platform.ready().then(() => {
-      // Okay, so the platform is ready and our plugins are available.
-      // Here you can do any higher level native things you might need.
-      this.statusBar.styleDefault();
-      this.keyboard.hideKeyboardAccessoryBar(false);
     });
   }
 
