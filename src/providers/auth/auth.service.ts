@@ -30,7 +30,8 @@ export class JwtToken {
 
 @Injectable()
 export class AuthService {
-  authUrl: string = 'https://auth.voetbalpoules.nl';
+  //authUrl: string = 'https://auth.voetbalpoules.nl';
+  authUrl: string = 'http://localhost:5000';
   accessToken: string;
   //idToken: string;
   user: any;

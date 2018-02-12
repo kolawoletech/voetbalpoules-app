@@ -5,25 +5,30 @@
 </ion-header>
 
 <ion-content>
-  <ion-list *ngFor="let voorspelling of listing.voorspellingen">
-      <ion-item>
-        <ion-grid>
-            <ion-row justify-content-center>
-              <ion-col col-4>
-                <img src="{{getLogo(voorspelling.wedstrijd.thuisteam)}}" />                    
-              </ion-col>
-              <ion-col col-4 text-center align-self-center>
-                <span class="voorspelling">
-                    {{voorspelling.thuisdoelpunten}} - {{voorspelling.uitdoelpunten}}                    
-                </span>
-                <br>
-                {{voorspelling.wedstrijd.thuisdoelpunten}} - {{voorspelling.wedstrijd.uitdoelpunten}}  
-              </ion-col>
-              <ion-col col-4>
-                <img src="{{getLogo(voorspelling.wedstrijd.uitteam)}}" />                    
-              </ion-col>
-            </ion-row>
-          </ion-grid>        
-      </ion-item>
-  </ion-list>
+  <ion-slides #slider (ionSlideNextEnd)="loadNext()" (ionSlidePrevEnd)="loadPrev()" [initialSlide]="0">
+    <ion-slide *ngFor="let n of numbers">
+      <h2>{{n.Datum | date: shortdate }}</h2>
+      <ion-list *ngFor="let voorspelling of n.listing.voorspellingen">
+          <ion-item>
+            <ion-grid>
+                <ion-row justify-content-center>
+                  <ion-col col-4>
+                    <img src="{{getLogo(voorspelling.wedstrijd.thuisteam)}}" />                    
+                  </ion-col>
+                  <ion-col col-4 text-center align-self-center>
+                    <span class="voorspelling">
+                        {{voorspelling.thuisdoelpunten}} - {{voorspelling.uitdoelpunten}}                    
+                    </span>
+                    <br>
+                    {{voorspelling.wedstrijd.thuisdoelpunten}} - {{voorspelling.wedstrijd.uitdoelpunten}}  
+                  </ion-col>
+                  <ion-col col-4>
+                    <img src="{{getLogo(voorspelling.wedstrijd.uitteam)}}" />                    
+                  </ion-col>
+                </ion-row>
+              </ion-grid>        
+          </ion-item>
+      </ion-list>
+    </ion-slide>
+  </ion-slides>      
 </ion-content>

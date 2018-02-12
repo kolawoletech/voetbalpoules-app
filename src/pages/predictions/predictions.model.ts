@@ -1,5 +1,8 @@
 export class PredictionsModel {
   voorspellingen: Prediction[];
+  datum: Date;
+  vorigeDag: Date;
+  volgendeDag: Date;
   user: string;
 }
 
