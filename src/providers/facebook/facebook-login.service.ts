@@ -3,21 +3,30 @@ import 'rxjs/add/operator/toPromise';
 import { Facebook } from '@ionic-native/facebook';
 import { NativeStorage } from '@ionic-native/native-storage';
 import { AuthService } from '../auth/auth.service';
-
+import { Platform } from 'ionic-angular';
 @Injectable()
 export class FacebookLoginService {
   FB_APP_ID: number = 189009751163294;
+  private isApp: Boolean = true;
 
   constructor(
     public nativeStorage: NativeStorage,
     public fb: Facebook,
-    public authService: AuthService    
+    public authService: AuthService,
+    private platform: Platform    
   ){
-    this.fb.browserInit(this.FB_APP_ID, "v2.8");
+    this.isApp = this.platform.is('cordova');
+    if(this.isApp) {
+      this.fb.browserInit(this.FB_APP_ID, "v2.8");
+    }
   }
 
   public doFacebookLogin()
   {
+    if(!this.isApp)
+    {
+      return Promise.reject("This is not a native app!");      
+    }
     console.log("start");
     return this.fb.login(['public_profile']).then(
       response => {
@@ -48,6 +57,11 @@ export class FacebookLoginService {
 
   public doFacebookLogout()
   {
+    if(!this.isApp)
+    {
+      //no need to logout Facebook
+      return Promise.resolve("");      
+    }
     return this.fb.logout().then(
       response => {
         console.log("facebook logout successfull.");

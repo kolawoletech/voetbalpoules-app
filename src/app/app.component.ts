@@ -42,12 +42,21 @@ export class MyApp {
   ) {
     translate.setDefaultLang('nl');
     translate.use('nl');
+    if(authService.isAuthenticated())
+    {
+      console.log("authenticated, ga direct door naar de tabs.")
+      this.rootPage = TabsNavigationPage;
+    }  
+
     platform.ready().then(() => {
-      // Okay, so the platform is ready and our plugins are available.
-      // Here you can do any higher level native things you might need.
-      this.splashScreen.show(); //hide();
-      this.statusBar.hide(); //styleDefault();
-      this.keyboard.hideKeyboardAccessoryBar(false);          
+      if(platform.is('cordova'))
+      {
+          // Okay, so the platform is ready and our plugins are available.
+        // Here you can do any higher level native things you might need.
+        //this.splashScreen.show(); //hide();
+        this.statusBar.styleDefault();
+        this.keyboard.hideKeyboardAccessoryBar(false);          
+      }
     });
 
     this.translate.onLangChange.subscribe((event: LangChangeEvent) =>
@@ -71,7 +80,7 @@ export class MyApp {
     this.events.subscribe('logout', (loggedOut) => {
       console.log('logout: ', loggedOut);
       if (loggedOut) {
-        this.nav.setRoot(this.rootPage);
+        this.nav.setRoot(LoginPage);
         this.nav.popToRoot();
       }
     });  

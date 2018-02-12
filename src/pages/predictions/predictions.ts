@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, LoadingController } from 'ionic-angular';
+import { LoadingController, Events } from 'ionic-angular';
 import { AuthService } from "../../providers/auth/auth.service";
 import { PredictionsModel } from './predictions.model';
 import { PredictionsService } from './predictions.service';
@@ -16,24 +16,30 @@ export class PredictionsPage {
   auth: AuthService;
 
   constructor(
-    public nav: NavController,
     public predictionsService: PredictionsService,
     public loadingCtrl: LoadingController,
-    public authService: AuthService    
+    public authService: AuthService,
+    private events: Events
   ) {
     this.auth = authService;
   }
 
 
   ionViewWillEnter() {
-    this.user = this.auth.user;
-    this.loading = this.loadingCtrl.create();
-    this.predictionsService
-      .getData(this.user.sub)
-      .subscribe(data => {
-        this.listing.voorspellingen = data.voorspellingen;
-        this.loading.dismiss();
-      });
+    if(!this.auth.isAuthenticated())
+    {
+      console.log("niemand ingelogd.");
+      this.events.publish('logout', true); //app.component kan nu naar de root page      
+    } else {
+      this.user = this.auth.user;
+      this.loading = this.loadingCtrl.create();
+      this.predictionsService
+        .getData(this.user.sub)
+        .subscribe(data => {
+          this.listing.voorspellingen = data.voorspellingen;
+          this.loading.dismiss();
+        });  
+    }
   }
 
   getLogo(team : Team) : string {

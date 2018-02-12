@@ -66,6 +66,7 @@ export class AuthService {
 
   public isAuthenticated() : Boolean {
     const expiresAt = this.localStorage.getStorageVariable('expires_at');
+    console.log("isAuthenticated: expires: " + expiresAt + ", user: " + this.user);
     return this.user != null && Date.now() < expiresAt;
   }
 
@@ -93,11 +94,7 @@ export class AuthService {
   }
 
   public logout() {    
-    window.localStorage.removeItem('profile');
-    window.localStorage.removeItem('access_token');
-    window.localStorage.removeItem('id_token');
-    window.localStorage.removeItem('expires_at');
-
+    this.localStorage.clearAll();
     //this.idToken = null;
     this.accessToken = null;
     this.user = null;

@@ -1,11 +1,9 @@
 import { Component } from '@angular/core';
-import { NavController, ModalController, LoadingController, Platform } from 'ionic-angular';
+import { NavController, ModalController, LoadingController } from 'ionic-angular';
 import { FormGroup, FormControl } from '@angular/forms';
 
 import { TermsOfServicePage } from '../terms-of-service/terms-of-service';
 import { PrivacyPolicyPage } from '../privacy-policy/privacy-policy';
-
-import { LoginPage } from '../login/login';
 
 import 'rxjs/Rx';
 
@@ -22,8 +20,6 @@ import { FacebookLoginService } from '../../providers/facebook/facebook-login.se
 })
 export class SettingsPage {
   settingsForm: FormGroup;
-  // make WalkthroughPage the root (or first) page
-  rootPage: any = LoginPage;
   loading: any;
   languages: Array<LanguageModel>;
 
@@ -34,7 +30,6 @@ export class SettingsPage {
     public translate: TranslateService,
     public languageService: LanguageService,
     public appRate: AppRate,
-    public platform: Platform,
     public authService: AuthService,
     public facebookService: FacebookLoginService
   ) {
@@ -70,11 +65,8 @@ export class SettingsPage {
   }
 
   logout() {
+    this.facebookService.doFacebookLogout();
     this.authService.logout();
-    //this.facebookService.doFacebookLogout();
-    // navigate to the new page if it is not the current page
-    //this.nav.setRoot(this.rootPage);
-    //this.nav.popToRoot();
   }
 
   showTermsModal() {
