@@ -1,17 +1,9 @@
-import { Component, ViewChild } from '@angular/core';
-import { LoadingController, Events, Slides } from 'ionic-angular';
+import { Component, ViewChild, ViewChildren, QueryList } from '@angular/core';
+import { LoadingController, Events, Slides, Slide } from 'ionic-angular';
 import { AuthService } from "../../providers/auth/auth.service";
 import { PredictionsModel } from './predictions.model';
 import { PredictionsService } from './predictions.service';
 import { Team } from './predictions.model';
-
-export class SpeelDag {
-  constructor(
-    public number: number, 
-    public Datum: Date,
-    public listing: PredictionsModel = new PredictionsModel()
-  ) {}
-}
 
 @Component({
   selector: 'predictions-page',
@@ -23,10 +15,9 @@ export class PredictionsPage {
   auth: AuthService;
   nextDay: Date;
   previousDay: Date;
-  numbers: SpeelDag[] = [];
+  speelData: PredictionsModel[] = [];
 
   @ViewChild('slider') private slider: Slides;
-  firstLoad = true;
 
   constructor(
     public predictionsService: PredictionsService,
@@ -37,7 +28,6 @@ export class PredictionsPage {
     this.auth = authService;
   }
 
-
   ionViewWillEnter() {
     if(!this.auth.isAuthenticated())
     {
@@ -45,20 +35,27 @@ export class PredictionsPage {
       this.events.publish('logout', true); //app.component kan nu naar de root page      
     } else {
       this.user = this.auth.user;
+
+      if(this.speelData.length > 0)
+        return;
+
+      console.log("Haal eerstvolgende voorspellingen.");
+      let currentIndex = this.slider.getActiveIndex();
+      console.log("Huidige slide" + currentIndex);
       this.loading = this.loadingCtrl.create();
       this.predictionsService
         .getData(this.user.sub)
         .subscribe(data => {
-          let speeldag = new SpeelDag(0, data.datum);
-          speeldag.listing.voorspellingen = data.voorspellingen;
+          var previousDay = new PredictionsModel();
+          previousDay.datum = data.vorigeDag;
+          this.speelData.push(previousDay);
 
-          this.numbers.push(speeldag);
-          this.nextDay = data.volgendeDag;
-          speeldag = new SpeelDag(1, data.volgendeDag);
-          this.numbers.push(speeldag);
-          this.previousDay = data.vorigeDag;
-          speeldag = new SpeelDag(-1, data.vorigeDag);
-          //this.numbers.unshift(speeldag);
+          this.speelData.push(data);
+
+          var nextDay = new PredictionsModel();
+          nextDay.datum = data.volgendeDag;
+          this.speelData.push(nextDay);
+
           this.loading.dismiss();
         });  
     }
@@ -66,43 +63,46 @@ export class PredictionsPage {
 
   loadPrev() {
     console.log('Prev');
-    let newIndex = this.slider.getActiveIndex();
-    
-    newIndex++;
-    this.numbers.unshift(new SpeelDag(this.numbers[0].number - 1, new Date(2018,2,5)));
-    this.numbers.pop();
-    
-    // Workaround to make it work: breaks the animation
-    this.slider.slideTo(newIndex, 0, false);
-    
-    console.log(`New status: ${this.numbers}`);
+    this.loadSlide(false);
 	}
 	
-	loadNext() {
-    
+	loadNext() {    
     console.log('Next');
-    let newIndex = this.slider.getActiveIndex();
-    console.log('newindex');
+    this.loadSlide(true);
+  }
+
+  private loadSlide(isNext: Boolean)
+  {
+    let currentIndex = this.slider.getActiveIndex();
+    console.log("Huidige slide" + currentIndex);
     
+    var today = this.speelData[currentIndex];
+    if(today.voorspellingen)
+    {
+      console.log(today.datum + " heeft al voorspellingen!");
+      return;
+    }
     this.loading = this.loadingCtrl.create();
     this.predictionsService
-      .getData(this.user.sub, this.nextDay)
+      .getData(this.user.sub, today.datum)
       .subscribe(data => {
-        this.numbers[newIndex].listing.voorspellingen = data.voorspellingen;
-        let speeldag = new SpeelDag(this.numbers.length, data.volgendeDag);
-        this.numbers.push(speeldag);
-        this.nextDay = data.volgendeDag;
+        this.speelData[currentIndex] = data;
+        var newSlide = new PredictionsModel();
+
+        newSlide.datum = isNext ? data.volgendeDag : data.vorigeDag;
+        if(isNext)
+          this.speelData.push(newSlide);
+        else
+        {
+          this.speelData.unshift(newSlide);
+          currentIndex++;
+          // Workaround to make it work: breaks the animation
+          this.slider.slideTo(currentIndex, 0, false);
+        }
+
         this.loading.dismiss();
-
-        this.numbers.shift();
-        newIndex--;
-        // Workaround to make it work: breaks the animation
-        this.slider.slideTo(newIndex, 0, false);
-      });  
-
-    
-    console.log(`New status: ${this.numbers}`);
-	}
+      });          
+  }
 
   getLogo(team : Team) : string {
     return "https://www.voetbalpoules.nl/foto/" + team.logoId;

@@ -6,9 +6,9 @@
 
 <ion-content>
   <ion-slides #slider (ionSlideNextEnd)="loadNext()" (ionSlidePrevEnd)="loadPrev()" [initialSlide]="0">
-    <ion-slide *ngFor="let n of numbers">
-      <h2>{{n.Datum | date: shortdate }}</h2>
-      <ion-list *ngFor="let voorspelling of n.listing.voorspellingen">
+    <ion-slide *ngFor="let dag of speelData">
+      <h2>{{dag.datum | date: shortdate }}</h2>
+      <ion-list *ngFor="let voorspelling of dag.voorspellingen">
           <ion-item>
             <ion-grid>
                 <ion-row justify-content-center>
