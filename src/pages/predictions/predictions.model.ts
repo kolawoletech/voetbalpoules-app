@@ -4,6 +4,13 @@ export class PredictionsModel {
   vorigeDag: Date;
   volgendeDag: Date;
   user: string;
+
+  constructor(datumpie?: Date) {
+    if(datumpie)
+    {
+      this.datum = datumpie;
+    }
+  }
 }
 
 export class Prediction {

@@ -13,11 +13,10 @@ export class PredictionsPage {
   loading: any;
   user: any;
   auth: AuthService;
-  nextDay: Date;
-  previousDay: Date;
-  speelData: PredictionsModel[] = [];
 
   @ViewChild('slider') private slider: Slides;
+  @ViewChildren(Slide) slideCollection: QueryList<Slide>;
+  speelData: PredictionsModel[] = [];
 
   constructor(
     public predictionsService: PredictionsService,
@@ -32,33 +31,40 @@ export class PredictionsPage {
     if(!this.auth.isAuthenticated())
     {
       console.log("niemand ingelogd.");
-      this.events.publish('logout', true); //app.component kan nu naar de root page      
-    } else {
-      this.user = this.auth.user;
-
-      if(this.speelData.length > 0)
-        return;
-
-      console.log("Haal eerstvolgende voorspellingen.");
-      let currentIndex = this.slider.getActiveIndex();
-      console.log("Huidige slide" + currentIndex);
-      this.loading = this.loadingCtrl.create();
-      this.predictionsService
-        .getData(this.user.sub)
-        .subscribe(data => {
-          var previousDay = new PredictionsModel();
-          previousDay.datum = data.vorigeDag;
-          this.speelData.push(previousDay);
-
-          this.speelData.push(data);
-
-          var nextDay = new PredictionsModel();
-          nextDay.datum = data.volgendeDag;
-          this.speelData.push(nextDay);
-
-          this.loading.dismiss();
-        });  
+      this.events.publish('logout', true); //app.component kan nu naar de root page
+      return;
     }
+    console.log("Leeg speeldata");
+    this.user = this.auth.user;
+    this.speelData = [];
+    console.log("Haal eerstvolgende voorspellingen.");
+
+    let subscription = this.slideCollection.changes.subscribe((r) => {
+      setTimeout(() => {
+        console.log("zet initialSlide");
+        this.slider.slideTo(this.slider.initialSlide, 0, false);
+        //we hoeven alleen de eerste keer de juiste slide te zetten.
+        subscription.unsubscribe();
+      });
+    });
+    this.loading = this.loadingCtrl.create();
+
+    return this.predictionsService
+      .getData(this.user.sub)
+      .finally(() => this.loading.dismiss())
+      .subscribe(data => {
+        console.log("verwerk data");
+        var previousDay = new PredictionsModel(data.vorigeDag);
+        this.speelData.push(previousDay);
+        console.log("pushed gisteren");
+        this.speelData.push(data);
+        console.log("pushed vandaag");
+
+        var nextDay = new PredictionsModel(data.volgendeDag);
+        nextDay.datum = data.volgendeDag;
+        this.speelData.push(nextDay);
+        console.log("pushed morgen");
+      });  
   }
 
   loadPrev() {
@@ -83,24 +89,25 @@ export class PredictionsPage {
       return;
     }
     this.loading = this.loadingCtrl.create();
-    this.predictionsService
+    return this.predictionsService
       .getData(this.user.sub, today.datum)
+      .finally(() => this.loading.dismiss())
       .subscribe(data => {
         this.speelData[currentIndex] = data;
-        var newSlide = new PredictionsModel();
+        var newSlide = new PredictionsModel(isNext ? data.volgendeDag : data.vorigeDag);
 
-        newSlide.datum = isNext ? data.volgendeDag : data.vorigeDag;
         if(isNext)
+        {
+          currentIndex--;
           this.speelData.push(newSlide);
+        }
         else
         {
-          this.speelData.unshift(newSlide);
           currentIndex++;
-          // Workaround to make it work: breaks the animation
+          this.speelData.unshift(newSlide);
+          console.log("zet slider in loadSlide")
           this.slider.slideTo(currentIndex, 0, false);
         }
-
-        this.loading.dismiss();
       });          
   }
 
