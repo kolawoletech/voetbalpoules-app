@@ -61,7 +61,7 @@ export function jwtOptionsFactory(localStorageService) {
     tokenGetter: () => {
       return localStorageService.getStorageVariable('access_token');
     },
-    whitelistedDomains: ['api.voetbalpoules.nl']
+    whitelistedDomains: ['api.voetbalpoules.nl', 'localhost:49939']
   }
 }
 

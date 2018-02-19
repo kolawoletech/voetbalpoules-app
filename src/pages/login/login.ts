@@ -30,15 +30,15 @@ export class LoginPage {
   ) 
   {
     this.main_page = { component: TabsNavigationPage };
-    if(authService.isAuthenticated())
-    {
-      this.nav.setRoot(this.main_page.component);
-    }
+    //if(authService.isAuthenticated())
+    //{
+    //  this.nav.setRoot(this.main_page.component);
+    //}
 
     this.validationError = null;
     this.login = new FormGroup({
       email: new FormControl('', Validators.required),
-      password: new FormControl('test', Validators.required)
+      password: new FormControl('', Validators.required)
     });
   }
 

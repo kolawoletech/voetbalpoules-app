@@ -2,3 +2,10 @@
 	font-weight: bold;
 	font-size: 1.5em;
 }
+ion-slide.swiper-slide {
+    align-items: flex-start;
+}
+ion-slide {
+    overflow-y: auto;
+    display: block;
+}
