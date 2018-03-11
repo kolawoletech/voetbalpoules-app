@@ -1,4 +1,4 @@
-.voorspelling {
+.voorspelling, .punten {
 	font-weight: bold;
 	font-size: 1.5em;
 }
@@ -9,9 +9,26 @@ ion-slide {
     overflow-y: auto;
     display: block;
 }
-#predictions .item-input ion-input {
-    border: $theme-color-2 solid 1px;
-}
 ion-label {
     margin: 0; 
   }
+#predictions {
+    .item-input ion-input {
+        border: $theme-color-2 solid 1px;
+    }
+    ion-row {
+        text-align: center;
+    }
+    ion-col img {
+        padding: 0em .8em;
+    }
+    ion-col p.team {
+        font-size: 1rem;
+    }
+    .groen {
+        color: green;
+    }
+    .rood {
+        color: red;
+    }
+}

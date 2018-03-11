@@ -17,7 +17,6 @@ import { Observable } from 'rxjs/Observable';
 export class LoginPage {
   login: FormGroup;
   main_page: { component: any };
-  loading: any;
   validationError: string;
 
   constructor(
@@ -43,32 +42,33 @@ export class LoginPage {
   }
 
   public doLogin(values){
-    this.loading = this.loadingCtrl.create();
+    let loading = this.loadingCtrl.create();
+    loading.present();
     this.authService.login(this.login.value.email, this.login.value.password)
-      .subscribe(
+    .finally(() => loading.dismiss())
+    .subscribe(
         data => {
           this.nav.setRoot(this.main_page.component);      
-          this.loading.dismiss();
         },
         err => {
           this.validationError = err;
-          this.loading.dismiss();
         }
       )
   }
 
   public doFacebookLogin() {
-    this.loading = this.loadingCtrl.create();
+    let loading = this.loadingCtrl.create();
+    loading.present();
 
     this.facebookLoginService.doFacebookLogin().then(
       res => {
         console.log("Facebook logged in.");
         this.nav.setRoot(this.main_page.component);
-        this.loading.dismiss();
+        loading.dismiss();
       }, 
       err => {        
         this.validationError = err;  
-        this.loading.dismiss();
+        loading.dismiss();
       }
     );
   }

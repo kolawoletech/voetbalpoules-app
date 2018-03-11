@@ -9,28 +9,34 @@
       <ion-slide *ngFor="let dag of speelData">
         <h2>{{dag.datum | date: shortdate }}</h2>
         <form>
-            <ion-list *ngFor="let voorspelling of dag.voorspellingen">
+            <ion-list no-lines *ngFor="let voorspelling of dag.voorspellingen" no-margin>
             <ion-item>
-              <ion-grid>
-                  <ion-row justify-content-center>
-                    <ion-col col-4>
-                      <img src="{{getLogo(voorspelling.wedstrijd.thuisteam)}}" />                    
+              <ion-grid align-items-center>
+                  <ion-row>
+                    <ion-col col-3 class="team">
+                      <img src="{{getLogo(voorspelling.wedstrijd.thuisteam)}}" />
+                      <p class="team">{{voorspelling.wedstrijd.thuisteam.naam}}</p>                    
                     </ion-col>
-                    <ion-col ion-item col-2 *ngIf="voorspelling.wijzigbaar">
+                    <ion-col ion-item col-3 *ngIf="voorspelling.wijzigbaar">
                         <ion-input type="number" maxlength="2" min="0" max="20" value="{{voorspelling.thuisdoelpunten}}"></ion-input>
-                      </ion-col>
-                      <ion-col ion-item col-2 *ngIf="voorspelling.wijzigbaar">
-                        <ion-input type="number" maxlength="2" min="0" max="20" value="{{voorspelling.uitdoelpunten}}"></ion-input>
-                      </ion-col>
-                      <ion-col col-4 text-center align-self-center *ngIf="!voorspelling.wijzigbaar">
-                      <span class="voorspelling">
-                          {{voorspelling.thuisdoelpunten}} - {{voorspelling.uitdoelpunten}}                    
-                      </span>
-                      <br>
-                      {{voorspelling.wedstrijd.thuisdoelpunten}} - {{voorspelling.wedstrijd.uitdoelpunten}}  
                     </ion-col>
-                    <ion-col col-4>
+                    <ion-col ion-item col-3 *ngIf="voorspelling.wijzigbaar">
+                      <ion-input type="number" maxlength="2" min="0" max="20" value="{{voorspelling.uitdoelpunten}}"></ion-input>
+                    </ion-col>
+                    <ion-col col-5 text-center align-self-center *ngIf="!voorspelling.wijzigbaar">
+                      <span class="voorspelling">
+                          <span [ngClass]="{'groen': voorspelling.thuisdoelpunten === voorspelling.wedstrijd.thuisdoelpunten}">{{voorspelling.thuisdoelpunten}}</span> 
+                          <span [ngClass]="{'groen': (voorspelling.thuisdoelpunten === voorspelling.wedstrijd.thuisdoelpunten && voorspelling.uitdoelpunten === voorspelling.wedstrijd.uitdoelpunten)}">-</span>  
+                          <span [ngClass]="{'groen': voorspelling.uitdoelpunten === voorspelling.wedstrijd.uitdoelpunten}">{{voorspelling.uitdoelpunten}}</span> 
+                      </span>
+                      <p>{{voorspelling.wedstrijd.thuisdoelpunten}} - {{voorspelling.wedstrijd.uitdoelpunten}}</p>                      
+                    </ion-col>
+                    <ion-col col-3 class="team">
                       <img src="{{getLogo(voorspelling.wedstrijd.uitteam)}}" />                    
+                      <p class="team">{{voorspelling.wedstrijd.uitteam.naam}}</p>
+                    </ion-col>
+                    <ion-col col-1 text-right align-self-center class="punten" no-padding *ngIf="!voorspelling.wijzigbaar">
+                      {{voorspelling.punten}}                      
                     </ion-col>
                   </ion-row>
                 </ion-grid>        

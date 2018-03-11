@@ -10,7 +10,6 @@ import { Team } from './predictions.model';
   templateUrl: 'predictions.html',
 })
 export class PredictionsPage {
-  loading: any;
   user: any;
   auth: AuthService;
 
@@ -47,11 +46,12 @@ export class PredictionsPage {
         subscription.unsubscribe();
       });
     });
-    this.loading = this.loadingCtrl.create();
+    let loading = this.loadingCtrl.create();
+    loading.present();
 
     return this.predictionsService
       .getData(this.user.sub)
-      .finally(() => this.loading.dismiss())
+      .finally(() => loading.dismiss())
       .subscribe(data => {
         console.log("verwerk data");
         var previousDay = new PredictionsModel(data.vorigeDag);
@@ -88,10 +88,12 @@ export class PredictionsPage {
       console.log(today.datum + " heeft al voorspellingen!");
       return;
     }
-    this.loading = this.loadingCtrl.create();
+    let loading = this.loadingCtrl.create();
+    loading.present();
+
     return this.predictionsService
       .getData(this.user.sub, today.datum)
-      .finally(() => this.loading.dismiss())
+      .finally(() => loading.dismiss())
       .subscribe(data => {
         this.speelData[currentIndex] = data;
         var newSlide = new PredictionsModel(isNext ? data.volgendeDag : data.vorigeDag);
