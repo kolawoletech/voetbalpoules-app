@@ -15,7 +15,6 @@ import { SignupPage } from '../pages/signup/signup';
 import { ForgotPasswordPage } from '../pages/forgot-password/forgot-password';
 import { TermsOfServicePage } from '../pages/terms-of-service/terms-of-service';
 import { PrivacyPolicyPage } from '../pages/privacy-policy/privacy-policy';
-import { AdsPage } from '../pages/ads/ads';
 
 //import { PreloadImage } from '../components/preload-image/preload-image';
 //import { BackgroundImage } from '../components/background-image/background-image';
@@ -77,7 +76,6 @@ export function jwtOptionsFactory(localStorageService) {
     SignupPage,
     WalkthroughPage,
     ForgotPasswordPage,
-    AdsPage,
     ProfilePage,
     Rating,
     ShowHideInput,

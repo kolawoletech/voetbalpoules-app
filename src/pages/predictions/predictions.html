@@ -4,18 +4,25 @@
   </ion-navbar>
 </ion-header>
 
-<ion-content>
+<ion-content id="predictions">
   <ion-slides #slider (ionSlideNextEnd)="loadNext()" (ionSlidePrevEnd)="loadPrev()" [initialSlide]="1" pager="true">
       <ion-slide *ngFor="let dag of speelData">
         <h2>{{dag.datum | date: shortdate }}</h2>
-        <ion-list *ngFor="let voorspelling of dag.voorspellingen">
+        <form>
+            <ion-list *ngFor="let voorspelling of dag.voorspellingen">
             <ion-item>
               <ion-grid>
                   <ion-row justify-content-center>
                     <ion-col col-4>
                       <img src="{{getLogo(voorspelling.wedstrijd.thuisteam)}}" />                    
                     </ion-col>
-                    <ion-col col-4 text-center align-self-center>
+                    <ion-col ion-item col-2 *ngIf="voorspelling.wijzigbaar">
+                        <ion-input type="number" maxlength="2" min="0" max="20" value="{{voorspelling.thuisdoelpunten}}"></ion-input>
+                      </ion-col>
+                      <ion-col ion-item col-2 *ngIf="voorspelling.wijzigbaar">
+                        <ion-input type="number" maxlength="2" min="0" max="20" value="{{voorspelling.uitdoelpunten}}"></ion-input>
+                      </ion-col>
+                      <ion-col col-4 text-center align-self-center *ngIf="!voorspelling.wijzigbaar">
                       <span class="voorspelling">
                           {{voorspelling.thuisdoelpunten}} - {{voorspelling.uitdoelpunten}}                    
                       </span>
@@ -29,6 +36,7 @@
                 </ion-grid>        
             </ion-item>
         </ion-list>
-      </ion-slide>
+      </form>
+    </ion-slide>
   </ion-slides>      
 </ion-content>

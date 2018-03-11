@@ -112,6 +112,8 @@ export class PredictionsPage {
   }
 
   getLogo(team : Team) : string {
-    return "https://www.voetbalpoules.nl/foto/" + team.logoId;
+    //return "https://www.voetbalpoules.nl/foto/" + team.logoId;
+    return "https://voetbalpoules.azureedge.net/logo/" + team.logoId + ".svg";    
+    //return "https://voetbalpoules.blob.core.windows.net/logo/" + team.logoId + ".svg";
   } 
 }

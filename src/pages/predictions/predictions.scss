@@ -9,3 +9,9 @@ ion-slide {
     overflow-y: auto;
     display: block;
 }
+#predictions .item-input ion-input {
+    border: $theme-color-2 solid 1px;
+}
+ion-label {
+    margin: 0; 
+  }

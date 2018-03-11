@@ -17,6 +17,7 @@ export class Prediction {
   punten: number;
   thuisdoelpunten: number;
   thuisspeler: Player;
+  wijzigbaar: Boolean;
   uitdoelpunten: number;
   uitspeler: Player;
   wedstrijd: Match;
