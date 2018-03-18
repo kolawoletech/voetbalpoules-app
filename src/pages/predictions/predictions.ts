@@ -88,29 +88,30 @@ export class PredictionsPage {
       console.log(today.datum + " heeft al voorspellingen!");
       return;
     }
-    let loading = this.loadingCtrl.create();
-    loading.present();
 
-    return this.predictionsService
-      .getData(this.user.sub, today.datum)
-      .finally(() => loading.dismiss())
-      .subscribe(data => {
-        this.speelData[currentIndex] = data;
-        var newSlide = new PredictionsModel(isNext ? data.volgendeDag : data.vorigeDag);
+    //let loading = this.loadingCtrl.create({ showBackdrop: false});
+    //loading.present().then(() => {    
+      return this.predictionsService
+        .getData(this.user.sub, today.datum)
+        //.finally(() => loading.dismiss())
+        .subscribe(data => {
+          this.speelData[currentIndex] = data;
+          var newSlide = new PredictionsModel(isNext ? data.volgendeDag : data.vorigeDag);
 
-        if(isNext)
-        {
-          currentIndex--;
-          this.speelData.push(newSlide);
-        }
-        else
-        {
-          currentIndex++;
-          this.speelData.unshift(newSlide);
-          console.log("zet slider in loadSlide")
-          this.slider.slideTo(currentIndex, 0, false);
-        }
-      });          
+          if(isNext)
+          {
+            currentIndex--;
+            this.speelData.push(newSlide);
+          }
+          else
+          {
+            currentIndex++;
+            this.speelData.unshift(newSlide);
+            console.log("zet slider in loadSlide")
+            this.slider.slideTo(currentIndex, 0, false);
+          }
+        });
+      //});
   }
 
   getLogo(team : Team) : string {

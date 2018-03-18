@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 import { catchError, tap } from 'rxjs/operators';
 import { HttpHeaders, HttpParams } from '@angular/common/http';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
@@ -30,15 +31,21 @@ export class JwtToken {
 
 @Injectable()
 export class AuthService {
-  authUrl: string = 'https://auth.voetbalpoules.nl';
-  //authUrl: string = 'http://localhost:5000';
+  //authUrl: string = 'https://auth.voetbalpoules.nl';
+  authUrl: string = 'http://localhost:5000';
   accessToken: string;
   //idToken: string;
   user: any;
 
+  // Observable to send messages to when the user is no long auth'd
+  // BehaviorSubject is like a ReplaySubject with a stack depth of 1
+  authNotifier: BehaviorSubject<boolean> = new BehaviorSubject(null);
+
   constructor(public events: Events, private http: HttpClient, private localStorage: LocalStorageService) {
     this.user = localStorage.getStorageVariable('profile');
     //this.idToken = this.getStorageVariable('id_token');
+
+    this.authNotifier.next(this.isAuthenticated()); // will return true or false
   }
 
   // private setIdToken(token) {
@@ -65,7 +72,7 @@ export class AuthService {
     }
   }
 
-  public isAuthenticated() : Boolean {
+  public isAuthenticated() : boolean {
     const expiresAt = this.localStorage.getStorageVariable('expires_at');
     console.log("isAuthenticated: expires: " + expiresAt + ", user: " + this.user);
     return this.user != null && Date.now() < expiresAt;
