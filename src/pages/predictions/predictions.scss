@@ -1,6 +1,6 @@
 .voorspelling, .punten {
 	font-weight: bold;
-	font-size: 1.5em;
+	font-size: 6vw;
 }
 ion-slide.swiper-slide {
     align-items: flex-start;
@@ -11,10 +11,68 @@ ion-slide {
 }
 ion-label {
     margin: 0; 
-  }
+}
+//cancel knop van selecteren doelpuntenmaker
+.action-sheet-cancel {
+    border-top: #ababab solid 1px; 
+    background-color: #acacac !important; 
+    text-align: right;
+}
+.action-sheet-button {
+    border-bottom: #ababab solid 1px; 
+}
+
 #predictions {
-    .item-input ion-input {
-        border: $theme-color-2 solid 1px;
+    
+    form {
+        height: 100%;
+        .error
+        {
+          border: color($colors, danger) solid 2px;
+        }
+        .opgeslagen
+        {
+          border: green solid 1px;
+        }
+        .opgeslagen-melding 
+        {
+          padding-top: 6px;
+          color: green;
+          font-size: 3.5vw;
+          min-height: 7vw;
+        }
+        
+        .error-message
+        {
+          padding-top:6px;
+          color: color($colors, danger);
+          font-size: 4vw;
+          font-weight: 500;
+          background-color: inherit; //voor de achtergrond van de wedstrijd van de week
+        }
+    }
+    .card-header-md {
+        padding: 0;
+        .item-md
+        {
+            background-color: rgba(#ababab, 0.1);
+            color: #ababab;
+            font-size: 3vw;
+        }
+    }
+    .wvdw {
+        background-color: rgba($theme-color-2, 0.1);
+        .card-header-md {
+            .item-md {
+                background-color: inherit; 
+            }
+        }
+    }
+    .links {
+        text-align: left;
+    }
+    .rechts {
+        text-align: right;
     }
     ion-row {
         text-align: center;
@@ -22,13 +80,48 @@ ion-label {
     ion-col img {
         padding: 0em .8em;
     }
-    ion-col p.team {
-        font-size: 1rem;
+    ion-col .team {
+        font-size: 3vw;
+        padding: 6px 0;
+    }
+    .doelpunt-container.selected {
+        border: $theme-color-2 solid 2px;
+    }
+    .doelpunt-container {
+        border: $theme-color-2 solid 1px; 
+        width: 100%;
+        padding-top: 100%; /* 1:1 Aspect Ratio */
+        position: relative; /* If you want text inside of it */
+        background-color: white;
+        .doelpunt {
+            position: absolute;
+            top: 50%;
+            height: 50%;
+            margin-top: -25%;
+            left: 0;
+            right: 0;
+            text-align: center;
+            vertical-align: middle;
+            font-size: 5vw;
+            font-weight: bold;
+        }
+    }
+    .doelpuntenmaker {
+        border: $theme-color-2 solid 1px;
     }
     .groen {
         color: green;
     }
     .rood {
         color: red;
+    }
+    ion-select {
+        max-width: 100%;
+        width: 100%;
+        padding: 0;
+    }
+    /* deze zorgt ervoor dat het pijltje van de dropdown normaal staat */
+    .select-md .select-icon .select-icon-inner {
+        left: 0px;
     }
 }

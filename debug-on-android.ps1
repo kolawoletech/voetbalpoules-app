@@ -1,1 +1,1 @@
-ionic cordova run android --device
+ionic cordova run android --device -s -c --livereload

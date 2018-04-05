@@ -1,29 +1,141 @@
-import { Component, ViewChild, ViewChildren, QueryList } from '@angular/core';
+import { IonDigitKeyboardCmp } from '../../components/ion-digit-keyboard';
+import { Component, ViewChild, ViewChildren, QueryList, OnDestroy } from '@angular/core';
 import { LoadingController, Events, Slides, Slide } from 'ionic-angular';
+import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 import { AuthService } from "../../providers/auth/auth.service";
-import { PredictionsModel } from './predictions.model';
+import { PredictionsModel, ValidationResult } from './predictions.model';
 import { PredictionsService } from './predictions.service';
-import { Team } from './predictions.model';
+import { Team, Prediction, PredictionCommand } from './predictions.model';
+import { Observable } from 'rxjs';
+import { Subscription } from 'rxjs/Subscription';
+import { TabsService } from '../../providers/tabs.service';
+import { PredictionValidations } from './predictions.validations';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'predictions-page',
   templateUrl: 'predictions.html',
 })
-export class PredictionsPage {
+export class PredictionsPage implements OnDestroy {
+  subscription: Subscription;
   user: any;
   auth: AuthService;
 
   @ViewChild('slider') private slider: Slides;
   @ViewChildren(Slide) slideCollection: QueryList<Slide>;
+  @ViewChild(IonDigitKeyboardCmp) keyboard;
+
   speelData: PredictionsModel[] = [];
+  slideForm: FormGroup;
+  currentFieldThuis: boolean;
+  currentVoorspelling: Prediction;
+  keyboardHeader: string;
+  thuisdoelpunten: string = '';
 
   constructor(
     public predictionsService: PredictionsService,
     public loadingCtrl: LoadingController,
     public authService: AuthService,
-    private events: Events
+    public formBuilder: FormBuilder,
+    public tabsService: TabsService,
+    private events: Events,
+    private translate: TranslateService
   ) {
     this.auth = authService;
+  }
+
+  ngOnInit() {
+    this.slideForm = new FormGroup({});
+
+    /**
+     * Since we want to prevent native keyboard to show up, we put the disabled
+     * attribute on the input, and manage focus programmaticaly.
+     */
+    this.subscription = this.keyboard.onClick.subscribe((key: any) => {
+      let voorspelling = this.currentVoorspelling;
+      if (typeof key == 'number') {
+        let formGroup = this.slideForm.controls["voorspelling-" + voorspelling.wedstrijd.id];
+        if(this.currentFieldThuis) {
+          voorspelling.thuisdoelpunten = key; // template toont deze value...
+          var control = <FormControl>formGroup.get('thuisdoelpunten');
+          control.markAsDirty();
+          control.setValue(key);
+        }
+        else {
+          voorspelling.uitdoelpunten = key; // template toont deze value...
+          var control2 = <FormControl>formGroup.get('uitdoelpunten');
+          control2.markAsDirty();
+          control2.setValue(key);
+        }
+      }
+      if(this.currentFieldThuis) {
+        this.setFocus(voorspelling, false);
+      }
+      else {
+        this.hideKeyboard();
+      }
+    });
+
+    // (BLur) Clear focus field name on keyboard hide
+    const subscription = this.keyboard.onHide.subscribe(() => {
+      this.hideKeyboard();
+    });
+    this.subscription.add(subscription);
+  }
+
+  ngOnDestroy() {
+    console.log("kill m'allllllllllllllllllllllllllllllll");
+    this.subscription.unsubscribe();
+  }
+
+  public isValid(voorspelling: Prediction, fieldName: string) : boolean { 
+    let formGroup = this.slideForm.controls["voorspelling-" + voorspelling.wedstrijd.id] as FormGroup;
+    return formGroup.controls[fieldName].valid; 
+  }
+
+  public errorMessage(voorspelling: Prediction, fieldName: string) : Observable<string> { 
+    let formGroup = this.slideForm.controls["voorspelling-" + voorspelling.wedstrijd.id] as FormGroup;
+    let error = formGroup.controls[fieldName].getError("error"); 
+    return this.translate.get(error);
+  }
+
+  setFocus(voorspelling: Prediction, isThuis: boolean) {
+    document.querySelector((isThuis ? "#t-" : "#u-") + voorspelling.wedstrijd.id).classList.add('selected');
+    document.querySelector((isThuis ? "#u-" : "#t-") + voorspelling.wedstrijd.id).classList.remove('selected');
+    this.currentFieldThuis = isThuis;
+    this.currentVoorspelling = voorspelling;
+
+    this.setKeyboardHeader(voorspelling, isThuis);
+    this.showKeyboard();
+  }
+
+  private setKeyboardHeader(voorspelling: Prediction, isThuis: boolean)
+  {
+    let keyboardHeader = isThuis ? voorspelling.wedstrijd.thuisteam.naam : voorspelling.wedstrijd.uitteam.naam;
+    if(isThuis && voorspelling.thuisdoelpunten != null)
+      keyboardHeader += " (" + voorspelling.thuisdoelpunten + ")";
+    if(!isThuis && voorspelling.uitdoelpunten != null)
+      keyboardHeader += " (" + voorspelling.uitdoelpunten + ")";
+    this.keyboardHeader = keyboardHeader;
+  }
+
+  showKeyboard() {
+    this.tabsService.hide();
+    this.keyboard.show();    
+  }
+
+  hideKeyboard() {
+    if(this.currentFieldThuis != null && this.currentVoorspelling != null)
+    {
+      document.querySelector("#t-" + this.currentVoorspelling.wedstrijd.id).classList.remove('selected');
+      document.querySelector("#u-" + this.currentVoorspelling.wedstrijd.id).classList.remove('selected');
+      this.currentFieldThuis = null;
+      this.currentVoorspelling = null;  
+    }
+    this.keyboard.hide();
+    //Hier moet een timeout omheen, anders klik je bij de 0 direct op de tabbar...
+    setTimeout(() => { this.tabsService.show(); }, 50); 
+    this.keyboardHeader = null;
   }
 
   ionViewWillEnter() {
@@ -60,6 +172,8 @@ export class PredictionsPage {
         this.speelData.push(data);
         console.log("pushed vandaag");
 
+        this.mapVoorspellingen(data.voorspellingen);
+
         var nextDay = new PredictionsModel(data.volgendeDag);
         nextDay.datum = data.volgendeDag;
         this.speelData.push(nextDay);
@@ -67,14 +181,98 @@ export class PredictionsPage {
       });  
   }
 
+  private mapVoorspellingen(voorspellingen: Prediction[])
+  {
+    voorspellingen.map((voorspelling, index) => {
+      const name = 'voorspelling-' + voorspelling.wedstrijd.id.toString();
+      const formGroup = this.formBuilder.group({
+        wedstrijdId: [''],
+        thuisdoelpunten: ['', [Validators.required]],
+        uitdoelpunten: ['', [Validators.required]]
+        });
+
+      formGroup.setValue({
+        wedstrijdId: voorspelling.wedstrijd.id,
+        thuisdoelpunten: voorspelling.thuisdoelpunten,
+        uitdoelpunten: voorspelling.uitdoelpunten
+      });
+      if(voorspelling.wedstrijd.wedstrijdVanDeWeek)
+      {
+        formGroup.addControl("thuisspelerId", new FormControl(voorspelling.thuisspeler ? voorspelling.thuisspeler.id : null));
+        formGroup.addControl("uitspelerId", new FormControl(voorspelling.uitspeler ? voorspelling.uitspeler.id : null));
+
+        formGroup.setValidators( Validators.compose([PredictionValidations.wedstrijdVanDeWeek]));
+
+        //doelpunt op 0? Selecteer dan gelijk 'Geen score'
+        let subscribe = formGroup.controls["thuisdoelpunten"].valueChanges.subscribe(value => {
+          if(value == 0)
+            formGroup.controls["thuisspelerId"].setValue(-1);
+        });
+        this.subscription.add(subscribe);
+
+        let subscribeUit = formGroup.controls["uitdoelpunten"].valueChanges.subscribe(value => {
+          if(value == 0)
+            formGroup.controls["uitspelerId"].setValue(-1);
+        });
+        this.subscription.add(subscribeUit);
+      }
+
+      let subscription = formGroup.valueChanges.subscribe(voorspelling => {
+        console.log("save voorspelling? " + formGroup.dirty + ' ' + formGroup.valid);
+        if(formGroup.dirty && formGroup.valid)
+        {
+          return this.save(voorspelling)
+            .subscribe(data => {
+              formGroup.markAsPristine();
+              voorspellingen[index].foutmelding = null;
+              voorspellingen[index].opgeslagen = true; 
+              // setTimeout(function() { //doei na 1,5 seconde
+              //   voorspellingen[index].opgeslagen = false;
+              // }.bind(this), 3000);            
+            }, error => {
+              voorspellingen[index].opgeslagen = false; 
+              var validationErrors = <ValidationResult>error;
+              if(validationErrors != null && validationErrors.errors != null)
+                validationErrors.errors.forEach(validationError => {
+                  validationError.memberNames.forEach(member => {
+                    formGroup.controls[member].setErrors({'error': validationError.errorMessage});
+                  });                
+                });
+              if (validationErrors.message != null) {
+                voorspellingen[index].foutmelding = validationErrors.message;
+              }
+            });
+        }
+        if(formGroup.invalid)
+          voorspellingen[index].opgeslagen = false; 
+      });
+      this.subscription.add(subscription);
+      this.slideForm.addControl(name, formGroup);
+    })
+  }
+
   loadPrev() {
     console.log('Prev');
+    this.hideKeyboard();
     this.loadSlide(false);
 	}
 	
 	loadNext() {    
     console.log('Next');
+    this.hideKeyboard();
     this.loadSlide(true);
+  }
+
+  save(prediction: any) : Observable<Object> {
+    let predictionCommand = new PredictionCommand();
+    predictionCommand.wedstrijdId = prediction.wedstrijdId;
+    predictionCommand.thuisdoelpunten = prediction.thuisdoelpunten;
+    predictionCommand.uitdoelpunten = prediction.uitdoelpunten;
+    predictionCommand.thuisspelerId = prediction.thuisspelerId;
+    predictionCommand.uitspelerId = prediction.uitspelerId;
+    
+    return this.predictionsService
+      .save(this.user.sub, predictionCommand);
   }
 
   private loadSlide(isNext: Boolean)
@@ -89,15 +287,17 @@ export class PredictionsPage {
       return;
     }
 
-    //let loading = this.loadingCtrl.create({ showBackdrop: false});
-    //loading.present().then(() => {    
+    let loading = this.loadingCtrl.create({ showBackdrop: false});
+    loading.present().then(() => {    
       return this.predictionsService
         .getData(this.user.sub, today.datum)
-        //.finally(() => loading.dismiss())
+        .finally(() => loading.dismiss())
         .subscribe(data => {
           this.speelData[currentIndex] = data;
           var newSlide = new PredictionsModel(isNext ? data.volgendeDag : data.vorigeDag);
 
+          this.mapVoorspellingen(data.voorspellingen);
+  
           if(isNext)
           {
             currentIndex--;
@@ -111,12 +311,10 @@ export class PredictionsPage {
             this.slider.slideTo(currentIndex, 0, false);
           }
         });
-      //});
+      });
   }
 
-  getLogo(team : Team) : string {
-    //return "https://www.voetbalpoules.nl/foto/" + team.logoId;
+  private getLogo(team : Team) : string {
     return "https://voetbalpoules.azureedge.net/logo/" + team.logoId + ".svg";    
-    //return "https://voetbalpoules.blob.core.windows.net/logo/" + team.logoId + ".svg";
   } 
 }

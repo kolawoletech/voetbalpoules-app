@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget android-versionCode="8" id="com.voetbalpoules.app" version="0.0.8" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget android-versionCode="14" id="com.voetbalpoules.app" version="0.0.14" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>Voetbalpoules</name>
     <description>De leukste voetbalpoule van Nederland!</description>
     <author email="jeroen@voetbalpoules.nl" href="https://www.voetbalpoules.nl/">Voetbalpoules</author>
@@ -97,6 +97,7 @@
     <allow-navigation href="http://192.168.178.41:8100" />
     <allow-navigation href="http://192.168.178.28:8100" />
     <plugin name="cordova-plugin-whitelist" spec="^1.3.3" />
+    <plugin name="cordova-custom-config" spec="^5.0.2" />
     <engine name="ios" spec="4.4.0" />
     <engine name="android" spec="^6.4.0" />
 </widget>

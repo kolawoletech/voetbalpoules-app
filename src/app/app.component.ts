@@ -42,11 +42,6 @@ export class MyApp {
   ) {
     translate.setDefaultLang('nl');
     translate.use('nl');
-    // if(authService.isAuthenticated())
-    // {
-    //   console.log("authenticated, ga direct door naar de tabs.")
-    //   this.rootPage = TabsNavigationPage;
-    // }  
 
     platform.ready().then(() => {
       if(platform.is('cordova'))
@@ -93,7 +88,7 @@ export class MyApp {
       // filter on null so our app will wait for a real response
       .filter(res => res !== null)
       .subscribe(status => {
-        console.log("APP AuthNotifier said: ",status);
+        console.log("APP AuthNotifier said: ", status);
         if(!status){ // when not auth'd
           console.log("APP Logging out!");
           this.nav.setRoot(LoginPage);

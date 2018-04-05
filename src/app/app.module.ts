@@ -1,7 +1,7 @@
-import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA, LOCALE_ID } from '@angular/core';
 import { IonicApp, IonicModule } from 'ionic-angular';
 import { MyApp } from './app.component';
-import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
+import { TranslateModule, TranslateLoader, TranslateService } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { Http } from '@angular/http';
 
@@ -20,6 +20,7 @@ import { PrivacyPolicyPage } from '../pages/privacy-policy/privacy-policy';
 //import { BackgroundImage } from '../components/background-image/background-image';
 import { ShowHideContainer } from '../components/show-hide-password/show-hide-container';
 import { ShowHideInput } from '../components/show-hide-password/show-hide-input';
+import { TabsService } from '../providers/tabs.service';
 //import { ColorRadio } from '../components/color-radio/color-radio';
 //import { CounterInput } from '../components/counter-input/counter-input';
 import { Rating } from '../components/rating/rating';
@@ -50,6 +51,7 @@ import { AuthService } from '../providers/auth/auth.service';
 import { LanguageService } from '../providers/language/language.service';
 import { LocalStorageService} from '../providers/localstorage/localstorage.service';
 import { LanguageInterceptor } from '../interceptors/language.interceptor';
+import { IonDigitKeyboard } from '../components/ion-digit-keyboard/ion-digit-keyboard.module';
 
 export function createTranslateLoader(http: Http) {
 	return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -85,6 +87,7 @@ export function jwtOptionsFactory(localStorageService) {
     BrowserModule,
     HttpModule,
     HttpClientModule,
+    IonDigitKeyboard,
     JwtModule.forRoot({
       jwtOptionsProvider: {
         provide: JWT_OPTIONS,
@@ -94,8 +97,8 @@ export function jwtOptionsFactory(localStorageService) {
     }),    
     IonicModule.forRoot(MyApp, {
       scrollPadding: false,
-      scrollAssist: false,
-      autoFocusAssist: true
+      scrollAssist: true,
+      autoFocusAssist: false
     }),
 		TranslateModule.forRoot({
     loader: {
@@ -115,11 +118,12 @@ export function jwtOptionsFactory(localStorageService) {
     SettingsPage
   ],
   providers: [
+    TabsService,
     PredictionsService,
     FacebookLoginService,
     AuthService,
     LocalStorageService,
-		LanguageService,
+    LanguageService,
 	  SplashScreen,
 	  StatusBar,
     NativeStorage,
@@ -132,8 +136,17 @@ export function jwtOptionsFactory(localStorageService) {
       provide: HTTP_INTERCEPTORS,
       useClass: LanguageInterceptor,
       multi: true
-    }
+    },
+    {
+      provide: LOCALE_ID, // takes care of date pipe locale
+      deps: [TranslateService], 
+      useFactory: getCurrentLanguage
+    }    
   ],
   schemas: [ CUSTOM_ELEMENTS_SCHEMA ]
 })
 export class AppModule {}
+
+export function getCurrentLanguage(translateService: TranslateService) {
+  return translateService.currentLang;
+}
