@@ -50,7 +50,7 @@ export class AuthService {
     const expiresAt = this.localStorage.getStorageVariable('expires_at');
     console.log("isAuthenticated: expires: " + new Date(expiresAt*1000).toISOString() + ", user: " + this.user);
     let timeToRefresh = Math.round(new Date().getTime() / 1000) - (30*60); //als de token nog een half uur geldig is, dan maar ff refreshen
-    return Math.round(new Date().getTime() / 1000) < expiresAt;
+    return timeToRefresh < expiresAt;
   }
 
   private setRefreshToken(token) {

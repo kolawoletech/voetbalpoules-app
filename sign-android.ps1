@@ -8,3 +8,5 @@ del ..\voetbalpoules.apk
 zipalign.exe -v 4 .\platforms\android\build\outputs\apk\release\android-release-unsigned.apk ..\voetbalpoules.apk
 
 apksigner verify ..\voetbalpoules.apk
+
+adb install ..\voetbalpoules.apk
