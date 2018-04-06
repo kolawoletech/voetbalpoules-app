@@ -34,24 +34,28 @@ export class AuthService {
   authUrl: string = 'https://auth.voetbalpoules.nl';
   //authUrl: string = 'http://localhost:5000';
   accessToken: string;
-  //idToken: string;
   user: any;
 
-  // Observable to send messages to when the user is no long auth'd
+  // Observable to send messages when the user is no longer auth'd
   // BehaviorSubject is like a ReplaySubject with a stack depth of 1
   authNotifier: BehaviorSubject<boolean> = new BehaviorSubject(null);
 
   constructor(public events: Events, private http: HttpClient, private localStorage: LocalStorageService) {
     this.user = localStorage.getStorageVariable('profile');
-    //this.idToken = this.getStorageVariable('id_token');
 
     this.authNotifier.next(this.isAuthenticated()); // will return true or false
   }
 
-  // private setIdToken(token) {
-  //   this.idToken = token;
-  //   this.setStorageVariable('id_token', token);
-  // }
+  private isAuthenticated() : boolean {
+    const expiresAt = this.localStorage.getStorageVariable('expires_at');
+    console.log("isAuthenticated: expires: " + new Date(expiresAt*1000).toISOString() + ", user: " + this.user);
+    let timeToRefresh = Math.round(new Date().getTime() / 1000) - (30*60); //als de token nog een half uur geldig is, dan maar ff refreshen
+    return Math.round(new Date().getTime() / 1000) < expiresAt;
+  }
+
+  private setRefreshToken(token) {
+     this.localStorage.setStorageVariable('refresh_token', token);
+  }
 
   private setAccessToken(token) {
     this.accessToken = token;
@@ -72,18 +76,12 @@ export class AuthService {
     }
   }
 
-  public isAuthenticated() : boolean {
-    const expiresAt = this.localStorage.getStorageVariable('expires_at');
-    console.log("isAuthenticated: expires: " + expiresAt + ", user: " + this.user);
-    return this.user != null && Date.now() < expiresAt;
-  }
-
   public login(email: string, password: string): Observable<UserResponse> {
     var headers = new HttpHeaders()
       .set('Content-Type', 'application/x-www-form-urlencoded');
     const body = new HttpParams()
       .set('grant_type', 'password')
-      .set('scope', '')
+      .set('scope', 'offline_access')
       .set('username', email)
       .set('password', password);      
 
@@ -95,15 +93,26 @@ export class AuthService {
       .set('Content-Type', 'application/x-www-form-urlencoded');
     const body = new HttpParams()
       .set('grant_type', 'facebook_identity_token')
-      .set('scope', '')
+      .set('scope', 'offline_access')
       .set('assertion', facebookToken);      
+    console.log(facebookToken);
+    return this.getToken(body, headers);
+  }
 
+  public refreshToken(): Observable<UserResponse> {
+    const refreshToken = this.localStorage.getStorageVariable('refresh_token');
+  
+    var headers = new HttpHeaders()
+      .set('Content-Type', 'application/x-www-form-urlencoded');
+    const body = new HttpParams()
+      .set('grant_type', 'refresh_token')
+      //.set('scope', 'offline_access')
+      .set('refresh_token', refreshToken);      
     return this.getToken(body, headers);
   }
 
   public logout() {    
     this.localStorage.clearAll();
-    //this.idToken = null;
     this.accessToken = null;
     this.user = null;
 
@@ -114,9 +123,13 @@ export class AuthService {
     let url = this.authUrl + '/connect/token';
     return this.http.post<UserResponse>(url, body.toString(), { headers })
       .pipe(tap<UserResponse>(authResult => {
-        //this.setIdToken(authResult.idToken);
         this.setAccessToken(authResult.access_token);
-        const expiresAt = JSON.stringify((authResult.expires_in * 1000) + new Date().getTime());
+        if(authResult.refresh_token)
+        {
+          this.setRefreshToken(authResult.refresh_token);
+          console.log("refresh token:" + authResult.refresh_token);
+        }
+        const expiresAt = JSON.stringify(authResult.expires_in + Math.round(new Date().getTime() / 1000));
         this.localStorage.setStorageVariable('expires_at', expiresAt);
         var bla = new JwtHelper();
         var token = bla.decodeToken(authResult.access_token) as JwtToken;

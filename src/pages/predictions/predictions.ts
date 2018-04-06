@@ -139,14 +139,14 @@ export class PredictionsPage implements OnDestroy {
   }
 
   ionViewWillEnter() {
-    if(!this.auth.isAuthenticated())
+    this.user = this.auth.user;
+    if(!this.user)
     {
-      console.log("niemand ingelogd.");
-      this.events.publish('logout', true); //app.component kan nu naar de root page
-      return;
+       console.log("niemand ingelogd.");
+       this.events.publish('logout', true); //app.component kan nu naar de root page
+       return;
     }
     console.log("Leeg speeldata");
-    this.user = this.auth.user;
     this.speelData = [];
     console.log("Haal eerstvolgende voorspellingen.");
 

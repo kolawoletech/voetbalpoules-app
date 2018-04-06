@@ -90,12 +90,16 @@ export class MyApp {
       .subscribe(status => {
         console.log("APP AuthNotifier said: ", status);
         if(!status){ // when not auth'd
-          console.log("APP Logging out!");
-          this.nav.setRoot(LoginPage);
-          // this.authService.logout().subscribe(res => { // logout and then redirect to login
-          //   console.log("Logged out.",res);
-          //   this.nav.setRoot('LoginPage');
-          // });
+          console.log("niet meer ingelogd, refresh token");
+          this.authService.refreshToken()
+            .subscribe(() => {
+              console.log("refresh token gelukt!");
+              this.nav.setRoot(TabsNavigationPage);
+            }, 
+            () => {
+              console.log("APP Logging out!");
+              this.nav.setRoot(LoginPage);    
+            });
         }
         else {
           this.nav.setRoot(TabsNavigationPage);
