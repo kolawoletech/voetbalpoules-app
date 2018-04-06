@@ -189,7 +189,7 @@ export class PredictionsPage implements OnDestroy {
         wedstrijdId: [''],
         thuisdoelpunten: ['', [Validators.required]],
         uitdoelpunten: ['', [Validators.required]]
-        });
+      });
 
       formGroup.setValue({
         wedstrijdId: voorspelling.wedstrijd.id,
@@ -314,7 +314,7 @@ export class PredictionsPage implements OnDestroy {
       });
   }
 
-  private getLogo(team : Team) : string {
+  getLogo(team : Team) : string {
     return "https://voetbalpoules.azureedge.net/logo/" + team.logoId + ".svg";    
   } 
 }

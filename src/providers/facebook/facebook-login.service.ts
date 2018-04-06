@@ -28,31 +28,31 @@ export class FacebookLoginService {
       return Promise.reject("This is not a native app!");      
     }
     console.log("start");
-    return this.fb.login(['public_profile']).then(
-      response => {
-        console.log("facebook login successfull.");
-        return this.authService.loginWithFacebook(response.authResponse.accessToken)
-          .toPromise()
-          .then(
-            data => {
-              console.log("facebook token authenticated.")
-              Promise.resolve("");
-            },
-            err => {
-              console.log("rejected");
-              Promise.reject(err.message);
-            }
-          ),
-      err => {
-        console.log("facebook call mislukt" + err);
-        Promise.reject(err);
-      }            
-    }).catch(error => {
-      let str = JSON.stringify(error, null, 4); // beautiful indented output.
-      console.log(str);
-      let error_message = this.TranslateError(str);
-      return Promise.reject(error_message);
-    });
+    return this.fb.login(['public_profile'])
+      .then(
+        response => {
+          console.log("facebook login successfull.");
+          return this.authService.loginWithFacebook(response.authResponse.accessToken).toPromise();
+        },
+        err => {
+          console.log("facebook call mislukt" + err);
+          Promise.reject(err);
+        })
+      .then(
+        data => {
+          console.log("facebook token authenticated.")
+          Promise.resolve("");
+        },
+        err => {
+          console.log("rejected");
+          Promise.reject(err.message);
+        })
+      .catch(error => {
+        let str = JSON.stringify(error, null, 4); // beautiful indented output.
+        console.log(str);
+        let error_message = this.TranslateError(str);
+        return Promise.reject(error_message);
+      });
   }
 
   public doFacebookLogout()
