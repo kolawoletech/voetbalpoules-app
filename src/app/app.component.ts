@@ -87,19 +87,10 @@ export class MyApp {
     this.authService.authNotifier
       // filter on null so our app will wait for a real response
       .filter(res => res !== null)
-      .subscribe(status => {
-        console.log("APP AuthNotifier said: ", status);
-        if(!status){ // when not auth'd
-          console.log("niet meer ingelogd, refresh token");
-          this.authService.refreshToken()
-            .subscribe(() => {
-              console.log("refresh token gelukt!");
-              this.nav.setRoot(TabsNavigationPage);
-            }, 
-            () => {
-              console.log("APP Logging out!");
-              this.nav.setRoot(LoginPage);    
-            });
+      .subscribe(isTokenValid => {
+        console.log("APP AuthNotifier said: ", isTokenValid);
+        if(!isTokenValid) {
+          this.nav.setRoot(LoginPage);    
         }
         else {
           this.nav.setRoot(TabsNavigationPage);

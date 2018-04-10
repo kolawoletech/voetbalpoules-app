@@ -31,8 +31,8 @@ export class JwtToken {
 
 @Injectable()
 export class AuthService {
-  authUrl: string = 'https://auth.voetbalpoules.nl';
-  //authUrl: string = 'http://localhost:5000';
+  //authUrl: string = 'https://auth.voetbalpoules.nl';
+  authUrl: string = 'http://localhost:5000';
   accessToken: string;
   user: any;
 
@@ -62,17 +62,17 @@ export class AuthService {
     this.localStorage.setStorageVariable('access_token', token);
   }
 
-  private handleError(operation: String) {
+  private handleError(operation: string) {
     return (err: any) => {
-      let errMsg = 'error in ${operation}() retrieving ${this.authUrl}';
-        console.log('${errMsg}:', err);
-        if(err instanceof HttpErrorResponse) {
-            // you could extract more info about the error if you want, e.g.:
-            console.log(`status: ${err.status}, ${err.statusText}`);
-            var error : ErrorMessage = JSON.parse(err.error);
-            errMsg = error.error_description;
-          }
-        return Observable.throw(errMsg);
+      let errMsg = 'error in ' + operation;
+      console.log(err);
+      if(err instanceof HttpErrorResponse) {
+        // you could extract more info about the error if you want, e.g.:
+        console.log(`status: ${err.status}, ${err.statusText}`);
+        var error : ErrorMessage = JSON.parse(err.error);
+        errMsg = error.error_description;
+      }
+      return Observable.throw(errMsg);
     }
   }
 
@@ -100,7 +100,7 @@ export class AuthService {
   }
 
   public refreshToken(): Observable<UserResponse> {
-    const refreshToken = this.localStorage.getStorageVariable('refresh_token');
+    const refreshToken = this.getRefreshToken();
   
     var headers = new HttpHeaders()
       .set('Content-Type', 'application/x-www-form-urlencoded');
@@ -109,6 +109,14 @@ export class AuthService {
       //.set('scope', 'offline_access')
       .set('refresh_token', refreshToken);      
     return this.getToken(body, headers);
+  }
+
+  public getAccessToken() : string {
+    return this.localStorage.getStorageVariable('access_token');
+  }
+
+  public getRefreshToken() : string {
+    return this.localStorage.getStorageVariable('refresh_token');
   }
 
   public logout() {    

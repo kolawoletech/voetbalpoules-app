@@ -1,9 +1,10 @@
-import { NgModule, CUSTOM_ELEMENTS_SCHEMA, LOCALE_ID } from '@angular/core';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA, LOCALE_ID, Injector } from '@angular/core';
 import { IonicApp, IonicModule } from 'ionic-angular';
 import { MyApp } from './app.component';
 import { TranslateModule, TranslateLoader, TranslateService } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
-import { Http } from '@angular/http';
+import { Http, HttpModule } from '@angular/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import { PredictionsPage } from '../pages/predictions/predictions';
 import { LoginPage } from '../pages/login/login';
@@ -32,10 +33,7 @@ import { PredictionsService } from '../pages/predictions/predictions.service';
 import { FacebookLoginService } from '../providers/facebook/facebook-login.service';
 
 import { BrowserModule } from '@angular/platform-browser';
-import { HttpModule } from '@angular/http';
 import { JwtModule, JWT_OPTIONS } from '@auth0/angular-jwt';
-import { HttpClientModule } from '@angular/common/http';
-import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
 import { NativeStorage } from '@ionic-native/native-storage';
@@ -51,16 +49,18 @@ import { AuthService } from '../providers/auth/auth.service';
 import { LanguageService } from '../providers/language/language.service';
 import { LocalStorageService} from '../providers/localstorage/localstorage.service';
 import { LanguageInterceptor } from '../interceptors/language.interceptor';
+import { UnauthorizedInterceptor } from '../interceptors/unauthorized.interceptor';
 import { IonDigitKeyboard } from '../components/ion-digit-keyboard/ion-digit-keyboard.module';
 
 export function createTranslateLoader(http: Http) {
 	return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }
 
-export function jwtOptionsFactory(localStorageService) {
+export function jwtOptionsFactory(inj: Injector) {
   return {
     tokenGetter: () => {
-      return localStorageService.getStorageVariable('access_token');
+      const authService = inj.get(AuthService);
+      return authService.getAccessToken();
     },
     whitelistedDomains: ['api.voetbalpoules.nl', 'localhost:49939']
   }
@@ -92,9 +92,9 @@ export function jwtOptionsFactory(localStorageService) {
       jwtOptionsProvider: {
         provide: JWT_OPTIONS,
         useFactory: jwtOptionsFactory,
-        deps: [LocalStorageService]
+        deps: [Injector]
       },
-    }),    
+    }),
     IonicModule.forRoot(MyApp, {
       scrollPadding: false,
       scrollAssist: true,
@@ -135,6 +135,11 @@ export function jwtOptionsFactory(localStorageService) {
     { 
       provide: HTTP_INTERCEPTORS,
       useClass: LanguageInterceptor,
+      multi: true
+    },
+    { 
+      provide: HTTP_INTERCEPTORS,
+      useClass: UnauthorizedInterceptor,
       multi: true
     },
     {
