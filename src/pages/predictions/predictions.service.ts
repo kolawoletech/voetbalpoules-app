@@ -7,8 +7,8 @@ import { catchError, tap } from 'rxjs/operators';
 
 @Injectable()
 export class PredictionsService {
-  //url: string = 'https://api.voetbalpoules.nl';
-  url: string = 'http://localhost:49939';
+  url: string = 'https://api.voetbalpoules.nl';
+  //url: string = 'http://localhost:49939';
   constructor(private http: HttpClient) {}
 
   public getData(userId: number, date?: Date) : Observable<PredictionsModel> {
