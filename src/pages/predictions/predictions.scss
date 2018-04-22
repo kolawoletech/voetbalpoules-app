@@ -51,9 +51,9 @@ ion-label {
           background-color: inherit; //voor de achtergrond van de wedstrijd van de week
         }
     }
-    .card-header-md {
+    .card-header-md, .card-header-ios {
         padding: 0;
-        .item-md
+        .item-md, .item-ios
         {
             background-color: rgba(#ababab, 0.1);
             color: #ababab;
@@ -62,8 +62,8 @@ ion-label {
     }
     .wvdw {
         background-color: rgba($theme-color-2, 0.1);
-        .card-header-md {
-            .item-md {
+        .card-header-md, .card-header-ios {
+            .item-md, .item-ios {
                 background-color: inherit; 
             }
         }

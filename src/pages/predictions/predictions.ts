@@ -3,9 +3,9 @@ import { Component, ViewChild, ViewChildren, QueryList, OnDestroy } from '@angul
 import { LoadingController, Events, Slides, Slide } from 'ionic-angular';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 import { AuthService } from "../../providers/auth/auth.service";
-import { PredictionsModel, ValidationResult } from './predictions.model';
+import { PredictionsModel, ValidationResult, WeekPositie } from './predictions.model';
 import { PredictionsService } from './predictions.service';
-import { Team, Prediction, PredictionCommand } from './predictions.model';
+import { Team, Prediction, Match, PredictionCommand } from './predictions.model';
 import { Observable } from 'rxjs';
 import { Subscription } from 'rxjs/Subscription';
 import { TabsService } from '../../providers/tabs.service';
@@ -317,4 +317,44 @@ export class PredictionsPage implements OnDestroy {
   getLogo(team : Team) : string {
     return "https://voetbalpoules.azureedge.net/logo/" + team.logoId + ".svg";    
   } 
+
+  getWeekpositie(wedstrijd: Match, weekPosities: WeekPositie[]) : Observable<string> {
+    if(!weekPosities || weekPosities.length == 0)
+      return;
+    let competitie = weekPosities.find(x => x.hoofdCompetitieId == wedstrijd.hoofdcompetitie.id && 
+      x.jaar == wedstrijd.jaar && 
+      x.week == wedstrijd.week);
+
+
+    if(competitie)
+    {
+      return this.translate.get('WEEKTOTAAL')
+        .pipe(<ScalarObservable>(data) => {
+          return Observable.of(data.value + ": " + competitie.punten.toLocaleString() + " (" + this.intToOrdinalNumberString(competitie.positie) + ")");
+      });
+    }
+  } 
+
+  private intToOrdinalNumberString(num: number): string {
+    num = Math.round(num);
+    let numString = num.toLocaleString(this.translate.currentLang);
+
+    if(this.translate.currentLang === "nl")
+      return numString + "e";
+    
+    // If the ten's place is 1, the suffix is always "th"
+    // (10th, 11th, 12th, 13th, 14th, 111th, 112th, etc.)
+    if (Math.floor(num / 10) % 10 === 1) {
+      return numString + "th";
+    }
+  
+    // Otherwise, the suffix depends on the one's place as follows
+    // (1st, 2nd, 3rd, 4th, 21st, 22nd, etc.)
+    switch (num % 10) {
+      case 1: return numString + "st";
+      case 2: return numString + "nd";
+      case 3: return numString + "rd";
+      default: return numString + "th";
+    }
+  }
 }

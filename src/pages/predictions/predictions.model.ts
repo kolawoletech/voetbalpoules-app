@@ -4,6 +4,7 @@ export class PredictionsModel {
   vorigeDag: Date;
   volgendeDag: Date;
   user: string;
+  weekPosities: WeekPositie[];
 
   constructor(datumpie?: Date) {
     if(datumpie)
@@ -51,6 +52,7 @@ export class Match {
   id: number;
   datum: Date;
   hoofdcompetitie: Competition;
+  competitieRonde: Competition; 
   live: boolean;
   status: Status;
   thuisdoelpunten: number;
@@ -60,6 +62,8 @@ export class Match {
   uitspeler: Player;
   uitteam: Team;
   wedstrijdVanDeWeek: boolean;
+  week: number;
+  jaar: number;
 }
 
 export class Player {
@@ -79,7 +83,14 @@ export class Team {
 export class Competition {
   id: number;
   naam: string;
-  logoId: number;
+}
+
+export class WeekPositie {
+  hoofdCompetitieId: number;
+  week: number;
+  jaar: number;
+  positie: number;
+  punten: number;
 }
 
 export class ValidationResult {

@@ -60,8 +60,11 @@
                   <img src="{{getLogo(voorspelling.wedstrijd.uitteam)}}" />                    
                   <p class="team">{{voorspelling.wedstrijd.uitteam.naam}}</p>
                 </ion-col>
-                <ion-col col-1 text-right align-self-center class="punten" no-padding *ngIf="!voorspelling.wijzigbaar">
-                  {{voorspelling.punten}}                      
+                <ion-col col-1 text-right align-self-center class="punten" no-padding *ngIf="voorspelling.punten">
+                  +{{voorspelling.punten}}
+                </ion-col>
+                <ion-col col-1 text-right align-self-center class="punten" no-padding *ngIf="voorspelling.punten === 0">
+                  {{voorspelling.punten}}
                 </ion-col>
               </ion-row>
               <ion-row *ngIf="voorspelling.wedstrijd.wedstrijdVanDeWeek && !voorspelling.wijzigbaar">
@@ -95,7 +98,12 @@
                   <p text-center text-wrap class="error-message">{{voorspelling.foutmelding | translate }}</p>                  
                 </ion-col>
               </ion-row>
-              </ion-grid>
+              <ion-row *ngIf="!voorspelling.wijzigbaar">
+                <ion-col col-12>
+                  <p class="rechts" [innerHtml]="getWeekpositie(voorspelling.wedstrijd, dag.weekPosities) | async"></p>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
         </ion-card>
       </ion-slide>
     </ion-slides>
