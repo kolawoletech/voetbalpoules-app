@@ -8,11 +8,19 @@
   <form [formGroup]="slideForm">
     <ion-slides #slider (ionSlideNextEnd)="loadNext()" (ionSlidePrevEnd)="loadPrev()" [initialSlide]="1" pager="true">
       <ion-slide *ngFor="let dag of speelData">  
-        <h2>{{dag.datum | date: 'fullDate' }}</h2>
+        <h2>{{dag.datum | date: 'EE d MMMM y' }}</h2>
         <ion-card *ngFor="let voorspelling of dag.voorspellingen" [ngClass]="{ 'error': voorspelling.foutmelding, 'opgeslagen': voorspelling.opgeslagen, 'wvdw': voorspelling.wedstrijd.wedstrijdVanDeWeek }">
-            <ion-card-header>
+            <ion-card-header *ngIf="!voorspelling.wedstrijd.competitieronde && !voorspelling.wedstrijd.speelronde">
               <ion-item row-no-padding>
-                  {{voorspelling.wedstrijd.hoofdcompetitie.naam}}
+                  {{voorspelling.wedstrijd.hoofdcompetitie.naam}} {{'WEEK' | translate }} {{voorspelling.wedstrijd.week}}
+                  <span item-end>{{voorspelling.wedstrijd.datum | date: 'shortTime'}}</span>  
+              </ion-item>
+            </ion-card-header>          
+            <ion-card-header *ngIf="voorspelling.wedstrijd.competitieronde || voorspelling.wedstrijd.speelronde">
+              <ion-item row-no-padding>
+                  {{voorspelling.wedstrijd.hoofdcompetitie.naam}} {{voorspelling.wedstrijd.speelronde?.naam}} 
+                  <p *ngIf="voorspelling.wedstrijd.competitieronde">{{voorspelling.wedstrijd.competitieronde?.naam}}</p>
+                  <p *ngIf="voorspelling.wedstrijd.groepsletter">{{'GROEP' | translate}} {{voorspelling.wedstrijd.groepsletter}}</p>
                   <span item-end>{{voorspelling.wedstrijd.datum | date: 'shortTime'}}</span>  
               </ion-item>
             </ion-card-header>          

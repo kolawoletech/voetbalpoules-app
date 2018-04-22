@@ -14,11 +14,11 @@
   </div>
   <form class="login-form auth-form" [formGroup]="login" (ngSubmit)="doLogin(login.values)">
     <ion-item>
-      <ion-input type="email" placeholder="Email" formControlName="email"></ion-input>
+      <ion-input type="email" placeholder="{{'EMAIL' | translate}}" formControlName="email"></ion-input>
     </ion-item>
     <show-hide-container>
       <ion-item>
-        <ion-input type="password" placeholder="Password" formControlName="password" show-hide-input></ion-input>
+        <ion-input type="password" placeholder="{{'PASSWORD' | translate}}" formControlName="password" show-hide-input></ion-input>
       </ion-item>
     </show-hide-container>
     <button ion-button block class="auth-action-button login-button" type="submit" [disabled]="!login.valid">{{'LOG_IN' | translate}}</button>

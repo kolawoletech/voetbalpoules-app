@@ -56,15 +56,18 @@ ion-label {
         .item-md, .item-ios
         {
             background-color: rgba(#ababab, 0.1);
-            color: #ababab;
-            font-size: 3vw;
+            color: #333;
+            font-size: 3.2vw;
+            span, p {
+                font-size: 3.2vw;
+            }
         }
     }
     .wvdw {
         background-color: rgba($theme-color-2, 0.1);
         .card-header-md, .card-header-ios {
             .item-md, .item-ios {
-                background-color: inherit; 
+                background-color: rgba($theme-color-2, 0.12);
             }
         }
     }
