@@ -318,7 +318,15 @@ export class PredictionsPage implements OnDestroy {
     return "https://voetbalpoules.azureedge.net/logo/" + team.logoId + ".svg";    
   } 
 
-  getWeekpositie(wedstrijd: Match, weekPosities: WeekPositie[]) : Observable<string> {
+  public getWeekpositie(wedstrijd: Match, weekPosities: WeekPositie[]) : WeekPositie {
+    if(!weekPosities || weekPosities.length == 0)
+      return;
+    return weekPosities.find(x => x.hoofdCompetitieId == wedstrijd.hoofdcompetitie.id && 
+      x.jaar == wedstrijd.jaar && 
+      x.week == wedstrijd.week);
+  } 
+
+  getWeekpositieOud(wedstrijd: Match, weekPosities: WeekPositie[]) : Observable<string> {
     if(!weekPosities || weekPosities.length == 0)
       return;
     let competitie = weekPosities.find(x => x.hoofdCompetitieId == wedstrijd.hoofdcompetitie.id && 
@@ -335,7 +343,7 @@ export class PredictionsPage implements OnDestroy {
     }
   } 
 
-  private intToOrdinalNumberString(num: number): string {
+  public intToOrdinalNumberString(num: number): string {
     num = Math.round(num);
     let numString = num.toLocaleString(this.translate.currentLang);
 

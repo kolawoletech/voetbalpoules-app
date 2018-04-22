@@ -1,4 +1,4 @@
-.voorspelling, .punten {
+.voorspelling {
 	font-weight: bold;
 	font-size: 6vw;
 }
@@ -123,5 +123,19 @@ ion-label {
     /* deze zorgt ervoor dat het pijltje van de dropdown normaal staat */
     .select-md .select-icon .select-icon-inner {
         left: 0px;
+    }
+    .weekpositie {
+        ion-col {
+            padding-bottom: 0;
+            padding-left: 0;
+            padding-right: 0;
+            p, span {
+                font-size: 3.5vw;
+            }
+            span.punten {
+                font-weight: bold;
+                font-size: 5vw;
+            }
+        }
     }
 }
