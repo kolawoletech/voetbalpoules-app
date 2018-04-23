@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-//import {BehaviorSubject} from 'rxjs/BehaviorSubject';
+import {BehaviorSubject} from 'rxjs/BehaviorSubject';
 import { catchError, tap } from 'rxjs/operators';
 import { HttpHeaders, HttpParams } from '@angular/common/http';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
@@ -38,18 +38,18 @@ export class AuthService {
 
   // Observable to send messages when the user is no longer auth'd
   // BehaviorSubject is like a ReplaySubject with a stack depth of 1
-  //authNotifier: BehaviorSubject<boolean> = new BehaviorSubject(null);
+  authNotifier: BehaviorSubject<boolean> = new BehaviorSubject(null);
 
   constructor(public events: Events, private http: HttpClient, private localStorage: LocalStorageService) {
     this.user = localStorage.getStorageVariable('profile');
 
-  //  this.authNotifier.next(this.isAuthenticated()); // will return true or false
+    this.authNotifier.next(this.isAuthenticated()); // will return true or false
   }
 
-  public isAuthenticated() : boolean {
+  private isAuthenticated() : boolean {
     const expiresAt = this.localStorage.getStorageVariable('expires_at');
     console.log("isAuthenticated: expires: " + new Date(expiresAt*1000).toISOString() + ", user: " + this.user);
-    let timeToRefresh = Math.round(new Date().getTime() / 1000) - (59*60); //als de token nog een half uur geldig is, dan maar ff refreshen
+    let timeToRefresh = Math.round(new Date().getTime() / 1000) - (30*60); //als de token nog een half uur geldig is, dan maar ff refreshen
     return timeToRefresh < expiresAt;
   }
 
