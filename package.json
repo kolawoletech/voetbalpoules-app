@@ -11,14 +11,14 @@
     "ionic:serve": "ionic-app-scripts serve"
   },
   "dependencies": {
-    "@angular/common": "4.4.4",
-    "@angular/compiler": "4.4.4",
-    "@angular/compiler-cli": "4.4.4",
-    "@angular/core": "^4.4.4",
-    "@angular/forms": "4.4.4",
-    "@angular/http": "^4.4.4",
-    "@angular/platform-browser": "4.4.4",
-    "@angular/platform-browser-dynamic": "4.4.4",
+    "@angular/common": "^4.4.7",
+    "@angular/compiler": "^4.4.7",
+    "@angular/compiler-cli": "^4.4.7",
+    "@angular/core": "^4.4.7",
+    "@angular/forms": "^4.4.7",
+    "@angular/http": "^4.4.7",
+    "@angular/platform-browser": "^4.4.7",
+    "@angular/platform-browser-dynamic": "^4.4.7",
     "@auth0/angular-jwt": "^1.1.0",
     "@ionic-native/admob-free": "^3.9.2",
     "@ionic-native/app-rate": "3.7.0",
@@ -63,8 +63,7 @@
     "sw-toolbox": "3.6.0",
     "text-mask-addons": "3.5.1",
     "web-animations-js": "^2.3.1",
-    "zone.js": "0.8.17",
-    "cordova-browser": "5.0.3"
+    "zone.js": "^0.8.26"
   },
   "devDependencies": {
     "@ionic/app-scripts": "^3.1.2",
@@ -95,8 +94,7 @@
     },
     "platforms": [
       "ios",
-      "android",
-      "browser"
+      "android"
     ]
   }
 }

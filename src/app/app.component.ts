@@ -83,30 +83,27 @@ export class MyApp {
 
   ngAfterContentInit() {
     console.log("APP started");
-    // Listen to authNotifier
-    this.authService.authNotifier
-      // filter on null so our app will wait for a real response
-      .filter(res => res !== null)
-      .subscribe(isTokenValid => {
-        console.log("APP AuthNotifier said: ", isTokenValid);
-        if(!isTokenValid) {
-          this.authService.refreshToken()
-            // filter on null so our app will wait for a real response      
-            .filter(res => res !== null)
-            .subscribe(() => {
-              console.log("Ingelogd via refresh token");
-              this.nav.setRoot(TabsNavigationPage);
-            }, () => {
-              console.log("refresh token faalt, opnieuw inloggen.")
-              this.authService.logout();
-              this.nav.setRoot(LoginPage);
-            }
-          );
-        }
-        else {
+
+    if(this.authService.isAuthenticated())
+    {
+      console.log("nog ingelogd");
+      this.nav.setRoot(TabsNavigationPage);
+    }
+    else
+    {
+      this.authService.refreshToken()
+        // filter on null so our app will wait for a real response      
+        .filter(res => res !== null)
+        .subscribe(() => {
+          console.log("Ingelogd via refresh token");
           this.nav.setRoot(TabsNavigationPage);
+        }, () => {
+          console.log("refresh token faalt, opnieuw inloggen.")
+          this.authService.logout();
+          this.nav.setRoot(LoginPage);
         }
-      });
+      );
+    }
   }
 
   openPage(page) {
