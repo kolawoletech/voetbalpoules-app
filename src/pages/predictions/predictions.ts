@@ -1,5 +1,5 @@
 import { IonDigitKeyboardCmp } from '../../components/ion-digit-keyboard';
-import { Component, ViewChild, ViewChildren, QueryList, OnDestroy } from '@angular/core';
+import { Component, ViewChild, ViewChildren, QueryList } from '@angular/core';
 import { LoadingController, Events, Slides, Slide, Refresher } from 'ionic-angular';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 import { AuthService } from "../../providers/auth/auth.service";
@@ -16,7 +16,7 @@ import { TranslateService } from '@ngx-translate/core';
   selector: 'predictions-page',
   templateUrl: 'predictions.html',
 })
-export class PredictionsPage implements OnDestroy {
+export class PredictionsPage {
   subscription: Subscription;
   user: any;
   auth: AuthService;
@@ -46,44 +46,10 @@ export class PredictionsPage implements OnDestroy {
 
   ngOnInit() {
     this.slideForm = new FormGroup({});
-
-    /**
-     * Since we want to prevent native keyboard to show up, we put the disabled
-     * attribute on the input, and manage focus programmaticaly.
-     */
-    this.subscription = this.keyboard.onClick.subscribe((key: any) => {
-      let voorspelling = this.currentVoorspelling;
-      if (typeof key == 'number') {
-        let formGroup = this.slideForm.controls["voorspelling-" + voorspelling.wedstrijd.id];
-        if(this.currentFieldThuis) {
-          voorspelling.thuisdoelpunten = key; // template toont deze value...
-          var control = <FormControl>formGroup.get('thuisdoelpunten');
-          control.markAsDirty();
-          control.setValue(key);
-        }
-        else {
-          voorspelling.uitdoelpunten = key; // template toont deze value...
-          var control2 = <FormControl>formGroup.get('uitdoelpunten');
-          control2.markAsDirty();
-          control2.setValue(key);
-        }
-      }
-      if(this.currentFieldThuis) {
-        this.setFocus(voorspelling, false);
-      }
-      else {
-        this.hideKeyboard();
-      }
-    });
-
-    // (BLur) Clear focus field name on keyboard hide
-    const subscription = this.keyboard.onHide.subscribe(() => {
-      this.hideKeyboard();
-    });
-    this.subscription.add(subscription);
+console.log("init")
   }
 
-  ngOnDestroy() {
+  ionViewWillLeave() { //ngOnDestroy
     console.log("kill m'allllllllllllllllllllllllllllllll");
     this.subscription.unsubscribe();
   }
@@ -135,7 +101,10 @@ export class PredictionsPage implements OnDestroy {
 
     var hideCallback = () : void => {
       this.keyboardHeader = null;
-      this.tabsService.show(); 
+      //Hier moet een timeout omheen, anders klik je bij de 0 direct op de tabbar...
+      setTimeout(() => { 
+        this.tabsService.show(); 
+      }, 250); 
     }
     this.keyboard.hide(hideCallback);
   }
@@ -148,7 +117,44 @@ export class PredictionsPage implements OnDestroy {
        this.events.publish('logout', true); //app.component kan nu naar de root page
        return;
     }
+
+    /**
+     * Since we want to prevent native keyboard to show up, we put the disabled
+     * attribute on the input, and manage focus programmaticaly.
+     */
+    this.subscription = this.keyboard.onClick.subscribe((key: any) => {
+      let voorspelling = this.currentVoorspelling;
+      if (typeof key == 'number') {
+        let formGroup = this.slideForm.controls["voorspelling-" + voorspelling.wedstrijd.id];
+        if(this.currentFieldThuis) {
+          voorspelling.thuisdoelpunten = key; // template toont deze value...
+          var control = <FormControl>formGroup.get('thuisdoelpunten');
+          control.markAsDirty();
+          control.setValue(key);
+        }
+        else {
+          voorspelling.uitdoelpunten = key; // template toont deze value...
+          var control2 = <FormControl>formGroup.get('uitdoelpunten');
+          control2.markAsDirty();
+          control2.setValue(key);
+        }
+      }
+      if(this.currentFieldThuis) {
+        this.setFocus(voorspelling, false);
+      }
+      else {
+        this.hideKeyboard();
+      }
+    });
+
+    // (BLur) Clear focus field name on keyboard hide
+    const keyboardsubscription = this.keyboard.onHide.subscribe(() => {
+      this.hideKeyboard();
+    });
+    this.subscription.add(keyboardsubscription);
+    
     console.log("Leeg speeldata");
+    this.slideForm = new FormGroup({});
     this.speelData = [];
     console.log("Haal eerstvolgende voorspellingen.");
 
@@ -226,12 +232,12 @@ export class PredictionsPage implements OnDestroy {
           return this.save(voorspelling)
             .subscribe(data => {
               formGroup.markAsPristine();
-              console.log("voorspelling opgeslagen");
+              console.log("voorspelling opgeslagen" + index);
               voorspellingen[index].foutmelding = null;
               voorspellingen[index].opgeslagen = true; 
-              setTimeout(function() { //doei na 1,5 seconde
-                 voorspellingen[index].opgeslagen = false;
-              }.bind(this), 3000);            
+              // setTimeout(function() { //doei na 1,5 seconde
+              //    voorspellingen[index].opgeslagen = false;
+              // }.bind(this), 3000);            
             }, error => {
               voorspellingen[index].opgeslagen = false; 
               var validationErrors = <ValidationResult>error;
