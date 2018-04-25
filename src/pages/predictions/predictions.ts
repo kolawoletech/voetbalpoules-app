@@ -132,9 +132,11 @@ export class PredictionsPage implements OnDestroy {
       this.currentFieldThuis = null;
       this.currentVoorspelling = null;  
     }
-    this.keyboard.hide();
     //Hier moet een timeout omheen, anders klik je bij de 0 direct op de tabbar...
-    setTimeout(() => { this.tabsService.show(); }, 100); 
+    setTimeout(() => { 
+      this.keyboard.hide();
+      this.tabsService.show(); 
+    }, 100); 
     this.keyboardHeader = null;
   }
 

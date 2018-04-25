@@ -63,7 +63,8 @@
     "sw-toolbox": "3.6.0",
     "text-mask-addons": "3.5.1",
     "web-animations-js": "^2.3.1",
-    "zone.js": "^0.8.26"
+    "zone.js": "^0.8.26",
+    "cordova-browser": "5.0.3"
   },
   "devDependencies": {
     "@ionic/app-scripts": "^3.1.2",
@@ -94,7 +95,8 @@
     },
     "platforms": [
       "ios",
-      "android"
+      "android",
+      "browser"
     ]
   }
 }
