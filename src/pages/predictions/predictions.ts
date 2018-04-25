@@ -132,12 +132,12 @@ export class PredictionsPage implements OnDestroy {
       this.currentFieldThuis = null;
       this.currentVoorspelling = null;  
     }
-    //Hier moet een timeout omheen, anders klik je bij de 0 direct op de tabbar...
-    setTimeout(() => { 
-      this.keyboard.hide();
+
+    var hideCallback = () : void => {
+      this.keyboardHeader = null;
       this.tabsService.show(); 
-    }, 100); 
-    this.keyboardHeader = null;
+    }
+    this.keyboard.hide(hideCallback);
   }
 
   ionViewWillEnter() {
@@ -226,11 +226,12 @@ export class PredictionsPage implements OnDestroy {
           return this.save(voorspelling)
             .subscribe(data => {
               formGroup.markAsPristine();
+              console.log("voorspelling opgeslagen");
               voorspellingen[index].foutmelding = null;
               voorspellingen[index].opgeslagen = true; 
-              // setTimeout(function() { //doei na 1,5 seconde
-              //   voorspellingen[index].opgeslagen = false;
-              // }.bind(this), 3000);            
+              setTimeout(function() { //doei na 1,5 seconde
+                 voorspellingen[index].opgeslagen = false;
+              }.bind(this), 3000);            
             }, error => {
               voorspellingen[index].opgeslagen = false; 
               var validationErrors = <ValidationResult>error;
