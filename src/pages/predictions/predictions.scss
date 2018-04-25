@@ -9,6 +9,9 @@ ion-slide {
     overflow-y: auto;
     display: block;
 }
+ion-content .has-refresher {
+    position: static; //ion-content element voor de refresher.
+}
 ion-label {
     margin: 0; 
 }

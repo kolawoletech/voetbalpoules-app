@@ -1,6 +1,6 @@
 import { IonDigitKeyboardCmp } from '../../components/ion-digit-keyboard';
 import { Component, ViewChild, ViewChildren, QueryList, OnDestroy } from '@angular/core';
-import { LoadingController, Events, Slides, Slide } from 'ionic-angular';
+import { LoadingController, Events, Slides, Slide, Refresher } from 'ionic-angular';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 import { AuthService } from "../../providers/auth/auth.service";
 import { PredictionsModel, ValidationResult, WeekPositie } from './predictions.model';
@@ -134,7 +134,7 @@ export class PredictionsPage implements OnDestroy {
     }
     this.keyboard.hide();
     //Hier moet een timeout omheen, anders klik je bij de 0 direct op de tabbar...
-    setTimeout(() => { this.tabsService.show(); }, 50); 
+    setTimeout(() => { this.tabsService.show(); }, 100); 
     this.keyboardHeader = null;
   }
 
@@ -263,6 +263,21 @@ export class PredictionsPage implements OnDestroy {
     this.loadSlide(true);
   }
 
+  public doRefresh(refresher: Refresher) {
+    let currentIndex = this.slider.getActiveIndex();
+    console.log("Huidige slide" + currentIndex);
+    
+    var today = this.speelData[currentIndex];
+
+    return this.predictionsService
+      .getData(this.user.sub, today.datum)
+      .subscribe(data => {
+        this.speelData[currentIndex] = data;
+        this.mapVoorspellingen(data.voorspellingen);
+        refresher.complete();
+      });
+  }
+
   save(prediction: any) : Observable<Object> {
     let predictionCommand = new PredictionCommand();
     predictionCommand.wedstrijdId = prediction.wedstrijdId;
@@ -297,7 +312,7 @@ export class PredictionsPage implements OnDestroy {
           var newSlide = new PredictionsModel(isNext ? data.volgendeDag : data.vorigeDag);
 
           this.mapVoorspellingen(data.voorspellingen);
-  
+              
           if(isNext)
           {
             currentIndex--;
@@ -324,23 +339,6 @@ export class PredictionsPage implements OnDestroy {
     return weekPosities.find(x => x.hoofdCompetitieId == wedstrijd.hoofdcompetitie.id && 
       x.jaar == wedstrijd.jaar && 
       x.week == wedstrijd.week);
-  } 
-
-  getWeekpositieOud(wedstrijd: Match, weekPosities: WeekPositie[]) : Observable<string> {
-    if(!weekPosities || weekPosities.length == 0)
-      return;
-    let competitie = weekPosities.find(x => x.hoofdCompetitieId == wedstrijd.hoofdcompetitie.id && 
-      x.jaar == wedstrijd.jaar && 
-      x.week == wedstrijd.week);
-
-
-    if(competitie)
-    {
-      return this.translate.get('WEEKTOTAAL')
-        .pipe(<ScalarObservable>(data) => {
-          return Observable.of(data.value + ": " + competitie.punten.toLocaleString() + " (" + this.intToOrdinalNumberString(competitie.positie) + ")");
-      });
-    }
   } 
 
   public intToOrdinalNumberString(num: number): string {

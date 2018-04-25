@@ -7,116 +7,121 @@
 <ion-content id="predictions">
   <form [formGroup]="slideForm">
     <ion-slides #slider (ionSlideNextEnd)="loadNext()" (ionSlidePrevEnd)="loadPrev()" [initialSlide]="1" pager="true">
-      <ion-slide *ngFor="let dag of speelData">  
-        <h2>{{dag.datum | date: 'EE d MMMM y' }}</h2>
-        <ion-card *ngFor="let voorspelling of dag.voorspellingen" [ngClass]="{ 'error': voorspelling.foutmelding, 'opgeslagen': voorspelling.opgeslagen, 'wvdw': voorspelling.wedstrijd.wedstrijdVanDeWeek }">
-            <ion-card-header *ngIf="!voorspelling.wedstrijd.competitieronde && !voorspelling.wedstrijd.speelronde">
-              <ion-item row-no-padding>
-                  {{voorspelling.wedstrijd.hoofdcompetitie.naam}} {{'WEEK' | translate }} {{voorspelling.wedstrijd.week}}
-                  <span item-end>{{voorspelling.wedstrijd.datum | date: 'shortTime'}}</span>  
-              </ion-item>
-            </ion-card-header>          
-            <ion-card-header *ngIf="voorspelling.wedstrijd.competitieronde || voorspelling.wedstrijd.speelronde">
-              <ion-item row-no-padding>
-                  {{voorspelling.wedstrijd.hoofdcompetitie.naam}} {{voorspelling.wedstrijd.speelronde?.naam}} 
-                  <p *ngIf="voorspelling.wedstrijd.competitieronde">{{voorspelling.wedstrijd.competitieronde?.naam}}</p>
-                  <p *ngIf="voorspelling.wedstrijd.groepsletter">{{'GROEP' | translate}} {{voorspelling.wedstrijd.groepsletter}}</p>
-                  <span item-end>{{voorspelling.wedstrijd.datum | date: 'shortTime'}}</span>  
-              </ion-item>
-            </ion-card-header>          
-            <ion-grid align-items-center formGroupName="voorspelling-{{voorspelling.wedstrijd.id}}">
-              <ion-row>
-                <ion-col col-3 class="team">
-                  <img src="{{getLogo(voorspelling.wedstrijd.thuisteam)}}" />
-                  <p class="team">{{voorspelling.wedstrijd.thuisteam.naam}}</p>  
-                </ion-col>
-                <ion-col col-6 *ngIf="voorspelling.wijzigbaar">
-                  <ion-grid no-padding align-items-center>
-                    <ion-row>
-                      <ion-col col-4 (click)="setFocus(voorspelling, true)">
-                        <div class="doelpunt-container" id="t-{{voorspelling.wedstrijd.id}}">
-                            <div class="doelpunt">
-                                {{voorspelling.thuisdoelpunten}}
-                            </div>    
-                        </div>                 
-                      </ion-col>
-                      <ion-col col-4 text-center align-self-center>-</ion-col>
-                      <ion-col col-4 (click)="setFocus(voorspelling, false)">
-                        <div class="doelpunt-container" id="u-{{voorspelling.wedstrijd.id}}">
-                            <div class="doelpunt">
-                                {{voorspelling.uitdoelpunten}}
-                            </div>    
-                        </div>                 
-                      </ion-col>        
-                    </ion-row>
-                    <ion-row>
-                        <ion-col class="opgeslagen-melding" col-12>
-                            <div class="opgeslagen-melding" *ngIf="voorspelling.wijzigbaar && voorspelling.opgeslagen">{{'SAVED' | translate}}</div>
-                        </ion-col>                          
-                    </ion-row>
-                  </ion-grid>
-                </ion-col>
-                <ion-col col-6 text-center align-self-center *ngIf="!voorspelling.wijzigbaar">
-                  <span class="voorspelling">
-                      <span [ngClass]="{'groen': voorspelling.thuisdoelpunten === voorspelling.wedstrijd.thuisdoelpunten}">{{voorspelling.thuisdoelpunten}}</span> 
-                      <span [ngClass]="{'groen': (voorspelling.thuisdoelpunten === voorspelling.wedstrijd.thuisdoelpunten && voorspelling.uitdoelpunten === voorspelling.wedstrijd.uitdoelpunten)}">-</span>  
-                      <span [ngClass]="{'groen': voorspelling.uitdoelpunten === voorspelling.wedstrijd.uitdoelpunten}">{{voorspelling.uitdoelpunten}}</span> 
-                  </span>
-                  <p>{{voorspelling.wedstrijd.thuisdoelpunten}} - {{voorspelling.wedstrijd.uitdoelpunten}}</p>                      
-                </ion-col>
-                <ion-col col-3 class="team">
-                  <img src="{{getLogo(voorspelling.wedstrijd.uitteam)}}" />                    
-                  <p class="team">{{voorspelling.wedstrijd.uitteam.naam}}</p>
-                </ion-col>
-              </ion-row>
-              <ion-row *ngIf="voorspelling.wedstrijd.wedstrijdVanDeWeek && !voorspelling.wijzigbaar">
-                <ion-col col-6>
-                  <p class="links" [ngClass]="{'groen': voorspelling.thuisspeler.id === voorspelling.wedstrijd.thuisspeler.id, 'rood': voorspelling.wedstrijd.thuisspeler && voorspelling.thuisspeler.id !== voorspelling.wedstrijd.thuisspeler.id }">{{voorspelling.thuisspeler.naam}}</p>
-                </ion-col>
-                <ion-col col-6>
-                  <p class="rechts" [ngClass]="{'groen': voorspelling.uitspeler.id === voorspelling.wedstrijd.uitspeler.id, 'rood': voorspelling.wedstrijd.uitspeler && voorspelling.uitspeler.id !== voorspelling.wedstrijd.uitspeler.id }">{{voorspelling.uitspeler.naam}}</p>
-                </ion-col>
-              </ion-row>
-              <ion-row *ngIf="voorspelling.wedstrijd.wedstrijdVanDeWeek && voorspelling.wijzigbaar">
-                <ion-col col-6>
-                  <ion-item class="doelpuntenmaker" row-no-padding [ngClass]="{ 'error': !isValid(voorspelling, 'thuisspelerId') }">
-                    <ion-select interface="action-sheet" formControlName="thuisspelerId" placeholder="{{'KIES_SPELER' | translate}}" cancelText="{{'CANCEL' | translate}}">
-                      <ion-option *ngFor="let speler of voorspelling.wedstrijd.thuisteam.spelers" [value]="speler.id">{{speler.naam}} {{ speler.doelpunten > 0 ? '(' + speler.doelpunten + ')' : ''}}</ion-option>
-                    </ion-select>      
+      <ion-slide *ngFor="let dag of speelData">
+          <ion-content>
+            <ion-refresher (ionRefresh)="doRefresh($event)">
+                <ion-refresher-content></ion-refresher-content>
+              </ion-refresher>
+            <h2>{{dag.datum | date: 'EE d MMMM y' }}</h2>
+            <ion-card *ngFor="let voorspelling of dag.voorspellingen" [ngClass]="{ 'error': voorspelling.foutmelding, 'opgeslagen': voorspelling.opgeslagen, 'wvdw': voorspelling.wedstrijd.wedstrijdVanDeWeek }">
+                <ion-card-header *ngIf="!voorspelling.wedstrijd.competitieronde && !voorspelling.wedstrijd.speelronde">
+                  <ion-item row-no-padding>
+                      {{voorspelling.wedstrijd.hoofdcompetitie.naam}} {{'WEEK' | translate }} {{voorspelling.wedstrijd.week}}
+                      <span item-end>{{voorspelling.wedstrijd.datum | date: 'shortTime'}}</span>  
                   </ion-item>
-                  <ion-item text-wrap class="error-message" *ngIf="!isValid(voorspelling, 'thuisspelerId')" [innerHTML]="errorMessage(voorspelling, 'thuisspelerId') | async"></ion-item>
-                </ion-col>
-                <ion-col col-6>
-                  <ion-item class="doelpuntenmaker" row-no-padding [ngClass]="{ 'error': !isValid(voorspelling, 'uitspelerId') }">
-                    <ion-select interface="action-sheet" formControlName="uitspelerId" placeholder="{{'KIES_SPELER' | translate}}" cancelText="{{'CANCEL' | translate}}">
-                      <ion-option *ngFor="let speler of voorspelling.wedstrijd.uitteam.spelers" [value]="speler.id">{{speler.naam}} {{ speler.doelpunten > 0 ? '(' + speler.doelpunten + ')' : ''}}</ion-option>
-                    </ion-select>
+                </ion-card-header>          
+                <ion-card-header *ngIf="voorspelling.wedstrijd.competitieronde || voorspelling.wedstrijd.speelronde">
+                  <ion-item row-no-padding>
+                      {{voorspelling.wedstrijd.hoofdcompetitie.naam}} {{voorspelling.wedstrijd.speelronde?.naam}} 
+                      <p *ngIf="voorspelling.wedstrijd.competitieronde">{{voorspelling.wedstrijd.competitieronde?.naam}}</p>
+                      <p *ngIf="voorspelling.wedstrijd.groepsletter">{{'GROEP' | translate}} {{voorspelling.wedstrijd.groepsletter}}</p>
+                      <span item-end>{{voorspelling.wedstrijd.datum | date: 'shortTime'}}</span>  
                   </ion-item>
-                  <ion-item text-wrap class="error-message" *ngIf="!isValid(voorspelling, 'uitspelerId')" [innerHTML]="errorMessage(voorspelling, 'uitspelerId') | async"></ion-item>
-                </ion-col>
-              </ion-row>
-              <ion-row *ngIf="voorspelling.foutmelding">
-                <ion-col col-12>
-                  <p text-center text-wrap class="error-message">{{voorspelling.foutmelding | translate }}</p>                  
-                </ion-col>
-              </ion-row>
-              <ion-row *ngIf="!voorspelling.wijzigbaar && voorspelling.punten != null" class="weekpositie">
-                <ion-col col-5>
-                  <p class="links">
-                    <span>{{'PUNTEN' | translate}}:</span>
-                    +<span class="punten">{{voorspelling.punten}}</span>
-                  </p>
-                </ion-col>
-                <ion-col col-7>
-                  <p class="rechts" *ngFor="let weekPositie of [getWeekpositie(voorspelling.wedstrijd, dag.weekPosities)]">
-                    <span>{{'WEEKTOTAAL' | translate}}</span>:
-                    <span class="punten">{{weekPositie.punten}}</span>
-                    (<span [innerHtml]="intToOrdinalNumberString(weekPositie.positie)"></span>)
-                  </p>
-                </ion-col>
-              </ion-row>
-            </ion-grid>
-        </ion-card>
+                </ion-card-header>          
+                <ion-grid align-items-center formGroupName="voorspelling-{{voorspelling.wedstrijd.id}}">
+                  <ion-row>
+                    <ion-col col-3 class="team">
+                      <img src="{{getLogo(voorspelling.wedstrijd.thuisteam)}}" />
+                      <p class="team">{{voorspelling.wedstrijd.thuisteam.naam}}</p>  
+                    </ion-col>
+                    <ion-col col-6 *ngIf="voorspelling.wijzigbaar">
+                      <ion-grid no-padding align-items-center>
+                        <ion-row>
+                          <ion-col col-4 (click)="setFocus(voorspelling, true)">
+                            <div class="doelpunt-container" id="t-{{voorspelling.wedstrijd.id}}">
+                                <div class="doelpunt">
+                                    {{voorspelling.thuisdoelpunten}}
+                                </div>    
+                            </div>                 
+                          </ion-col>
+                          <ion-col col-4 text-center align-self-center>-</ion-col>
+                          <ion-col col-4 (click)="setFocus(voorspelling, false)">
+                            <div class="doelpunt-container" id="u-{{voorspelling.wedstrijd.id}}">
+                                <div class="doelpunt">
+                                    {{voorspelling.uitdoelpunten}}
+                                </div>    
+                            </div>                 
+                          </ion-col>        
+                        </ion-row>
+                        <ion-row>
+                            <ion-col class="opgeslagen-melding" col-12>
+                                <div class="opgeslagen-melding" *ngIf="voorspelling.wijzigbaar && voorspelling.opgeslagen">{{'SAVED' | translate}}</div>
+                            </ion-col>                          
+                        </ion-row>
+                      </ion-grid>
+                    </ion-col>
+                    <ion-col col-6 text-center align-self-center *ngIf="!voorspelling.wijzigbaar">
+                      <span class="voorspelling">
+                          <span [ngClass]="{'groen': voorspelling.thuisdoelpunten === voorspelling.wedstrijd.thuisdoelpunten}">{{voorspelling.thuisdoelpunten}}</span> 
+                          <span [ngClass]="{'groen': (voorspelling.thuisdoelpunten === voorspelling.wedstrijd.thuisdoelpunten && voorspelling.uitdoelpunten === voorspelling.wedstrijd.uitdoelpunten)}">-</span>  
+                          <span [ngClass]="{'groen': voorspelling.uitdoelpunten === voorspelling.wedstrijd.uitdoelpunten}">{{voorspelling.uitdoelpunten}}</span> 
+                      </span>
+                      <p>{{voorspelling.wedstrijd.thuisdoelpunten}} - {{voorspelling.wedstrijd.uitdoelpunten}}</p>                      
+                    </ion-col>
+                    <ion-col col-3 class="team">
+                      <img src="{{getLogo(voorspelling.wedstrijd.uitteam)}}" />                    
+                      <p class="team">{{voorspelling.wedstrijd.uitteam.naam}}</p>
+                    </ion-col>
+                  </ion-row>
+                  <ion-row *ngIf="voorspelling.wedstrijd.wedstrijdVanDeWeek && !voorspelling.wijzigbaar">
+                    <ion-col col-6>
+                      <p class="links" [ngClass]="{'groen': voorspelling.thuisspeler.id === voorspelling.wedstrijd.thuisspeler.id, 'rood': voorspelling.wedstrijd.thuisspeler && voorspelling.thuisspeler.id !== voorspelling.wedstrijd.thuisspeler.id }">{{voorspelling.thuisspeler.naam}}</p>
+                    </ion-col>
+                    <ion-col col-6>
+                      <p class="rechts" [ngClass]="{'groen': voorspelling.uitspeler.id === voorspelling.wedstrijd.uitspeler.id, 'rood': voorspelling.wedstrijd.uitspeler && voorspelling.uitspeler.id !== voorspelling.wedstrijd.uitspeler.id }">{{voorspelling.uitspeler.naam}}</p>
+                    </ion-col>
+                  </ion-row>
+                  <ion-row *ngIf="voorspelling.wedstrijd.wedstrijdVanDeWeek && voorspelling.wijzigbaar">
+                    <ion-col col-6>
+                      <ion-item class="doelpuntenmaker" row-no-padding [ngClass]="{ 'error': !isValid(voorspelling, 'thuisspelerId') }">
+                        <ion-select interface="action-sheet" formControlName="thuisspelerId" placeholder="{{'KIES_SPELER' | translate}}" cancelText="{{'CANCEL' | translate}}">
+                          <ion-option *ngFor="let speler of voorspelling.wedstrijd.thuisteam.spelers" [value]="speler.id">{{speler.naam}} {{ speler.doelpunten > 0 ? '(' + speler.doelpunten + ')' : ''}}</ion-option>
+                        </ion-select>      
+                      </ion-item>
+                      <ion-item text-wrap class="error-message" *ngIf="!isValid(voorspelling, 'thuisspelerId')" [innerHTML]="errorMessage(voorspelling, 'thuisspelerId') | async"></ion-item>
+                    </ion-col>
+                    <ion-col col-6>
+                      <ion-item class="doelpuntenmaker" row-no-padding [ngClass]="{ 'error': !isValid(voorspelling, 'uitspelerId') }">
+                        <ion-select interface="action-sheet" formControlName="uitspelerId" placeholder="{{'KIES_SPELER' | translate}}" cancelText="{{'CANCEL' | translate}}">
+                          <ion-option *ngFor="let speler of voorspelling.wedstrijd.uitteam.spelers" [value]="speler.id">{{speler.naam}} {{ speler.doelpunten > 0 ? '(' + speler.doelpunten + ')' : ''}}</ion-option>
+                        </ion-select>
+                      </ion-item>
+                      <ion-item text-wrap class="error-message" *ngIf="!isValid(voorspelling, 'uitspelerId')" [innerHTML]="errorMessage(voorspelling, 'uitspelerId') | async"></ion-item>
+                    </ion-col>
+                  </ion-row>
+                  <ion-row *ngIf="voorspelling.foutmelding">
+                    <ion-col col-12>
+                      <p text-center text-wrap class="error-message">{{voorspelling.foutmelding | translate }}</p>                  
+                    </ion-col>
+                  </ion-row>
+                  <ion-row *ngIf="!voorspelling.wijzigbaar && voorspelling.punten != null" class="weekpositie">
+                    <ion-col col-5>
+                      <p class="links">
+                        <span>{{'PUNTEN' | translate}}:</span>
+                        +<span class="punten">{{voorspelling.punten}}</span>
+                      </p>
+                    </ion-col>
+                    <ion-col col-7>
+                      <p class="rechts" *ngFor="let weekPositie of [getWeekpositie(voorspelling.wedstrijd, dag.weekPosities)]">
+                        <span>{{'WEEKTOTAAL' | translate}}</span>:
+                        <span class="punten">{{weekPositie.punten}}</span>
+                        (<span [innerHtml]="intToOrdinalNumberString(weekPositie.positie)"></span>)
+                      </p>
+                    </ion-col>
+                  </ion-row>
+                </ion-grid>
+            </ion-card>
+            </ion-content>
       </ion-slide>
     </ion-slides>
   </form>
