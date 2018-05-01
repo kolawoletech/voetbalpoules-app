@@ -31,6 +31,7 @@ export class PredictionsPage {
   currentVoorspelling: Prediction;
   keyboardHeader: string;
   thuisdoelpunten: string = '';
+  refreshTime: Date; 
 
   constructor(
     public predictionsService: PredictionsService,
@@ -185,91 +186,95 @@ export class PredictionsPage {
       .getData(this.user.id)
       .finally(() => loading.dismiss())
       .subscribe(data => {
+        this.refreshTime = new Date(); //.toLocaleTimeString(); 
         console.log("verwerk data");
-        var previousDay = new PredictionsModel(data.vorigeDag);
-        this.speelData.push(previousDay);
-        console.log("pushed gisteren");
+        if(data.vorigeDag) {
+          this.speelData.push(new PredictionsModel(data.vorigeDag));  
+          console.log("pushed gisteren");
+        }
         this.speelData.push(data);
         console.log("pushed vandaag");
-
         this.mapVoorspellingen(data.voorspellingen);
 
-        var nextDay = new PredictionsModel(data.volgendeDag);
-        nextDay.datum = data.volgendeDag;
-        this.speelData.push(nextDay);
-        console.log("pushed morgen");
+        if(data.volgendeDag) {
+          this.speelData.push(new PredictionsModel(data.volgendeDag));
+          console.log("pushed morgen");
+        }
       });  
   }
 
   private mapVoorspellingen(voorspellingen: Prediction[])
   {
-    voorspellingen.map((voorspelling, index) => {
-      const name = 'voorspelling-' + voorspelling.wedstrijd.id.toString();
-      const formGroup = this.formBuilder.group({
-        wedstrijdId: [''],
-        thuisdoelpunten: ['', [Validators.required]],
-        uitdoelpunten: ['', [Validators.required]]
-      });
-
-      formGroup.setValue({
-        wedstrijdId: voorspelling.wedstrijd.id,
-        thuisdoelpunten: voorspelling.thuisdoelpunten,
-        uitdoelpunten: voorspelling.uitdoelpunten
-      });
-      if(voorspelling.wedstrijd.wedstrijdVanDeWeek)
-      {
-        formGroup.addControl("thuisspelerId", new FormControl(voorspelling.thuisspeler ? voorspelling.thuisspeler.id : null));
-        formGroup.addControl("uitspelerId", new FormControl(voorspelling.uitspeler ? voorspelling.uitspeler.id : null));
-
-        formGroup.setValidators( Validators.compose([PredictionValidations.wedstrijdVanDeWeek]));
-
-        //doelpunt op 0? Selecteer dan gelijk 'Geen score'
-        let subscribe = formGroup.controls["thuisdoelpunten"].valueChanges.subscribe(value => {
-          if(value == 0)
-            formGroup.controls["thuisspelerId"].setValue(-1);
+    voorspellingen
+      .filter((voorspelling: Prediction) => voorspelling.wijzigbaar) //alleen form bij te wijzigen voorspellingen
+      .map((voorspelling, index) => {
+        console.log("map " + voorspelling.thuisdoelpunten);
+        const name = 'voorspelling-' + voorspelling.wedstrijd.id.toString();
+        const formGroup = this.formBuilder.group({
+          wedstrijdId: [''],
+          thuisdoelpunten: ['', [Validators.required]],
+          uitdoelpunten: ['', [Validators.required]]
         });
-        this.subscription.add(subscribe);
 
-        let subscribeUit = formGroup.controls["uitdoelpunten"].valueChanges.subscribe(value => {
-          if(value == 0)
-            formGroup.controls["uitspelerId"].setValue(-1);
+        formGroup.setValue({
+          wedstrijdId: voorspelling.wedstrijd.id,
+          thuisdoelpunten: voorspelling.thuisdoelpunten,
+          uitdoelpunten: voorspelling.uitdoelpunten
         });
-        this.subscription.add(subscribeUit);
-      }
-
-      let subscription = formGroup.valueChanges.subscribe(voorspelling => {
-        console.log("save voorspelling? " + formGroup.dirty + ' ' + formGroup.valid);
-        if(formGroup.dirty && formGroup.valid)
+        if(voorspelling.wedstrijd.wedstrijdVanDeWeek)
         {
-          return this.save(voorspelling)
-            .subscribe(data => {
-              formGroup.markAsPristine();
-              console.log("voorspelling opgeslagen" + index);
-              voorspellingen[index].foutmelding = null;
-              voorspellingen[index].opgeslagen = true; 
-              // setTimeout(function() { //doei na 1,5 seconde
-              //    voorspellingen[index].opgeslagen = false;
-              // }.bind(this), 3000);            
-            }, error => {
-              voorspellingen[index].opgeslagen = false; 
-              var validationErrors = <ValidationResult>error;
-              if(validationErrors != null && validationErrors.errors != null)
-                validationErrors.errors.forEach(validationError => {
-                  validationError.memberNames.forEach(member => {
-                    formGroup.controls[member].setErrors({'error': validationError.errorMessage});
-                  });                
-                });
-              if (validationErrors.message != null) {
-                voorspellingen[index].foutmelding = validationErrors.message;
-              }
-            });
+          formGroup.addControl("thuisspelerId", new FormControl(voorspelling.thuisspeler ? voorspelling.thuisspeler.id : null));
+          formGroup.addControl("uitspelerId", new FormControl(voorspelling.uitspeler ? voorspelling.uitspeler.id : null));
+
+          formGroup.setValidators( Validators.compose([PredictionValidations.wedstrijdVanDeWeek]));
+
+          //doelpunt op 0? Selecteer dan gelijk 'Geen score'
+          let subscribe = formGroup.controls["thuisdoelpunten"].valueChanges.subscribe(value => {
+            if(value == 0)
+              formGroup.controls["thuisspelerId"].setValue(-1);
+          });
+          this.subscription.add(subscribe);
+
+          let subscribeUit = formGroup.controls["uitdoelpunten"].valueChanges.subscribe(value => {
+            if(value == 0)
+              formGroup.controls["uitspelerId"].setValue(-1);
+          });
+          this.subscription.add(subscribeUit);
         }
-        if(formGroup.invalid)
-          voorspellingen[index].opgeslagen = false; 
-      });
-      this.subscription.add(subscription);
-      this.slideForm.addControl(name, formGroup);
-    })
+
+        let subscription = formGroup.valueChanges.subscribe(voorspelling => {
+          console.log("save voorspelling? " + formGroup.dirty + ' ' + formGroup.valid);
+          if(formGroup.dirty && formGroup.valid)
+          {
+            return this.save(voorspelling)
+              .subscribe(data => {
+                formGroup.markAsPristine();
+                console.log("voorspelling opgeslagen" + index);
+                voorspellingen[index].foutmelding = null;
+                voorspellingen[index].opgeslagen = true; 
+                // setTimeout(function() { //doei na 1,5 seconde
+                //    voorspellingen[index].opgeslagen = false;
+                // }.bind(this), 3000);            
+              }, error => {
+                voorspellingen[index].opgeslagen = false; 
+                var validationErrors = <ValidationResult>error;
+                if(validationErrors != null && validationErrors.errors != null)
+                  validationErrors.errors.forEach(validationError => {
+                    validationError.memberNames.forEach(member => {
+                      formGroup.controls[member].setErrors({'error': validationError.errorMessage});
+                    });                
+                  });
+                if (validationErrors.message != null) {
+                  voorspellingen[index].foutmelding = validationErrors.message;
+                }
+              });
+          }
+          if(formGroup.invalid)
+            voorspellingen[index].opgeslagen = false; 
+        });
+        this.subscription.add(subscription);
+        this.slideForm.addControl(name, formGroup);  
+      })
   }
 
   loadPrev() {
@@ -285,6 +290,11 @@ export class PredictionsPage {
   }
 
   public doRefresh(refresher: Refresher) {
+    if(new Date() < new Date(this.refreshTime.getTime() + 10000)) {
+      //elke 10s. een keer refreshen is wel genoeg.
+      refresher.cancel();
+      return;
+    }
     let currentIndex = this.slider.getActiveIndex();
     console.log("Huidige slide" + currentIndex);
     
@@ -294,8 +304,10 @@ export class PredictionsPage {
       .getData(this.user.id, today.datum)
       .subscribe(data => {
         this.speelData[currentIndex] = data;
-        this.mapVoorspellingen(data.voorspellingen);
+        this.mapVoorspellingen(data.voorspellingen);        
+        
         refresher.complete();
+        this.refreshTime = new Date(); 
       });
   }
 
@@ -329,10 +341,15 @@ export class PredictionsPage {
         .getData(this.user.id, today.datum)
         .finally(() => loading.dismiss())
         .subscribe(data => {
+          this.refreshTime = new Date(); //.toLocaleTimeString(); 
           this.speelData[currentIndex] = data;
-          var newSlide = new PredictionsModel(isNext ? data.volgendeDag : data.vorigeDag);
-
           this.mapVoorspellingen(data.voorspellingen);
+
+          var datum = isNext ? data.volgendeDag : data.vorigeDag;
+          if(!datum)
+            return;
+
+          var newSlide = new PredictionsModel(datum);
               
           if(isNext)
           {

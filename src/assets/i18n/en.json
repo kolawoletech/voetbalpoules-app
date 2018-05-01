@@ -131,6 +131,7 @@
   "WEEK": "week",
   "WEEKTOTAAL": "Week total",
   "PUNTEN": "Points",
+  "REFRESHTEXT": "Last time refreshed on {{time}}",
   "NOT_IMPLEMENTED": "Not yet implemented",  
   "NOT_IMPLEMENTED_SIGN_UP": "Sign up is not yet implemented, please visit www.voetbalpoules.nl to sign up.",
   "NOT_IMPLEMENTED_PASSWORD": "You cannot recover your password yet, please visit www.voetbalpoules.nl to do so.",
