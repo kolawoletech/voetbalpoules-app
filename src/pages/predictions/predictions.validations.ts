@@ -33,7 +33,7 @@ export class PredictionValidations {
             };    
             return message;
         }
-        if (doelpunt.value > 0 && spelerId.value == -1) {
+        if (doelpunt.value > 0 && (spelerId.value == null || spelerId.value == 0 || spelerId.value == -1)) {
             spelerId.setErrors({'error': 'VOORSPELLING_KIES_EEN_SPELER'});
             const message = {
                 fieldName: {
@@ -42,15 +42,6 @@ export class PredictionValidations {
             };    
             return message;
         }
-        if (doelpunt.value != null && spelerId.value == null) {
-            spelerId.setErrors({'error': 'VOORSPELLING_KIES_DOELPUNTENMAKER'});
-            const message = {
-                fieldName: {
-                'error': "VOORSPELLING_KIES_DOELPUNTENMAKER"
-                }
-            };    
-            return message;
-        }        
         spelerId.setErrors(null);
         return null;        
     }
