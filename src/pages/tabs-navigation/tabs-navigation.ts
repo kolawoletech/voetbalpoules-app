@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 
 import { PredictionsPage } from '../predictions/predictions';
+import { PoulesPage } from '../mijn/poules';
 import { SettingsPage } from '../settings/settings';
 
 @Component({
@@ -15,6 +16,7 @@ export class TabsNavigationPage {
   
   constructor() {
     this.tab1Root = PredictionsPage;
+    this.tab2Root = PoulesPage;
     this.tab3Root = SettingsPage;
   }
 }

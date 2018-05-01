@@ -16,6 +16,11 @@ export class UserResponse {
   expires_in: number;
 }
 
+export class User {
+  id: number;
+  teamnaam: string;
+}
+
 export class ErrorMessage {
   error: string;
   error_description: string;

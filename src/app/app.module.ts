@@ -7,6 +7,8 @@ import { Http, HttpModule } from '@angular/http';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import { PredictionsPage } from '../pages/predictions/predictions';
+import { PoulesPage } from '../pages/mijn/poules';
+import { PoulePage } from '../pages/poule/poule';
 import { LoginPage } from '../pages/login/login';
 import { ProfilePage } from '../pages/profile/profile';
 import { TabsNavigationPage } from '../pages/tabs-navigation/tabs-navigation';
@@ -28,6 +30,8 @@ import { Rating } from '../components/rating/rating';
 
 //import { FeedService } from '../pages/feed/feed.service';
 import { PredictionsService } from '../pages/predictions/predictions.service';
+import { PoulesService } from '../pages/mijn/poules.service';
+import { PouleService } from '../pages/poule/poule.service';
 //import { ProfileService } from '../pages/profile/profile.service';
 //import { ScheduleService } from '../pages/schedule/schedule.service';
 import { FacebookLoginService } from '../providers/facebook/facebook-login.service';
@@ -70,6 +74,8 @@ export function jwtOptionsFactory(inj: Injector) {
   declarations: [
     MyApp,
     PredictionsPage,
+    PoulePage,
+    PoulesPage,
     LoginPage,
     TabsNavigationPage,
     SettingsPage,
@@ -112,12 +118,16 @@ export function jwtOptionsFactory(inj: Injector) {
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
+    PoulesPage,
+    PoulePage,
     PredictionsPage,
     LoginPage,
     TabsNavigationPage,
     SettingsPage
   ],
   providers: [
+    PoulesService,
+    PouleService,
     TabsService,
     PredictionsService,
     FacebookLoginService,

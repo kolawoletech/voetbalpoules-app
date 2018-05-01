@@ -125,7 +125,9 @@
   "DONE": "Done",
   "GROEP": "Group",
   "KIES_SPELER": "Choose player",
+  "MIJN_POULES": "My pools",
   "POOL": "Pool",
+  "POOLS": "Pool",
   "WEEK": "week",
   "WEEKTOTAAL": "Week total",
   "PUNTEN": "Points",
@@ -137,5 +139,6 @@
   "VOORSPELLING_NIET_OPGESLAGEN": "You prediction couldn't be saved, please try again!",
   "VOORSPELLING_WEDSTRIJD_BEGONNEN": "This match is already started (or played) and can't be predicted anymore.",
   "VOORSPELLING_WEDSTRIJD_BESTAAT_NIET": "This match is unknown to us.",
-  "WEDSTRIJD_KIES_DOELPUNTENMAKER": "Choose the first scorer."
+  "WEDSTRIJD_KIES_DOELPUNTENMAKER": "Choose the first scorer.",
+  "JOUW": "(yours)"
 }

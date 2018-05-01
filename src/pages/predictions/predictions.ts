@@ -1,8 +1,8 @@
 import { IonDigitKeyboardCmp } from '../../components/ion-digit-keyboard';
 import { Component, ViewChild, ViewChildren, QueryList } from '@angular/core';
-import { LoadingController, Events, Slides, Slide, Refresher } from 'ionic-angular';
+import { LoadingController, Events, Slides, Slide, Refresher, NavController, NavParams } from 'ionic-angular';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
-import { AuthService } from "../../providers/auth/auth.service";
+import { AuthService, User } from "../../providers/auth/auth.service";
 import { PredictionsModel, ValidationResult, WeekPositie } from './predictions.model';
 import { PredictionsService } from './predictions.service';
 import { Team, Prediction, Match, PredictionCommand } from './predictions.model';
@@ -18,7 +18,7 @@ import { TranslateService } from '@ngx-translate/core';
 })
 export class PredictionsPage {
   subscription: Subscription;
-  user: any;
+  user: User;
   auth: AuthService;
 
   @ViewChild('slider') private slider: Slides;
@@ -38,15 +38,17 @@ export class PredictionsPage {
     public authService: AuthService,
     public formBuilder: FormBuilder,
     public tabsService: TabsService,
+    public navCtrl: NavController, 
+    public navParams: NavParams,
     private events: Events,
-    private translate: TranslateService
-  ) {
+    private translate: TranslateService,
+    ) {
     this.auth = authService;
   }
 
   ngOnInit() {
     this.slideForm = new FormGroup({});
-console.log("init")
+    console.log("init")
   }
 
   ionViewWillLeave() { //ngOnDestroy
@@ -101,16 +103,24 @@ console.log("init")
 
     var hideCallback = () : void => {
       this.keyboardHeader = null;
-      //Hier moet een timeout omheen, anders klik je bij de 0 direct op de tabbar...
-      setTimeout(() => { 
-        this.tabsService.show(); 
-      }, 250); 
+      this.tabsService.show(); 
     }
     this.keyboard.hide(hideCallback);
   }
 
-  ionViewWillEnter() {
-    this.user = this.auth.user;
+
+  goBack() {
+    console.log("popping");
+    this.navCtrl.pop();
+  }
+
+  ionViewWillEnter() {    
+    this.user = this.navParams.get("user");
+    if(!this.user && this.auth.user) {
+      let user : User = new User();
+      user.id = this.auth.user.sub;
+      this.user = user;
+    }
     if(!this.user)
     {
        console.log("niemand ingelogd.");
@@ -143,7 +153,9 @@ console.log("init")
         this.setFocus(voorspelling, false);
       }
       else {
-        this.hideKeyboard();
+        setTimeout(() => { 
+          this.hideKeyboard();
+        }, 250); 
       }
     });
 
@@ -170,7 +182,7 @@ console.log("init")
     loading.present();
 
     return this.predictionsService
-      .getData(this.user.sub)
+      .getData(this.user.id)
       .finally(() => loading.dismiss())
       .subscribe(data => {
         console.log("verwerk data");
@@ -279,7 +291,7 @@ console.log("init")
     var today = this.speelData[currentIndex];
 
     return this.predictionsService
-      .getData(this.user.sub, today.datum)
+      .getData(this.user.id, today.datum)
       .subscribe(data => {
         this.speelData[currentIndex] = data;
         this.mapVoorspellingen(data.voorspellingen);
@@ -296,7 +308,7 @@ console.log("init")
     predictionCommand.uitspelerId = prediction.uitspelerId;
     
     return this.predictionsService
-      .save(this.user.sub, predictionCommand);
+      .save(this.user.id, predictionCommand);
   }
 
   private loadSlide(isNext: Boolean)
@@ -314,7 +326,7 @@ console.log("init")
     let loading = this.loadingCtrl.create({ showBackdrop: false});
     loading.present().then(() => {    
       return this.predictionsService
-        .getData(this.user.sub, today.datum)
+        .getData(this.user.id, today.datum)
         .finally(() => loading.dismiss())
         .subscribe(data => {
           this.speelData[currentIndex] = data;

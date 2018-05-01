@@ -1,0 +1,37 @@
+<ion-header class="listing-header">
+    <ion-navbar>
+      <ion-title>{{'MIJN_POULES' | translate}}</ion-title>
+    </ion-navbar>
+</ion-header>
+
+<ion-content>
+    <ion-item *ngIf="competities && competities.length <= 1">
+        <h2>{{selectedCompetitie.naam}}</h2>
+    </ion-item>    
+    <ion-item *ngIf="competities && competities.length > 1">
+        <ion-select [(ngModel)]="selectedCompetitie" interface="action-sheet" class="full-width">
+            <ion-option *ngFor="let competitie of competities" [value]="competitie">{{competitie?.naam}}</ion-option>
+        </ion-select>
+    </ion-item>    
+    <ion-list>
+        <ion-list-header>
+            <ion-grid>
+                <ion-row row-no-padding>
+                    <ion-col col-8>{{'POOL'| translate}}</ion-col>
+                    <ion-col col-2 text-right>{{'POSITIE' | translate}} <p class="klein">({{'POOL' | translate}})</p></ion-col>
+                    <ion-col col-2 text-right>{{'POSITIE' | translate}} <p class="klein">{{'JOUW' | translate}}</p></ion-col>
+                </ion-row>            
+            </ion-grid>                
+        </ion-list-header>    
+        <button *ngFor="let poule of poules" ion-item (click)="navToPoule(poule)">
+            <ion-grid>
+                <ion-row  row-no-padding>
+                    <ion-col col-8>{{poule.naam}}</ion-col>
+                    <ion-col col-2 text-right>{{getCompetitie(poule)?.poulePositie}}</ion-col>
+                    <ion-col col-2 text-right>{{getCompetitie(poule)?.positie}}</ion-col>
+                </ion-row>            
+            </ion-grid>
+        </button>
+    </ion-list>        
+</ion-content>
+  

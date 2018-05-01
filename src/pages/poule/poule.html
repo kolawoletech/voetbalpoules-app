@@ -1,0 +1,26 @@
+<ion-header class="listing-header">
+    <ion-navbar>
+      <ion-title>{{poule?.naam}}</ion-title>
+    </ion-navbar>
+</ion-header>
+
+<ion-content>
+  <ion-item>
+      <h2>{{competitie.naam}}</h2>
+  </ion-item>    
+
+  <ion-list>
+    <button *ngFor="let user of users" ion-item (click)="navToVoorspelling(user)">
+      <ion-grid>
+        <ion-row row-no-padding>
+          <ion-col col-1 text-right class="dik">{{user.positie}}.</ion-col>
+          <ion-col col-1 text-right class="klein">{{user.positieOud ? user.positieOud + "." : "-"}}</ion-col>
+          <ion-col col-7 text-wrap>{{user.teamnaam}}</ion-col>
+          <ion-col col-2 text-right class="dik">{{user.punten | number}}</ion-col>
+          <ion-col col-1 text-right class="klein">(+{{user.verschil}})</ion-col>
+        </ion-row>            
+      </ion-grid>
+    </button>
+  </ion-list>        
+</ion-content>
+  

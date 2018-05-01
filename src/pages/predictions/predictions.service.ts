@@ -4,16 +4,19 @@ import { Observable } from 'rxjs';
 import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
 import { PredictionsModel, PredictionCommand, ValidationResult } from './predictions.model';
 import { catchError, tap } from 'rxjs/operators';
+import { AuthService } from '../../providers/auth/auth.service';
 
 @Injectable()
 export class PredictionsService {
   url: string = 'https://api.voetbalpoules.nl';
   //url: string = 'http://localhost:49939';
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private authService: AuthService) {}
 
   public getData(userId: number, date?: Date) : Observable<PredictionsModel> {
-    console.log("predictions for " + userId);
-    let uri = this.url + '/deelnemer/' + userId + '/voorspellingen/my';
+    console.log("predictions for " + userId);    
+    let uri = this.url + '/deelnemer/' + userId + '/voorspellingen';
+    if(this.authService.user.sub === userId)
+      uri += "/my";
     if(date)
     {
       uri += '?datum=' + date;
