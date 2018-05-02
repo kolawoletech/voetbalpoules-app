@@ -9,8 +9,8 @@
     <ion-slides #slider (ionSlideNextEnd)="loadNext()" (ionSlidePrevEnd)="loadPrev()" [initialSlide]="1" pager="true">
       <ion-slide *ngFor="let dag of speelData">
           <ion-content>
-            <ion-refresher (ionRefresh)="doRefresh($event)" pullMin="200">
-                <ion-refresher-content pullingText="{{'REFRESHTEXT' | translate:{ time: refreshTime | date: 'HH:MM:ss' } }}"></ion-refresher-content>
+            <ion-refresher (ionRefresh)="doRefresh($event)" pullMin="120">
+                <ion-refresher-content pullingText="{{'REFRESHTEXT' | translate:{ time: refreshTime | date: 'mediumTime' } }}"></ion-refresher-content>
               </ion-refresher>
             <h2>{{dag.datum | date: 'EE d MMMM y' }}</h2>
             <ion-card *ngFor="let voorspelling of dag.voorspellingen" [ngClass]="{ 'error': voorspelling.foutmelding, 'opgeslagen': voorspelling.opgeslagen, 'wvdw': voorspelling.wedstrijd.wedstrijdVanDeWeek }">
