@@ -111,10 +111,10 @@
                   </ion-row>
                   <ion-row *ngIf="voorspelling.wedstrijd.wedstrijdVanDeWeek">
                     <ion-col col-6>
-                      <p class="links" [ngClass]="{'groen': voorspelling?.thuisspeler?.id === voorspelling.wedstrijd?.thuisspeler?.id, 'rood': voorspelling.wedstrijd?.thuisspeler && voorspelling?.thuisspeler?.id !== voorspelling.wedstrijd?.thuisspeler?.id }">{{voorspelling?.thuisspeler?.naam}}</p>
+                      <p class="links" [ngClass]="{'groen': voorspelling?.thuisspeler?.id === voorspelling.wedstrijd?.thuisspeler?.id, 'rood': voorspelling.wedstrijd?.thuisspeler && voorspelling?.thuisspeler?.id !== voorspelling.wedstrijd?.thuisspeler?.id && voorspelling.wedstrijd?.thuisspeler?.id !== 0 }">{{voorspelling?.thuisspeler?.naam}}</p>
                     </ion-col>
                     <ion-col col-6>
-                      <p class="rechts" [ngClass]="{'groen': voorspelling?.uitspeler?.id === voorspelling.wedstrijd?.uitspeler?.id, 'rood': voorspelling.wedstrijd?.uitspeler && voorspelling.uitspeler?.id !== voorspelling.wedstrijd.uitspeler?.id }">{{voorspelling?.uitspeler?.naam}}</p>
+                      <p class="rechts" [ngClass]="{'groen': voorspelling?.uitspeler?.id === voorspelling.wedstrijd?.uitspeler?.id, 'rood': voorspelling.wedstrijd?.uitspeler && voorspelling.uitspeler?.id !== voorspelling.wedstrijd.uitspeler?.id && voorspelling.wedstrijd?.uitspeler?.id !== 0 }">{{voorspelling?.uitspeler?.naam}}</p>
                     </ion-col>
                   </ion-row>
                   <ion-row *ngIf="voorspelling.punten != null" class="weekpositie">
