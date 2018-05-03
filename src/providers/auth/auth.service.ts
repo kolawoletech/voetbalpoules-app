@@ -67,7 +67,7 @@ export class AuthService {
       if(err instanceof HttpErrorResponse) {
         // you could extract more info about the error if you want, e.g.:
         console.log(`status: ${err.status}, ${err.statusText}`);
-        var error : ErrorMessage = JSON.parse(err.error);
+        var error : ErrorMessage = err.error; // JSON.parse(err.error);
         errMsg = error.error_description;
       }
       return Observable.throw(errMsg);
