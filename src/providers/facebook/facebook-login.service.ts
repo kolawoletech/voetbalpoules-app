@@ -49,7 +49,6 @@ export class FacebookLoginService {
           return Promise.reject(err);
         })
       .catch(error => {
-        return Promise.reject(error);
         let str = JSON.stringify(error, null, 4); // beautiful indented output.
         console.log(str);
         let error_message = this.TranslateError(str);

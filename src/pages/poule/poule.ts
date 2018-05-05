@@ -5,7 +5,6 @@ import { User } from '../../providers/auth/auth.service';
 import { PouleService } from './poule.service';
 import { PredictionsPage } from '../predictions/predictions';
 import { PouleStandUser } from './poule.model';
-import { UserModel } from '../profile/profile.model';
 
 /**
  * Generated class for the PoulePage page.
