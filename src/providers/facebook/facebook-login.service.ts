@@ -32,22 +32,24 @@ export class FacebookLoginService {
       .then(
         response => {
           console.log("facebook login successfull.");
-          return this.authService.loginWithFacebook(response.authResponse.accessToken).toPromise();
+          return this.authService.loginWithFacebook(response.authResponse.accessToken)
+            .toPromise()
+            .then(
+              data => {
+                console.log("facebook token authenticated.")
+                return Promise.resolve("");
+              },
+              err => {
+                console.log("rejected hier" + err);
+                return Promise.reject(err);
+              });
         },
         err => {
           console.log("facebook call mislukt" + err);
-          Promise.reject(err);
-        })
-      .then(
-        data => {
-          console.log("facebook token authenticated.")
-          Promise.resolve("");
-        },
-        err => {
-          console.log("rejected");
-          Promise.reject(err.message);
+          return Promise.reject(err);
         })
       .catch(error => {
+        return Promise.reject(error);
         let str = JSON.stringify(error, null, 4); // beautiful indented output.
         console.log(str);
         let error_message = this.TranslateError(str);

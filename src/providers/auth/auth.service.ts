@@ -63,7 +63,7 @@ export class AuthService {
   private handleError(operation: string) {
     return (err: any) => {
       let errMsg = 'error in ' + operation;
-      console.log(err);
+      console.log('handleError authService: ' + err);
       if(err instanceof HttpErrorResponse) {
         // you could extract more info about the error if you want, e.g.:
         console.log(`status: ${err.status}, ${err.statusText}`);
@@ -93,6 +93,7 @@ export class AuthService {
       .set('grant_type', 'facebook_identity_token')
       .set('scope', 'offline_access')
       .set('assertion', facebookToken);      
+
     console.log(facebookToken);
     return this.getToken(body, headers);
   }
