@@ -77,13 +77,18 @@ export class FacebookLoginService {
 
   private TranslateError(str) : string {
     let parsedJson : any = JSON.parse(str);
+    if(!parsedJson)
+      return str;
     let error: FacebookError = <FacebookError>parsedJson;
-    if(error.errorMessage === "Facebook error: User logged in as different Facebook user.") {
+    if(!error)
+      return str;
+
+    if(error.errorMessage === "Facebook error: User logged in as different Facebook user.")
       return "FACEBOOK_ALREADY_LOGGED_IN";
-    } 
-    else {
+    
+    if(error.errorMessage)
       return error.errorMessage;
-    }
+    return str;
   }
 }
 

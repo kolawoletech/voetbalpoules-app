@@ -1,9 +1,9 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget android-packageName="com.voetbalpoules.nativeapp" android-versionCode="27" ios-CFBundleIdentifier="com.voetbalpoules.native" version="0.0.27" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget android-packageName="com.voetbalpoules.nativeapp" android-versionCode="28" ios-CFBundleIdentifier="com.voetbalpoules.native" version="0.0.28" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>Voetbalpoules</name>
     <description>De leukste voetbalpoule van Nederland!</description>
     <author email="jeroen@voetbalpoules.nl" href="https://www.voetbalpoules.nl/">Voetbalpoules</author>
-    <content src="index.html" />
+    <content original-src="index.html" src="http://192.168.178.28:8100" />
     <access origin="*" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
