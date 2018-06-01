@@ -5,21 +5,34 @@
 </ion-header>
 
 <ion-content class="signup-content auth-content">
-  <h2 class="auth-title">{{'CREATE_AN_ACCOUNT' | translate}}</h2>
+  <div class="validation-errors" *ngIf="validationError">
+    <ng-container>
+      <div class="error-message">
+        {{ validationError | translate }}
+      </div>
+    </ng-container>
+  </div>
   <form class="signup-form auth-form" [formGroup]="signup" (ngSubmit)="doSignup()">
     <ion-item>
-      <ion-input type="email" placeholder="Email" formControlName="email"></ion-input>
+      <ion-input type="email" placeholder="{{'EMAIL' | translate}}" formControlName="email"></ion-input>
     </ion-item>
     <show-hide-container>
       <ion-item>
-        <ion-input type="password" placeholder="Password" formControlName="password" show-hide-input></ion-input>
+        <ion-input type="password" placeholder="{{'PASSWORD' | translate}}" formControlName="wachtwoord" show-hide-input></ion-input>
       </ion-item>
     </show-hide-container>
+    <p class="danger" padding>ja dan {{signup.get('wachtwoord').errors?.error}}</p>
     <show-hide-container>
       <ion-item>
-        <ion-input type="password" placeholder="Confirm password" formControlName="confirm_password" show-hide-input></ion-input>
+        <ion-input type="password" placeholder="{{'PASSWORD_CONFIRM' | translate}}" formControlName="wachtwoordKopie" show-hide-input></ion-input>
       </ion-item>
     </show-hide-container>
+    <ion-item>
+      <ion-input type="text" placeholder="{{'NAAM' | translate}}" formControlName="naam"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-input type="text" placeholder="{{'TEAMNAAM' | translate}}" formControlName="teamnaam"></ion-input>
+    </ion-item>
     <button ion-button block class="auth-action-button signup-button" type="submit" [disabled]="!signup.valid">{{'SIGN_UP' | translate}}</button>
   </form>
   <p class="auth-divider">

@@ -6,7 +6,7 @@
 
 <ion-content id="predictions">
   <form [formGroup]="slideForm">
-    <ion-slides #slider (ionSlideNextEnd)="loadNext()" (ionSlidePrevEnd)="loadPrev()" [initialSlide]="1" pager="true">
+    <ion-slides #slider (ionSlideNextEnd)="loadNext()" (ionSlidePrevEnd)="loadPrev()" [initialSlide]="0" pager="true">
       <ion-slide *ngFor="let dag of speelData">
           <ion-content>
             <ion-refresher (ionRefresh)="doRefresh($event)" pullMin="120">

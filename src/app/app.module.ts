@@ -55,6 +55,7 @@ import { LocalStorageService} from '../providers/localstorage/localstorage.servi
 import { LanguageInterceptor } from '../interceptors/language.interceptor';
 import { UnauthorizedInterceptor } from '../interceptors/unauthorized.interceptor';
 import { IonDigitKeyboard } from '../components/ion-digit-keyboard/ion-digit-keyboard.module';
+import { SignupService } from '../pages/signup/signup.service';
 
 export function createTranslateLoader(http: Http) {
 	return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -118,16 +119,18 @@ export function jwtOptionsFactory(inj: Injector) {
   bootstrap: [IonicApp],
   entryComponents: [
     MyApp,
-    PoulesPage,
-    PoulePage,
-    PredictionsPage,
     LoginPage,
-    TabsNavigationPage,
-    SettingsPage
+    PoulePage,
+    PoulesPage,
+    PredictionsPage,
+    SettingsPage,
+    SignupPage,
+    TabsNavigationPage
   ],
   providers: [
     PoulesService,
     PouleService,
+    SignupService,
     TabsService,
     PredictionsService,
     FacebookLoginService,

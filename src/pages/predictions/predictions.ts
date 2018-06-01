@@ -191,11 +191,12 @@ export class PredictionsPage {
         if(data.vorigeDag) {
           this.speelData.push(new PredictionsModel(data.vorigeDag));  
           console.log("pushed gisteren");
+          this.slider.initialSlide = 1;
         }
         this.speelData.push(data);
         console.log("pushed vandaag");
         this.mapVoorspellingen(data.voorspellingen);
-
+        
         if(data.volgendeDag) {
           this.speelData.push(new PredictionsModel(data.volgendeDag));
           console.log("pushed morgen");

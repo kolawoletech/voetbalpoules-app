@@ -3,7 +3,7 @@ import { NavController, LoadingController, AlertController } from 'ionic-angular
 import { Validators, FormGroup, FormControl } from '@angular/forms';
 
 import { TabsNavigationPage } from '../tabs-navigation/tabs-navigation';
-//import { SignupPage } from '../signup/signup';
+import { SignupPage } from '../signup/signup';
 //import { ForgotPasswordPage } from '../forgot-password/forgot-password';
 import { FacebookLoginService } from '../../providers/facebook/facebook-login.service';
 import { AuthService } from '../../providers/auth/auth.service';
@@ -85,7 +85,8 @@ export class LoginPage {
         buttons: [data[2]]
       });
       alert.present();
-    });
+    });    
+    //console.log("ga naar signup");
     //this.nav.push(SignupPage);
   }
 
