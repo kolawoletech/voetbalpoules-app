@@ -46,14 +46,11 @@ export class FacebookLoginService {
         },
         err => {
           console.log("facebook call mislukt" + err);
-          return Promise.reject(err);
-        })
-      .catch(error => {
-        let str = JSON.stringify(error, null, 4); // beautiful indented output.
-        console.log(str);
-        let error_message = this.TranslateError(str);
-        return Promise.reject(error_message);
-      });
+          let str = JSON.stringify(err, null, 4); // beautiful indented output.
+          console.log(str);
+          let error_message = this.TranslateError(str);
+          return Promise.reject(error_message);            
+        });
   }
 
   public doFacebookLogout()
@@ -77,15 +74,19 @@ export class FacebookLoginService {
 
   private TranslateError(str) : string {
     let parsedJson : any = JSON.parse(str);
-    if(!parsedJson)
+    if(!parsedJson) {
       return str;
+    }
     let error: FacebookError = <FacebookError>parsedJson;
-    if(!error)
-      return str;
+    if(!error) {
+      return str;      
+    }
 
     if(error.errorMessage === "Facebook error: User logged in as different Facebook user.")
       return "FACEBOOK_ALREADY_LOGGED_IN";
-    
+    if(error.errorCode == 4201)
+      return "FACEBOOK_CANCEL";
+
     if(error.errorMessage)
       return error.errorMessage;
     return str;

@@ -1,5 +1,6 @@
 {
   "FACEBOOK_ALREADY_LOGGED_IN": "User logged in as different Facebook user.",  
+  "FACEBOOK_CANCEL": "You didn't give permission to login with Facebook. Please login with email and password.",
   "SELECT_LANGUAGE": "Select your language",
   "CHANGE_PROFILE_PICTURE": "Change profile picture",
   "SETTINGS": "Settings",

@@ -9,6 +9,7 @@
   "LOG_IN": "Inloggen",
   "LOGIN_WITH_FACEBOOK": "Log in met Facebook",
   "FACEBOOK_ALREADY_LOGGED_IN": "Je bent al ingelogd met een andere Facebook gebruiker. Probeer het nog eens.",
+  "FACEBOOK_CANCEL": "Je hebt geen toestemming gegeven om met Facebook in te loggen. Log in met email en wachtwoord.",
   "POOL": "Poule",
   "POOLS": "Poules",
   "PASSWORD": "Wachtwoord",
