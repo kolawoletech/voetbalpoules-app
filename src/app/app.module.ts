@@ -7,6 +7,7 @@ import { Http, HttpModule } from '@angular/http';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import { PredictionsPage } from '../pages/predictions/predictions';
+import { ExtraPage } from '../pages/extra/extra';
 import { PoulesPage } from '../pages/mijn/poules';
 import { PoulePage } from '../pages/poule/poule';
 import { LoginPage } from '../pages/login/login';
@@ -45,6 +46,7 @@ import { InAppBrowser } from '@ionic-native/in-app-browser';
 import { Facebook } from '@ionic-native/facebook';
 import { Keyboard } from '@ionic-native/keyboard';
 import { AppRate } from '@ionic-native/app-rate';
+import { AdMobFree } from '@ionic-native/admob-free';
 
 // Functionalities
 import { ValidatorsModule } from '../components/validators/validators.module';
@@ -75,6 +77,7 @@ export function jwtOptionsFactory(inj: Injector) {
   declarations: [
     MyApp,
     PredictionsPage,
+    ExtraPage,
     PoulePage,
     PoulesPage,
     LoginPage,
@@ -120,6 +123,7 @@ export function jwtOptionsFactory(inj: Injector) {
   entryComponents: [
     MyApp,
     LoginPage,
+    ExtraPage,
     PoulePage,
     PoulesPage,
     PredictionsPage,
@@ -145,6 +149,7 @@ export function jwtOptionsFactory(inj: Injector) {
     Rating,
     AppRate,
     Keyboard,
+    AdMobFree,
     { 
       provide: HTTP_INTERCEPTORS,
       useClass: LanguageInterceptor,

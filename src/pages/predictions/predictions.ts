@@ -1,6 +1,6 @@
 import { IonDigitKeyboardCmp } from '../../components/ion-digit-keyboard';
 import { Component, ViewChild, ViewChildren, QueryList } from '@angular/core';
-import { LoadingController, Events, Slides, Slide, Refresher, NavController, NavParams } from 'ionic-angular';
+import { Platform, LoadingController, Events, Slides, Slide, Refresher, NavController, NavParams } from 'ionic-angular';
 import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 import { AuthService, User } from "../../providers/auth/auth.service";
 import { PredictionsModel, ValidationResult, WeekPositie } from './predictions.model';
@@ -11,6 +11,7 @@ import { Subscription } from 'rxjs/Subscription';
 import { TabsService } from '../../providers/tabs.service';
 import { PredictionValidations } from './predictions.validations';
 import { TranslateService } from '@ngx-translate/core';
+import { AdMobFree, AdMobFreeBannerConfig } from '@ionic-native/admob-free';
 
 @Component({
   selector: 'predictions-page',
@@ -43,13 +44,41 @@ export class PredictionsPage {
     public navParams: NavParams,
     private events: Events,
     private translate: TranslateService,
+    private adMob: AdMobFree,
+    private platform: Platform
     ) {
     this.auth = authService;
+    platform.ready().then(()=>{
+      platform.registerBackButtonAction(()=> {
+        if(this.keyboard.visible)
+          this.hideKeyboard();
+        else
+          platform.exitApp();
+      });
+    });
   }
 
   ngOnInit() {
     this.slideForm = new FormGroup({});
     console.log("init")
+    const bannerConfig: AdMobFreeBannerConfig = {
+      isTesting: false,
+      autoShow: true
+     };
+     if(this.platform.is("ios"))
+       bannerConfig.id = "ca-app-pub-9993035719622406/3453786823";
+     else
+       bannerConfig.id = "ca-app-pub-9993035719622406/1274222330";
+     
+     this.adMob.banner.config(bannerConfig);
+     this.adMob.banner.prepare()
+     .then(() => {
+       this.adMob.banner.show();
+       console.log("klaar met banner");
+       // banner Ad is ready
+       // if we set autoShow to false, then we will need to call the show method here
+     })
+     .catch(e => console.log(e))
   }
 
   ionViewWillLeave() { //ngOnDestroy
@@ -210,6 +239,13 @@ export class PredictionsPage {
       .filter((voorspelling: Prediction) => voorspelling.wijzigbaar) //alleen form bij te wijzigen voorspellingen
       .map((voorspelling, index) => {
         console.log("map " + voorspelling.thuisdoelpunten);
+        //ooit voorspeld, nu niet meer in de selectie? Fix het ff
+        if(voorspelling.thuisspeler && voorspelling.thuisspeler.id > 0 && !voorspelling.wedstrijd.thuisteam.spelers.find(x => x.id == voorspelling.thuisspeler.id)) {
+          voorspelling.wedstrijd.thuisteam.spelers.push(voorspelling.thuisspeler);
+        }
+        if(voorspelling.uitspeler && voorspelling.uitspeler.id > 0 && !voorspelling.wedstrijd.uitteam.spelers.find(x => x.id == voorspelling.uitspeler.id)) {
+          voorspelling.wedstrijd.uitteam.spelers.push(voorspelling.uitspeler);
+        }
         const name = 'voorspelling-' + voorspelling.wedstrijd.id.toString();
         const formGroup = this.formBuilder.group({
           wedstrijdId: [''],
