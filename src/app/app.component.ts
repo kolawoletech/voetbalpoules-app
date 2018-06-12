@@ -12,6 +12,7 @@ import { AuthService } from '../providers/auth/auth.service';
 import { Events } from 'ionic-angular';
 import { Keyboard } from '@ionic-native/keyboard';
 import { GoogleAnalytics } from '@ionic-native/google-analytics';
+import { AdMobPro } from '@ionic-native/admob-pro';
 
 @Component({
   selector: 'app-root',
@@ -40,6 +41,7 @@ export class MyApp {
     public toastCtrl: ToastController,
     public events: Events,
     public keyboard: Keyboard,
+    public admob: AdMobPro,
     private ga: GoogleAnalytics
   ) {
     translate.setDefaultLang('nl');
@@ -55,6 +57,16 @@ export class MyApp {
         this.keyboard.hideKeyboardAccessoryBar(false);          
       }
       this.ga.startTrackerWithId("UA-120779996-1");      
+      var admobid;
+      if(platform.is("ios"))
+        admobid = "ca-app-pub-9993035719622406/3453786823";
+      else
+        admobid = "ca-app-pub-9993035719622406/1274222330";
+ 
+      this.admob.createBanner({
+        adId: admobid,
+        autoShow: true
+      });
     });
 
     this.translate.onLangChange.subscribe((event: LangChangeEvent) =>

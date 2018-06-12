@@ -46,7 +46,7 @@ import { InAppBrowser } from '@ionic-native/in-app-browser';
 import { Facebook } from '@ionic-native/facebook';
 import { Keyboard } from '@ionic-native/keyboard';
 import { AppRate } from '@ionic-native/app-rate';
-import { AdMobFree } from '@ionic-native/admob-free';
+import { AdMobPro } from '@ionic-native/admob-pro';
 
 // Functionalities
 import { ValidatorsModule } from '../components/validators/validators.module';
@@ -150,7 +150,7 @@ export function jwtOptionsFactory(inj: Injector) {
     Rating,
     AppRate,
     Keyboard,
-    AdMobFree,
+    AdMobPro,
     GoogleAnalytics,
     { 
       provide: HTTP_INTERCEPTORS,

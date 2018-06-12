@@ -11,7 +11,6 @@ import { Subscription } from 'rxjs/Subscription';
 import { TabsService } from '../../providers/tabs.service';
 import { PredictionValidations } from './predictions.validations';
 import { TranslateService } from '@ngx-translate/core';
-import { AdMobFree, AdMobFreeBannerConfig } from '@ionic-native/admob-free';
 import { GoogleAnalytics } from '@ionic-native/google-analytics';
 
 @Component({
@@ -45,11 +44,10 @@ export class PredictionsPage {
     public navParams: NavParams,
     private events: Events,
     private translate: TranslateService,
-    private adMob: AdMobFree,
     private platform: Platform,
     private ga: GoogleAnalytics
     ) {
-    this.ga.trackView('predictions');
+      this.ga.trackView('predictions');
     this.auth = authService;
     platform.ready().then(()=>{
       platform.registerBackButtonAction(()=> {
@@ -64,24 +62,6 @@ export class PredictionsPage {
   ngOnInit() {
     this.slideForm = new FormGroup({});
     console.log("init")
-    const bannerConfig: AdMobFreeBannerConfig = {
-      isTesting: false,
-      autoShow: true
-     };
-     if(this.platform.is("ios"))
-       bannerConfig.id = "ca-app-pub-9993035719622406/3453786823";
-     else
-       bannerConfig.id = "ca-app-pub-9993035719622406/1274222330";
-     
-     this.adMob.banner.config(bannerConfig);
-     this.adMob.banner.prepare()
-     .then(() => {
-       this.adMob.banner.show();
-       console.log("klaar met banner");
-       // banner Ad is ready
-       // if we set autoShow to false, then we will need to call the show method here
-     })
-     .catch(e => console.log(e))
   }
 
   ionViewWillLeave() { //ngOnDestroy
