@@ -5,6 +5,7 @@ import { User } from '../../providers/auth/auth.service';
 import { PouleService } from './poule.service';
 import { PredictionsPage } from '../predictions/predictions';
 import { PouleStandUser } from './poule.model';
+import { GoogleAnalytics } from '@ionic-native/google-analytics';
 
 /**
  * Generated class for the PoulePage page.
@@ -22,7 +23,13 @@ export class PoulePage {
   competitie: PouleUserCompetitie;
   users: PouleStandUser[];
 
-  constructor(public loadingCtrl: LoadingController, public navCtrl: NavController, public navParams: NavParams, public pouleService: PouleService) {
+  constructor(public loadingCtrl: LoadingController, 
+    public navCtrl: NavController, 
+    public navParams: NavParams, 
+    public pouleService: PouleService, 
+    public ga: GoogleAnalytics
+  ) {
+    ga.trackView("poule");
     this.poule = navParams.get("poule");
     this.competitie = navParams.get("competitie");
   }
@@ -46,6 +53,8 @@ export class PoulePage {
 
   navToVoorspelling(user: PouleStandUser)
   {
+    this.ga.trackEvent("poule", "predictions");
+
     let usertje: User = new User();
     usertje.id = user.userId;
     usertje.teamnaam = user.teamnaam;

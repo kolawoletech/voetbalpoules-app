@@ -49,9 +49,9 @@ export class PredictionsPage {
     private platform: Platform,
     private ga: GoogleAnalytics
     ) {
+    this.ga.trackView('predictions');
     this.auth = authService;
     platform.ready().then(()=>{
-      this.ga.trackView('predictions');
       platform.registerBackButtonAction(()=> {
         if(this.keyboard.visible)
           this.hideKeyboard();
@@ -318,12 +318,15 @@ export class PredictionsPage {
   }
 
   loadPrev() {
+    this.ga.trackEvent("predictions", "previous");
+    
     console.log('Prev');
     this.hideKeyboard();
     this.loadSlide(false);
 	}
 	
 	loadNext() {    
+    this.ga.trackEvent("predictions", "next");
     console.log('Next');
     this.hideKeyboard();
     this.loadSlide(true);
@@ -335,6 +338,7 @@ export class PredictionsPage {
       refresher.cancel();
       return;
     }
+    this.ga.trackEvent("predictions", "refresh");
     let currentIndex = this.slider.getActiveIndex();
     console.log("Huidige slide" + currentIndex);
     
@@ -352,6 +356,8 @@ export class PredictionsPage {
   }
 
   save(prediction: any) : Observable<Object> {
+    this.ga.trackEvent("predictions", "save");
+    
     let predictionCommand = new PredictionCommand();
     predictionCommand.wedstrijdId = prediction.wedstrijdId;
     predictionCommand.thuisdoelpunten = prediction.thuisdoelpunten;

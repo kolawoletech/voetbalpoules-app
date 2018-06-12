@@ -21,7 +21,7 @@ export class PoulesPage {
     public auth: AuthService,
     public loadingCtrl: LoadingController,
     public navCtrl: NavController,
-    private ga: GoogleAnalytics
+    public ga: GoogleAnalytics
   ) {
     this.ga.trackView('poules');
   }
