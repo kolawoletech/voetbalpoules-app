@@ -4,6 +4,7 @@ import { AuthService } from "../../providers/auth/auth.service";
 import { PoulesService } from './poules.service';
 import { PoulePage } from '../poule/poule';
 import { PouleModel, PouleUserCompetitie } from './poules.model';
+import { GoogleAnalytics } from '@ionic-native/google-analytics';
 
 @Component({
   selector: 'poules-page',
@@ -19,9 +20,10 @@ export class PoulesPage {
     public poulesService: PoulesService,
     public auth: AuthService,
     public loadingCtrl: LoadingController,
-    public navCtrl: NavController
+    public navCtrl: NavController,
+    private ga: GoogleAnalytics
   ) {
-
+    this.ga.trackView('poules');
   }
 
   ionViewWillEnter() {

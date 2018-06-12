@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget android-packageName="com.voetbalpoules.nativeapp" android-versionCode="31" ios-CFBundleIdentifier="com.voetbalpoules.native" version="0.0.31" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget android-packageName="com.voetbalpoules.nativeapp" android-versionCode="32" ios-CFBundleIdentifier="com.voetbalpoules.native" version="0.0.32" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>Voetbalpoules</name>
     <description>De leukste voetbalpoule van Nederland!</description>
     <author email="jeroen@voetbalpoules.nl" href="https://www.voetbalpoules.nl/">Voetbalpoules</author>
@@ -111,4 +111,6 @@
     <engine name="ios" spec="4.4.0" />
     <engine name="browser" spec="5.0.3" />
     <engine name="android" spec="^6.4.0" />
+    <allow-navigation href="http://192.168.178.32:8100" />
+    <plugin name="cordova-plugin-google-analytics" spec="^1.8.3" />
 </widget>

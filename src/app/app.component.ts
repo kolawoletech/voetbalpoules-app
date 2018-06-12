@@ -11,6 +11,7 @@ import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 import { AuthService } from '../providers/auth/auth.service';
 import { Events } from 'ionic-angular';
 import { Keyboard } from '@ionic-native/keyboard';
+import { GoogleAnalytics } from '@ionic-native/google-analytics';
 
 @Component({
   selector: 'app-root',
@@ -38,7 +39,8 @@ export class MyApp {
     public authService: AuthService,
     public toastCtrl: ToastController,
     public events: Events,
-    public keyboard: Keyboard
+    public keyboard: Keyboard,
+    private ga: GoogleAnalytics
   ) {
     translate.setDefaultLang('nl');
     translate.use('nl');
@@ -52,6 +54,7 @@ export class MyApp {
         this.statusBar.styleDefault();
         this.keyboard.hideKeyboardAccessoryBar(false);          
       }
+      this.ga.startTrackerWithId("UA-120779996-1");      
     });
 
     this.translate.onLangChange.subscribe((event: LangChangeEvent) =>

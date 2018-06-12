@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { GoogleAnalytics } from '@ionic-native/google-analytics';
 
 /**
  * Generated class for the ExtraPage page.
@@ -14,11 +15,11 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 })
 export class ExtraPage {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private ga: GoogleAnalytics) {
+    this.ga.trackView('extra');
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad ExtraPage');
   }
-
 }

@@ -12,6 +12,7 @@ import { TabsService } from '../../providers/tabs.service';
 import { PredictionValidations } from './predictions.validations';
 import { TranslateService } from '@ngx-translate/core';
 import { AdMobFree, AdMobFreeBannerConfig } from '@ionic-native/admob-free';
+import { GoogleAnalytics } from '@ionic-native/google-analytics';
 
 @Component({
   selector: 'predictions-page',
@@ -45,10 +46,12 @@ export class PredictionsPage {
     private events: Events,
     private translate: TranslateService,
     private adMob: AdMobFree,
-    private platform: Platform
+    private platform: Platform,
+    private ga: GoogleAnalytics
     ) {
     this.auth = authService;
     platform.ready().then(()=>{
+      this.ga.trackView('predictions');
       platform.registerBackButtonAction(()=> {
         if(this.keyboard.visible)
           this.hideKeyboard();
