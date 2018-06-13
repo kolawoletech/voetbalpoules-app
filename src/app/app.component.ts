@@ -65,7 +65,8 @@ export class MyApp {
  
       this.admob.createBanner({
         adId: admobid,
-        autoShow: true
+        autoShow: true,
+        position: this.admob.AD_POSITION.BOTTOM_CENTER
       });
     });
 
