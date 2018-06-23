@@ -83,6 +83,8 @@ export class Team {
 export class Competition {
   id: number;
   naam: string;
+  type: number;
+  aantalTeams: number;
 }
 
 export class WeekPositie {

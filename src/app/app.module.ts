@@ -59,6 +59,8 @@ import { UnauthorizedInterceptor } from '../interceptors/unauthorized.intercepto
 import { IonDigitKeyboard } from '../components/ion-digit-keyboard/ion-digit-keyboard.module';
 import { SignupService } from '../pages/signup/signup.service';
 import { GoogleAnalytics } from '@ionic-native/google-analytics';
+import { ToernooivoorspellingenService } from '../pages/extra/toernooivoorspellingen.service';
+import { ToernooiverloopService } from '../pages/extra/toernooiverloop.service';
 
 export function createTranslateLoader(http: Http) {
 	return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -133,6 +135,8 @@ export function jwtOptionsFactory(inj: Injector) {
     TabsNavigationPage
   ],
   providers: [
+    ToernooiverloopService,
+    ToernooivoorspellingenService,
     PoulesService,
     PouleService,
     SignupService,
