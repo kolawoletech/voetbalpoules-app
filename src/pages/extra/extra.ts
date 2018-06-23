@@ -84,7 +84,7 @@ export class ExtraPage {
   }
 
   getVoorspellingenFinales(): FinaleRonde[]
-  {
+  {    
     //let finales: FinaleWedstrijd[] = new Array<FinaleWedstrijd>();
 
     let rondes: FinaleRonde[] = new Array<FinaleRonde>();
@@ -94,6 +94,7 @@ export class ExtraPage {
     debugger;
     let voorspelType: VoorspelType;
     let ronde: FinaleRonde;
+    if(!this.toernooischema || !this.toernooischema.schema) return rondes;
     this.toernooischema.schema.forEach(finaleWedstrijd => {
       if(voorspelType != finaleWedstrijd.voorspelType)
       {
@@ -120,17 +121,23 @@ export class ExtraPage {
 
   getNummer3() : FinaleTeam
   {
-    return this.voorspellingen.voorspellingenKnockout.nummer3;
+    if(this.voorspellingen && this.voorspellingen.voorspellingenKnockout)    
+      return this.voorspellingen.voorspellingenKnockout.nummer3;
+    return new FinaleTeam();
   }
 
   getWinnaar() : FinaleTeam
   {
-    return this.voorspellingen.voorspellingenKnockout.winnaar;
+    if(this.voorspellingen && this.voorspellingen.voorspellingenKnockout)    
+      return this.voorspellingen.voorspellingenKnockout.winnaar;
+    return new FinaleTeam();
   }
 
   getTeam(teamId: number): Team
   {
+    if(this.toernooischema && this.toernooischema.teams)
       return this.toernooischema.teams.find(x => x.id == teamId);
+    return new Team();
   }
 
   getLogo(team : Team) : string {

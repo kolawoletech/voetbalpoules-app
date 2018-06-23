@@ -12,4 +12,15 @@ page-extra {
     .team {
         font-size: 16px;        
     }
+    #toolbar div.toolbar-background {
+        background-color: white;
+    }
+    ion-slide.swiper-slide {
+        align-items: flex-start;
+    }
+    ion-slide {
+        overflow-y: auto;
+        display: block;
+    }
+            
 }
