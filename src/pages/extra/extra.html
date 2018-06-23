@@ -22,9 +22,9 @@
 </ion-header>
 
 <ion-content>
-    <ion-slides *ngIf="segment == 'groepen'" [initialSlide]="0" pager="true">
-      <ion-slide *ngFor="let competitie of groepen">
-        <h2>{{competitie.naam}}</h2>
+  <div *ngIf="segment == 'groepen'">
+      <div *ngFor="let competitie of groepen">
+        <h2 text-center>{{competitie.naam}}</h2>
         <ion-list>
           <ion-item style="vertical-align: middle" *ngFor="let voorspelling of getVoorspellingen(competitie)" [ngClass]="{'groen': voorspelling.punten === 5, 'rood': voorspelling.punten === 0}">
             {{voorspelling.eindpositie}}. 
@@ -38,8 +38,8 @@
             <span *ngIf="!voorspelling.team.naam">-</span>
           </ion-item>
         </ion-list>    
-      </ion-slide>
-    </ion-slides>
+      </div>
+    </div>
   <ion-grid *ngIf="segment=='finales'">
       <div *ngFor="let ronde of getVoorspellingenFinales()">
         <h2 text-center>{{ronde.competitie.naam}}</h2>
