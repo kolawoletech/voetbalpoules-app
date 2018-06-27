@@ -3,6 +3,7 @@ import { Platform, MenuController, Nav, App, ToastController } from 'ionic-angul
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
 import { Observable } from 'rxjs/Observable';
+import { ImgCacheService } from 'ng-imgcache';
 
 import { TabsNavigationPage } from '../pages/tabs-navigation/tabs-navigation';
 import { SettingsPage } from '../pages/settings/settings';
@@ -40,7 +41,8 @@ export class MyApp {
     public toastCtrl: ToastController,
     public events: Events,
     public keyboard: Keyboard,
-    private ga: GoogleAnalytics
+    private ga: GoogleAnalytics,
+    private imgCache: ImgCacheService
   ) {
     translate.setDefaultLang('nl');
     translate.use('nl');
@@ -55,6 +57,9 @@ export class MyApp {
         this.keyboard.hideKeyboardAccessoryBar(false);          
       }
       this.ga.startTrackerWithId("UA-120779996-1");      
+      imgCache.init({
+        // Pass any options here...
+      });
     });
 
     this.translate.onLangChange.subscribe((event: LangChangeEvent) =>
