@@ -48,15 +48,25 @@ export class ExtraPage {
     loading.present();
     return this.toernooischemaService
       .get()
-      .finally(() => loading.dismiss())
+      .finally(() => {
+        console.log("dismiss loading");
+        loading.dismiss();
+        console.log("dismiss loading klaar");
+      })
       .subscribe(data => {
         this.toernooischema = data;
 
         return this.voorspellingenService.get(this.userId)
            .subscribe(data => {
+             console.log("voorspellingen binnen!");
              this.voorspellingen = data;
+             console.log("voorspellingen " + data);
              this.groepen = this.toernooischema.competitieRondes.filter(x => x.type == 40);
-            })
+             console.log("groepen " + this.groepen);
+            },
+          error => {
+            console.log("voorspellingen foutje " + error);
+          })
       });  
   }
   

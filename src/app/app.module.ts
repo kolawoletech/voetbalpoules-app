@@ -62,6 +62,8 @@ import { GoogleAnalytics } from '@ionic-native/google-analytics';
 import { ToernooivoorspellingenService } from '../pages/extra/toernooivoorspellingen.service';
 import { ToernooiverloopService } from '../pages/extra/toernooiverloop.service';
 
+import { IonicImageLoader } from 'ionic-image-loader';
+
 export function createTranslateLoader(http: Http) {
 	return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }
@@ -100,6 +102,7 @@ export function jwtOptionsFactory(inj: Injector) {
     BrowserModule,
     HttpModule,
     HttpClientModule,
+    IonicImageLoader.forRoot(),    
     IonDigitKeyboard,
     JwtModule.forRoot({
       jwtOptionsProvider: {

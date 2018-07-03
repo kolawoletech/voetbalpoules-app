@@ -22,9 +22,11 @@
     "@auth0/angular-jwt": "^1.1.0",
     "@ionic-native/admob-pro": "^4.7.0",
     "@ionic-native/app-rate": "3.7.0",
-    "@ionic-native/core": "^3.12.1",
+    "@ionic-native/core": "^3.14.0",
     "@ionic-native/email-composer": "3.12.1",
     "@ionic-native/facebook": "^3.14.0",
+    "@ionic-native/file": "^4.9.0",
+    "@ionic-native/file-transfer": "^4.9.0",
     "@ionic-native/google-analytics": "^4.1.0",
     "@ionic-native/in-app-browser": "3.12.1",
     "@ionic-native/keyboard": "3.12.1",
@@ -63,6 +65,7 @@
     "es6-promise-plugin": "^4.1.0",
     "hoek": "^5.0.3",
     "ionic-angular": "^3.9.2",
+    "ionic-image-loader": "^5.0.3",
     "ionic-plugin-keyboard": "^2.2.1",
     "ionicons": "3.0.0",
     "node-uuid": "^1.4.8",
@@ -108,7 +111,9 @@
         "UPDATE_API": "https://api.ionicjs.com",
         "MAX_STORE": "2"
       },
-      "cordova-plugin-admobpro": {}
+      "cordova-plugin-admobpro": {},
+      "cordova-plugin-file-transfer": {},
+      "cordova-plugin-file": {}
     },
     "platforms": [
       "ios",
