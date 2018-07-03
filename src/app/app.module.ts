@@ -5,7 +5,6 @@ import { TranslateModule, TranslateLoader, TranslateService } from '@ngx-transla
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { Http, HttpModule } from '@angular/http';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { ImgCacheModule } from 'ng-imgcache';
 
 import { PredictionsPage } from '../pages/predictions/predictions';
 import { ExtraPage } from '../pages/extra/extra';
@@ -102,7 +101,6 @@ export function jwtOptionsFactory(inj: Injector) {
     HttpModule,
     HttpClientModule,
     IonDigitKeyboard,
-    ImgCacheModule,
     JwtModule.forRoot({
       jwtOptionsProvider: {
         provide: JWT_OPTIONS,

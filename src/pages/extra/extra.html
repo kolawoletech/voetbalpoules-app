@@ -29,7 +29,7 @@
           <ion-item style="vertical-align: middle" *ngFor="let voorspelling of getVoorspellingen(competitie)" [ngClass]="{'groen': voorspelling.punten === 5, 'rood': voorspelling.punten === 0}">
             {{voorspelling.eindpositie}}. 
             <span *ngIf="voorspelling.team.naam">
-              <img style="height: 30px;" img-cache img-cache-src="{{getLogo(voorspelling.team)}}" />
+              <img style="height: 30px;" src="{{getLogo(voorspelling.team)}}" />
             </span>
             <span style="height:30px;vertical-align: middle" *ngIf="voorspelling.team.naam">
               {{voorspelling.team.naam}}
