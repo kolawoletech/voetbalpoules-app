@@ -12,7 +12,6 @@ import { AuthService } from '../providers/auth/auth.service';
 import { Events } from 'ionic-angular';
 import { Keyboard } from '@ionic-native/keyboard';
 import { GoogleAnalytics } from '@ionic-native/google-analytics';
-import { ImageLoaderConfig } from 'ionic-image-loader';
 
 @Component({
   selector: 'app-root',
@@ -41,8 +40,7 @@ export class MyApp {
     public toastCtrl: ToastController,
     public events: Events,
     public keyboard: Keyboard,
-    private ga: GoogleAnalytics,
-    private imageLoaderConfig: ImageLoaderConfig
+    private ga: GoogleAnalytics
   ) {
     translate.setDefaultLang('nl');
     translate.use('nl');
@@ -57,9 +55,6 @@ export class MyApp {
         this.keyboard.hideKeyboardAccessoryBar(false);          
       }
       this.ga.startTrackerWithId("UA-120779996-1");      
-      //this.imageLoaderConfig.setImageReturnType('base64');
-      this.imageLoaderConfig.setFileNameCachedWithExtension(true);
-      this.imageLoaderConfig.enableSpinner(false);
     });
 
     this.translate.onLangChange.subscribe((event: LangChangeEvent) =>

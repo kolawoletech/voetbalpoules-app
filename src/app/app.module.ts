@@ -20,8 +20,6 @@ import { ForgotPasswordPage } from '../pages/forgot-password/forgot-password';
 import { TermsOfServicePage } from '../pages/terms-of-service/terms-of-service';
 import { PrivacyPolicyPage } from '../pages/privacy-policy/privacy-policy';
 
-//import { PreloadImage } from '../components/preload-image/preload-image';
-//import { BackgroundImage } from '../components/background-image/background-image';
 import { ShowHideContainer } from '../components/show-hide-password/show-hide-container';
 import { ShowHideInput } from '../components/show-hide-password/show-hide-input';
 import { TabsService } from '../providers/tabs.service';
@@ -62,8 +60,6 @@ import { GoogleAnalytics } from '@ionic-native/google-analytics';
 import { ToernooivoorspellingenService } from '../pages/extra/toernooivoorspellingen.service';
 import { ToernooiverloopService } from '../pages/extra/toernooiverloop.service';
 
-import { IonicImageLoader } from 'ionic-image-loader';
-
 export function createTranslateLoader(http: Http) {
 	return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }
@@ -102,7 +98,6 @@ export function jwtOptionsFactory(inj: Injector) {
     BrowserModule,
     HttpModule,
     HttpClientModule,
-    IonicImageLoader.forRoot(),    
     IonDigitKeyboard,
     JwtModule.forRoot({
       jwtOptionsProvider: {

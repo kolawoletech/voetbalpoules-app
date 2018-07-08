@@ -101,7 +101,6 @@ export class ExtraPage {
 
     //competitie: Competition;
     //finales: FinaleWedstrijd[];
-    debugger;
     let voorspelType: VoorspelType;
     let ronde: FinaleRonde;
     if(!this.toernooischema || !this.toernooischema.schema) return rondes;

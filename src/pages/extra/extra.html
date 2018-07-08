@@ -29,7 +29,7 @@
           <ion-item style="vertical-align: middle" *ngFor="let voorspelling of getVoorspellingen(competitie)" [ngClass]="{'groen': voorspelling.punten === 5, 'rood': voorspelling.punten === 0}">
             {{voorspelling.eindpositie}}. 
             <span class="logo" *ngIf="voorspelling.team.naam">
-              <img-loader [src]="getLogo(voorspelling.team)" useImg></img-loader>              
+              <img [src]="getLogo(voorspelling.team)"/>
             </span>
             <span style="height:30px;vertical-align: middle" *ngIf="voorspelling.team.naam">
               {{voorspelling.team.naam}}
@@ -45,13 +45,13 @@
         <h2 text-center>{{ronde.competitie.naam}}</h2>
         <ion-card>          
             <ion-row row-no-padding *ngFor="let finale of ronde.finales">
-              <ion-col col-1 text-left class="punten">{{finale.thuisTeam.punten}}</ion-col>
-              <ion-col col-4 text-right class="team" [ngClass]="{'groen': finale.thuisTeam.punten > 0, 'rood': finale.thuisTeam.punten === 0}">
+              <ion-col col-2 text-left class="punten">{{finale.thuisTeam.punten}}</ion-col>
+              <ion-col col-3 text-right class="team" [ngClass]="{'groen': finale.thuisTeam.punten > 0, 'rood': finale.thuisTeam.punten === 0}">
                 {{getTeam(finale.thuisTeam.teamId).naam}}</ion-col>
               <ion-col col-2 text-center>-</ion-col>
-              <ion-col col-4 text-left class="team" [ngClass]="{'groen': finale.uitTeam.punten > 0, 'rood': finale.uitTeam.punten === 0}">
+              <ion-col col-3 text-left class="team" [ngClass]="{'groen': finale.uitTeam.punten > 0, 'rood': finale.uitTeam.punten === 0}">
                 {{getTeam(finale.uitTeam.teamId).naam}}</ion-col>
-              <ion-col col-1 text-right class="punten">{{finale.uitTeam.punten}}</ion-col>
+              <ion-col col-2 text-right class="punten">{{finale.uitTeam.punten}}</ion-col>
             </ion-row>     
           </ion-card>
           </div>
