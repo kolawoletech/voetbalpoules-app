@@ -4,7 +4,7 @@ import { GoogleAnalytics } from '@ionic-native/google-analytics';
 import { ToernooivoorspellingenService } from './toernooivoorspellingen.service';
 import { ToernooiverloopService } from './toernooiverloop.service';
 import { Toernooiverloop, VoorspelType } from './toernooiverloop.model';
-import { ToernooiverloopVoorspellingen, VoorspellingEindstand, VoorspellingEindstandDto, FinaleWedstrijd, FinaleRonde, FinaleTeam } from './toernooivoorspellingen.model';
+import { ToernooiverloopVoorspellingen, VoorspellingEindstand, VoorspellingEindstandDto, FinaleWedstrijd, FinaleRonde, FinaleTeam, TopscorerDto } from './toernooivoorspellingen.model';
 import { AuthService, User } from "../../providers/auth/auth.service";
 import { Competition, Team } from '../predictions/predictions.model';
 
@@ -25,7 +25,7 @@ export class ExtraPage {
   toernooischema: Toernooiverloop = new Toernooiverloop();
   voorspellingen: ToernooiverloopVoorspellingen;
   groepen: Competition[];
-  segment: string = "groepen";
+  segment: string = "finales";
 
   arraytje(n: number): number[] {
     return Array.from(Array(n).keys()).map(i => i + 1);
@@ -140,6 +140,13 @@ export class ExtraPage {
     if(this.voorspellingen && this.voorspellingen.voorspellingenKnockout)    
       return this.voorspellingen.voorspellingenKnockout.winnaar;
     return new FinaleTeam();
+  }
+
+  getTopscorer() : TopscorerDto
+  {
+    if(this.voorspellingen && this.voorspellingen.topscorer)    
+      return this.voorspellingen.topscorer;
+    return new TopscorerDto();
   }
 
   getTeam(teamId: number): Team

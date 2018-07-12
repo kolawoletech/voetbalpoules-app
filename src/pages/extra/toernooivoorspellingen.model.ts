@@ -4,6 +4,17 @@ export class ToernooiverloopVoorspellingen
 {
     voorspellingenEindstand: VoorspellingEindstand[];
     voorspellingenKnockout: ToernooiVoorspellingen;
+    topscorer: TopscorerDto;
+}
+
+export class TopscorerDto {
+    speler: SpelerDto;
+    punten: number;
+}
+
+export class SpelerDto {
+    id: number;
+    naam: string;    
 }
 
 export class VoorspellingEindstand

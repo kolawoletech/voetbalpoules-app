@@ -73,6 +73,14 @@
               </ion-item>
           </ion-card>
         </div>
-        <ion-item>De topscorer wordt later toegevoegd!</ion-item>
+      <div>
+          <h2 text-center>Topscorer</h2>
+          <ion-card>
+            <ion-item *ngIf="getTopscorer()" [ngClass]="{'groen': getTopscorer()?.punten > 0, 'rood': getTopscorer()?.punten === 0}">
+                {{getTopscorer().speler?.naam}}
+                <span class="punten" item-end>{{getTopscorer().punten}}</span>                  
+              </ion-item>
+          </ion-card>
+        </div>
     </ion-grid>      
   </ion-content>
