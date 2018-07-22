@@ -155,8 +155,4 @@ export class ExtraPage {
       return this.toernooischema.teams.find(x => x.id == teamId);
     return new Team();
   }
-
-  getLogo(team : Team) : string {
-    return "https://voetbalpoules.azureedge.net/logo/" + team.logoId + ".svg";    
-  } 
 }

@@ -407,11 +407,6 @@ export class PredictionsPage {
       });
   }
 
-  getLogo(team : Team) : string {
-    //return "https://www.voetbalpoules.nl/foto/" + team.logoId;// + ".svg";    
-    return "https://voetbalpoules.azureedge.net/logo/" + team.logoId + ".svg";    
-  } 
-
   public getWeekpositie(wedstrijd: Match, weekPosities: WeekPositie[]) : WeekPositie {
     if(!weekPosities || weekPosities.length == 0)
       return;

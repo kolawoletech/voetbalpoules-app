@@ -59,6 +59,8 @@ import { SignupService } from '../pages/signup/signup.service';
 import { GoogleAnalytics } from '@ionic-native/google-analytics';
 import { ToernooivoorspellingenService } from '../pages/extra/toernooivoorspellingen.service';
 import { ToernooiverloopService } from '../pages/extra/toernooiverloop.service';
+import { TeamLogoLoader } from '../components/team-logo-loader/teamlogoloader';
+import { File } from '@ionic-native/file';
 
 export function createTranslateLoader(http: Http) {
 	return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -92,7 +94,8 @@ export function jwtOptionsFactory(inj: Injector) {
     ProfilePage,
     Rating,
     ShowHideInput,
-    ShowHideContainer
+    ShowHideContainer,
+    TeamLogoLoader
   ],
   imports: [
     BrowserModule,
@@ -154,6 +157,7 @@ export function jwtOptionsFactory(inj: Injector) {
     Keyboard,
     AdMobPro,
     GoogleAnalytics,
+    File,
     { 
       provide: HTTP_INTERCEPTORS,
       useClass: LanguageInterceptor,
