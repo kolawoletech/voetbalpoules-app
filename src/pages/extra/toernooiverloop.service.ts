@@ -2,16 +2,15 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Toernooiverloop } from './toernooiverloop.model';
+import { SettingsService } from '../../providers/settings.service';
 
 @Injectable()
 export class ToernooiverloopService {
-  url: string = 'https://api.voetbalpoules.nl';
-  //url: string = 'http://localhost:49939';
   
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private settings: SettingsService) {}
 
   public get() : Observable<Toernooiverloop> {
-    let uri = this.url + '/toernooiverloop';
+    let uri = this.settings.PouleApiEndpoint + '/toernooiverloop';
     console.log(uri);
     return this.http.get<Toernooiverloop>(uri);
   }

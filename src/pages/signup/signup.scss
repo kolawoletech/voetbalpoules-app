@@ -13,5 +13,12 @@ signup-page {
 				color: $theme-color-2;
 			}
 		}
+		ion-label.error, error:focus {
+			color: red !important;
+			font-weight: bold;
+		}
+		.input-has-focus {
+			border-bottom-color: default;
+		}
 	}
 }

@@ -1,0 +1,29 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>{{'KIES_COMPETITIES' | translate}}</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding #signupCompetitionsPage>
+    <p class="intro">{{'INTRO_SELECT_COMPETITIONS' | translate}}</p>  
+    <div class="validation-errors" *ngIf="validationError">
+      <ng-container>
+        <div class="error-message">
+          {{ validationError | translate }}
+        </div>
+      </ng-container>
+    </div>
+    <ion-label>{{'COMPETITIES' | translate}}</ion-label>
+    <ion-list>
+        <ion-item *ngFor="let competitie of competities">
+          <ion-checkbox class="checkboxie" [(ngModel)]="competitie.selected" (change)="change($event, item)"></ion-checkbox>
+          <img item-start class="competition-logo" [competition-logo]="competitie" />
+          <ion-label>
+              {{competitie.naam}}
+          </ion-label>
+        </ion-item>
+      </ion-list>
+      <div>
+        <button ion-button (click)="saveCompetities();" style="text-align:center;">{{ 'SAVE' | translate}}</button>
+      </div>
+</ion-content>

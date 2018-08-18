@@ -1,4 +1,9 @@
 {
+  "INTRO_SIGNUP": "Thank you for joining Voetbalpoules.nl. Enter your personal details and start predicting right away!",
+  "INTRO_SELECT_COMPETITIONS": "Please select the competitions that you want to predict.",
+  "COMPETITIES": "Competitions",
+  "KIES_COMPETITIES": "Choose competition(s)",
+  "MINIMAAL_1_COMPETITIE": "Choose at least one competition to predict.",
   "FACEBOOK_ALREADY_LOGGED_IN": "User logged in as different Facebook user.",  
   "FACEBOOK_CANCEL": "You didn't give permission to login with Facebook. Please login with email and password.",
   "SELECT_LANGUAGE": "Select your language",
@@ -144,5 +149,7 @@
   "VOORSPELLING_WEDSTRIJD_BEGONNEN": "This match is already started (or played) and can't be predicted anymore.",
   "VOORSPELLING_WEDSTRIJD_BESTAAT_NIET": "This match is unknown to us.",
   "WEDSTRIJD_KIES_DOELPUNTENMAKER": "Choose the first scorer.",
-  "JOUW": "(yours)"
+  "JOUW": "(yours)",
+  "NIET_AANGEMELD": "Sorry, sign up wasn't successful. Please contact us on info@voetbalpoules.nl so we can help you.",
+  "OEI": "Oops, something went wrong. Please contact us on info@voetbalpoules.nl so we can help you."
 }

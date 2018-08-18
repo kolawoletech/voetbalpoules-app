@@ -29,10 +29,6 @@ export class LoginPage {
   ) 
   {
     this.main_page = { component: TabsNavigationPage };
-    //if(authService.isAuthenticated())
-    //{
-    //  this.nav.setRoot(this.main_page.component);
-    //}
 
     this.validationError = null;
     this.login = new FormGroup({
@@ -74,20 +70,7 @@ export class LoginPage {
   }
 
   goToSignup() {
-    Observable.forkJoin(
-      this.translate.get('NOT_IMPLEMENTED'),
-      this.translate.get('NOT_IMPLEMENTED_SIGN_UP'),
-      this.translate.get('OK')
-    ).subscribe(data => {
-      let alert = this.alertController.create({
-        title: data[0],
-        subTitle: data[1],
-        buttons: [data[2]]
-      });
-      alert.present();
-    });    
-    //console.log("ga naar signup");
-    //this.nav.push(SignupPage);
+    this.nav.push(SignupPage);
   }
 
   goToForgotPassword() {

@@ -16,6 +16,7 @@ import { TabsNavigationPage } from '../pages/tabs-navigation/tabs-navigation';
 import { WalkthroughPage } from '../pages/walkthrough/walkthrough';
 import { SettingsPage } from '../pages/settings/settings';
 import { SignupPage } from '../pages/signup/signup';
+import { SignupCompetitionsPage } from '../pages/signup-competitions/signup-competitions';
 import { ForgotPasswordPage } from '../pages/forgot-password/forgot-password';
 import { TermsOfServicePage } from '../pages/terms-of-service/terms-of-service';
 import { PrivacyPolicyPage } from '../pages/privacy-policy/privacy-policy';
@@ -45,13 +46,15 @@ import { Facebook } from '@ionic-native/facebook';
 import { Keyboard } from '@ionic-native/keyboard';
 import { AppRate } from '@ionic-native/app-rate';
 import { AdMobPro } from '@ionic-native/admob-pro';
+import { IsDebug } from '@ionic-native/is-debug';
 
 // Functionalities
 import { ValidatorsModule } from '../components/validators/validators.module';
 
 import { AuthService } from '../providers/auth/auth.service';
 import { LanguageService } from '../providers/language/language.service';
-import { LocalStorageService} from '../providers/localstorage/localstorage.service';
+import { LocalStorageService } from '../providers/localstorage/localstorage.service';
+import { SettingsService } from '../providers/settings.service';
 import { LanguageInterceptor } from '../interceptors/language.interceptor';
 import { UnauthorizedInterceptor } from '../interceptors/unauthorized.interceptor';
 import { IonDigitKeyboard } from '../components/ion-digit-keyboard/ion-digit-keyboard.module';
@@ -72,7 +75,7 @@ export function jwtOptionsFactory(inj: Injector) {
       const authService = inj.get(AuthService);
       return authService.getAccessToken();
     },
-    whitelistedDomains: ['api.voetbalpoules.nl', 'localhost:49939']
+    whitelistedDomains: ['api.voetbalpoules.nl', 'localhost:49939', 'localhost:44396']
   }
 }
 
@@ -89,6 +92,7 @@ export function jwtOptionsFactory(inj: Injector) {
     TermsOfServicePage,
     PrivacyPolicyPage,
     SignupPage,
+    SignupCompetitionsPage,
     WalkthroughPage,
     ForgotPasswordPage,
     ProfilePage,
@@ -133,6 +137,7 @@ export function jwtOptionsFactory(inj: Injector) {
     PredictionsPage,
     SettingsPage,
     SignupPage,
+    SignupCompetitionsPage,
     TabsNavigationPage
   ],
   providers: [
@@ -147,7 +152,8 @@ export function jwtOptionsFactory(inj: Injector) {
     AuthService,
     LocalStorageService,
     LanguageService,
-	  SplashScreen,
+    SplashScreen,
+    SettingsService,
 	  StatusBar,
     NativeStorage,
     InAppBrowser,
@@ -157,6 +163,7 @@ export function jwtOptionsFactory(inj: Injector) {
     Keyboard,
     AdMobPro,
     GoogleAnalytics,
+    IsDebug,
     File,
     { 
       provide: HTTP_INTERCEPTORS,

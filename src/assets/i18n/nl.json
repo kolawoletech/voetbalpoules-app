@@ -1,6 +1,10 @@
 {
+  "INTRO_SIGNUP": "Leuk dat je wilt meespelen met Voetbalpoules.nl. Vul hier je gegevens in, daarna kun je direct voorspellen!",
+  "INTRO_SELECT_COMPETITIONS": "Kies de competities die je wilt gaan voorspellen.",  
+  "COMPETITIES": "Competities",
+  "KIES_COMPETITIES": "Kies competitie(s)",
+  "MINIMAAL_1_COMPETITIE": "Kies minimaal 1 competitie die je wilt voorspellen.",
   "CHANGE_PROFILE_PICTURE": "Verander je foto",
-  "CONFIRM_PASSWORD": "Herhaal wachtwoord",
   "DONE": "Gereed",
   "EMAIL": "E-mail",
   "EXTRA": "Extra",
@@ -14,6 +18,7 @@
   "POOL": "Poule",
   "POOLS": "Poules",
   "PASSWORD": "Wachtwoord",
+  "CONFIRM_PASSWORD": "Herhaal wachtwoord",
   "PREDICT": "Voorspellen",
   "SELECT_LANGUAGE": "Kies taal",
   "SETTINGS": "Instellingen",
@@ -39,5 +44,7 @@
   "VOORSPELLING_WEDSTRIJD_BEGONNEN": "Deze wedstrijd is al begonnen (of gespeeld) en is niet meer te voorspellen.",
   "VOORSPELLING_WEDSTRIJD_BESTAAT_NIET": "Deze wedstrijd is niet bij ons bekend.",
   "VOORSPELLING_NIET_OPGESLAGEN": "Je voorspelling is niet opgeslagen, probeer het nog eens!",
-  "WEDSTRIJD_KIES_DOELPUNTENMAKER": "Kies de eerste doelpuntenmaker."
+  "WEDSTRIJD_KIES_DOELPUNTENMAKER": "Kies de eerste doelpuntenmaker.",
+  "NIET_AANGEMELD": "Aanmelden is helaas niet gelukt. Neem contact met ons op via info@voetbalpoules.nl zodat we je verder kunnen helpen!",
+  "OEI": "Oei, er gaat iets mis. Neem contact met ons op via info@voetbalpoules.nl zodat we je verder kunnen helpen!"
 }

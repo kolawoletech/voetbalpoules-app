@@ -5,16 +5,15 @@ import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
 import { PredictionsModel, PredictionCommand, ValidationResult } from './predictions.model';
 import { catchError, tap } from 'rxjs/operators';
 import { AuthService } from '../../providers/auth/auth.service';
+import { SettingsService } from '../../providers/settings.service';
 
 @Injectable()
 export class PredictionsService {
-  url: string = 'https://api.voetbalpoules.nl';
-  //url: string = 'http://localhost:49939';
-  constructor(private http: HttpClient, private authService: AuthService) {}
+  constructor(private http: HttpClient, private authService: AuthService, private settings: SettingsService) {}
 
   public getData(userId: number, date?: Date) : Observable<PredictionsModel> {
     console.log("predictions for " + userId);    
-    let uri = this.url + '/deelnemer/' + userId + '/voorspellingen';
+    let uri = this.settings.PouleApiEndpoint + '/deelnemer/' + userId + '/voorspellingen';
     if(this.authService.user.sub === userId)
       uri += "/my";
     if(date)
@@ -26,7 +25,7 @@ export class PredictionsService {
   }
 
   public save(userId: number, prediction: PredictionCommand): Observable<Object> {    
-    let uri = this.url + '/deelnemer/' + userId + '/voorspellingen';
+    let uri = this.settings.PouleApiEndpoint + '/deelnemer/' + userId + '/voorspellingen';
     //return this.http.post<PredictionCommandResponse>(uri, prediction)
     return this.http.post(uri, prediction, { responseType: 'text' }) //bug met lege response
       .pipe(
@@ -51,8 +50,7 @@ export class PredictionsService {
         try {
           validationResult = JSON.parse(error.error);
         } catch (error) {
-          validationResult = new ValidationResult();
-          validationResult.message = "VOORSPELLING_NIET_OPGESLAGEN";                    
+          validationResult = new ValidationResult("VOORSPELLING_NIET_OPGESLAGEN");                    
         }
         return new ErrorObservable(validationResult);        
       }

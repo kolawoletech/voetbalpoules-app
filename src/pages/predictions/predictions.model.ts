@@ -85,6 +85,8 @@ export class Competition {
   naam: string;
   type: number;
   aantalTeams: number;
+  logoId: number;
+  selected: boolean;
 }
 
 export class WeekPositie {
@@ -98,6 +100,10 @@ export class WeekPositie {
 export class ValidationResult {
   message: string;
   errors: ValidationError[];
+
+  constructor(message: string) {
+    this.message = message;
+  }
 }
 
 export class ValidationError {

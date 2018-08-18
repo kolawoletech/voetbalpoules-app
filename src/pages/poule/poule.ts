@@ -7,13 +7,6 @@ import { PredictionsPage } from '../predictions/predictions';
 import { PouleStandUser } from './poule.model';
 import { GoogleAnalytics } from '@ionic-native/google-analytics';
 
-/**
- * Generated class for the PoulePage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
-
 @Component({
   selector: 'page-poule',
   templateUrl: 'poule.html',

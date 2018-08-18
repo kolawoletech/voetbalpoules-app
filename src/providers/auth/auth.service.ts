@@ -7,6 +7,7 @@ import { JwtHelper } from 'angular2-jwt';
 import { Events } from 'ionic-angular';
 import { LocalStorageService } from '../localstorage/localstorage.service';
 import 'rxjs/add/observable/throw';
+import { SettingsService } from '../settings.service';
 
 export class UserResponse {
   token_type: string;
@@ -35,12 +36,10 @@ export class JwtToken {
 
 @Injectable()
 export class AuthService {
-  authUrl: string = 'https://auth.voetbalpoules.nl';
-  //authUrl: string = 'http://localhost:5000';
   accessToken: string;
   user: any;
 
-  constructor(public events: Events, private http: HttpClient, private localStorage: LocalStorageService) {
+  constructor(public events: Events, private http: HttpClient, private localStorage: LocalStorageService, private settings: SettingsService) {
     this.user = localStorage.getStorageVariable('profile');
   }
 
@@ -63,7 +62,7 @@ export class AuthService {
   private handleError(operation: string) {
     return (err: any) => {
       let errMsg = 'error in ' + operation;
-      console.log('handleError authService: ' + err);
+      console.log('handleError authService: ' + JSON.parse(JSON.stringify(err)));
       if(err instanceof HttpErrorResponse) {
         // you could extract more info about the error if you want, e.g.:
         console.log(`status: ${err.status}, ${err.statusText}`);
@@ -127,7 +126,8 @@ export class AuthService {
   }
 
   private getToken(body: HttpParams, headers: HttpHeaders) : Observable<UserResponse> {
-    let url = this.authUrl + '/connect/token';
+
+    let url = this.settings.AuthorizationApiEndpoint + '/connect/token';
     return this.http.post<UserResponse>(url, body.toString(), { headers })
       .pipe(tap<UserResponse>(authResult => {
         this.setAccessToken(authResult.access_token);

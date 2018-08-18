@@ -1,8 +1,8 @@
 {
   "name": "voetbalpoules-ionic",
-  "app_id": "c4fcfa90",
-  "type": "ionic-angular",
   "integrations": {
     "cordova": {}
-  }
+  },
+  "type": "ionic-angular",
+  "pro_id": "c4fcfa90"
 }

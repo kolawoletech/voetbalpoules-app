@@ -5,12 +5,14 @@ import { Validators, FormGroup, FormControl } from '@angular/forms';
 //import { TermsOfServicePage } from '../terms-of-service/terms-of-service';
 //import { PrivacyPolicyPage } from '../privacy-policy/privacy-policy';
 
-import { TabsNavigationPage } from '../tabs-navigation/tabs-navigation';
+import { SignupCompetitionsPage } from '../signup-competitions/signup-competitions';
+import { AuthService } from '../../providers/auth/auth.service';
 
 import { FacebookLoginService } from '../../providers/facebook/facebook-login.service';
 import { CreateUserCommand } from './signup.model';
 import { SignupService } from './signup.service';
 import { ValidationResult } from '../predictions/predictions.model';
+import { GoogleAnalytics } from '@ionic-native/google-analytics';
 
 @Component({
   selector: 'signup-page',
@@ -27,10 +29,13 @@ export class SignupPage {
     public modal: ModalController,
     public facebookLoginService: FacebookLoginService,
     public signupService: SignupService,
-    public loadingCtrl: LoadingController
+    public authService: AuthService,
+    public loadingCtrl: LoadingController,
+    private ga: GoogleAnalytics
   ) {
-    this.main_page = { component: TabsNavigationPage };
-    console.log("hallo signup");
+    this.ga.trackView('signup-data');
+    this.main_page = { component: SignupCompetitionsPage };
+
     this.signup = new FormGroup({
       email: new FormControl('', Validators.required),
       wachtwoord: new FormControl('', Validators.required),
@@ -45,6 +50,8 @@ export class SignupPage {
   }
 
   doSignup(){
+    let loading = this.loadingCtrl.create();
+    loading.present();
     let createUserCommand = new CreateUserCommand();
     createUserCommand.email = this.signup.get("email").value;
     createUserCommand.naam = this.signup.get("naam").value;
@@ -53,16 +60,26 @@ export class SignupPage {
     createUserCommand.wachtwoordKopie = this.signup.get("wachtwoordKopie").value;
 
     return this.signupService.SignUp(createUserCommand)
+      //.finally(() => loading.dismiss())
       .subscribe(data => {
         console.log("signup geslaagd");
-        this.nav.setRoot(this.main_page.component);
+        this.authService.login(createUserCommand.email, createUserCommand.wachtwoord)
+        .finally(() => loading.dismiss())
+        .subscribe(
+            data => {
+              this.nav.setRoot(this.main_page.component);      
+            },
+            err => {
+              this.validationError = err;
+            }
+          );            
       }, error => {
+        loading.dismiss();
         var validationErrors = <ValidationResult>error;
         if(validationErrors != null && validationErrors.errors != null)
           validationErrors.errors.forEach(validationError => {
             validationError.memberNames.forEach(member => {
-              debugger;
-              this.signup.controls[member].setErrors({'error': validationError.errorMessage});
+              this.signup.controls[member.toLowerCase()].setErrors({'error': validationError.errorMessage});
             });                
           });
         if (validationErrors.message != null) {

@@ -5,6 +5,7 @@
 </ion-header>
 
 <ion-content class="signup-content auth-content">
+  <p class="intro">{{'INTRO_SIGNUP' | translate}}</p>
   <div class="validation-errors" *ngIf="validationError">
     <ng-container>
       <div class="error-message">
@@ -14,32 +15,36 @@
   </div>
   <form class="signup-form auth-form" [formGroup]="signup" (ngSubmit)="doSignup()">
     <ion-item>
+      <ion-label class="error" stacked *ngIf="signup.get('email').invalid">{{signup.get('email').errors?.error}}</ion-label>
       <ion-input type="email" placeholder="{{'EMAIL' | translate}}" formControlName="email"></ion-input>
     </ion-item>
     <show-hide-container>
       <ion-item>
-        <ion-input type="password" placeholder="{{'PASSWORD' | translate}}" formControlName="wachtwoord" show-hide-input></ion-input>
+          <ion-label class="error" stacked *ngIf="signup.get('wachtwoord').invalid">{{signup.get('wachtwoord').errors?.error}}</ion-label>
+          <ion-input type="password" placeholder="{{'PASSWORD' | translate}}" formControlName="wachtwoord" show-hide-input></ion-input>
       </ion-item>
     </show-hide-container>
-    <p class="danger" padding>ja dan {{signup.get('wachtwoord').errors?.error}}</p>
     <show-hide-container>
       <ion-item>
-        <ion-input type="password" placeholder="{{'PASSWORD_CONFIRM' | translate}}" formControlName="wachtwoordKopie" show-hide-input></ion-input>
+        <ion-input type="password" placeholder="{{'CONFIRM_PASSWORD' | translate}}" formControlName="wachtwoordKopie" show-hide-input></ion-input>
       </ion-item>
     </show-hide-container>
     <ion-item>
+      <ion-label class="error" stacked *ngIf="signup.get('naam').invalid">{{signup.get('naam').errors?.error}}</ion-label>
       <ion-input type="text" placeholder="{{'NAAM' | translate}}" formControlName="naam"></ion-input>
     </ion-item>
-    <ion-item>
-      <ion-input type="text" placeholder="{{'TEAMNAAM' | translate}}" formControlName="teamnaam"></ion-input>
-    </ion-item>
+<ion-item>
+    <ion-label class="error" stacked *ngIf="signup.get('teamnaam').invalid">{{signup.get('teamnaam').errors?.error}}</ion-label>
+    <ion-input type="text" placeholder="{{'TEAMNAAM' | translate}}" formControlName="teamnaam"></ion-input>
+    <show-errors [control]="teamnaam"></show-errors>
+</ion-item>
     <button ion-button block class="auth-action-button signup-button" type="submit" [disabled]="!signup.valid">{{'SIGN_UP' | translate}}</button>
   </form>
-  <p class="auth-divider">
+  <!-- <p class="auth-divider">
     Or
   </p>
   <button ion-button block class="facebook-auth-button" (click)="doFacebookSignup()">{{'SIGN_UP_WITH_FACEBOOK' | translate}}</button>
   <p class="legal-stuff">
     {{'AGREEMENT_TEXT' | translate}} <a class="legal-action" (click)="showPrivacyModal()">{{'PRIVACY_POLICY' | translate}}</a> {{'AND' | translate}} <a class="legal-action" (click)="showTermsModal()">{{'TERMS_OF_USE' | translate}}</a>
-  </p>
+  </p> -->
 </ion-content>
