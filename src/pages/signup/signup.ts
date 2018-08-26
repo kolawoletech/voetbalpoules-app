@@ -89,10 +89,10 @@ export class SignupPage {
   }
 
   doFacebookSignup() {
-    this.loading = this.loadingCtrl.create();
+    //this.loading = this.loadingCtrl.create();
     // Here we will check if the user is already logged in
     // because we don't want to ask users to log in each time they open the app
-    let env = this;
+    //let env = this;
 
     // // this.facebookLoginService.getFacebookUser()
     // // .then(function(data) {

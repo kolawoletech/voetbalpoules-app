@@ -46,5 +46,6 @@
   "VOORSPELLING_NIET_OPGESLAGEN": "Je voorspelling is niet opgeslagen, probeer het nog eens!",
   "WEDSTRIJD_KIES_DOELPUNTENMAKER": "Kies de eerste doelpuntenmaker.",
   "NIET_AANGEMELD": "Aanmelden is helaas niet gelukt. Neem contact met ons op via info@voetbalpoules.nl zodat we je verder kunnen helpen!",
-  "OEI": "Oei, er gaat iets mis. Neem contact met ons op via info@voetbalpoules.nl zodat we je verder kunnen helpen!"
+  "OEI": "Oei, er gaat iets mis. Neem contact met ons op via info@voetbalpoules.nl zodat we je verder kunnen helpen!",
+  "OEI_OFFLINE": "Ai, er kan geen verbinding gemaakt worden met Voetbalpoules. Ben je wel online? Zo ja, dan is Voetbalpoules waarschijnlijk zelf even offline. Probeer het dan later nogmaals."
 }

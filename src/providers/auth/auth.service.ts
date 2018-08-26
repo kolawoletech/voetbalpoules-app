@@ -67,7 +67,11 @@ export class AuthService {
         // you could extract more info about the error if you want, e.g.:
         console.log(`status: ${err.status}, ${err.statusText}`);
         var error : ErrorMessage = err.error; // JSON.parse(err.error);
-        errMsg = error.error_description;
+        if(error.error_description) {
+          errMsg = error.error_description;  
+        } else {
+          errMsg = "OEI_OFFLINE";
+        }
       }
       return Observable.throw(errMsg);
     }

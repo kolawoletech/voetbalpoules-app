@@ -21,8 +21,11 @@ export class PredictionsService {
       uri += '?datum=' + date;
     }
     console.log(uri);
-    return this.http.get<PredictionsModel>(uri);
-  }
+    return this.http.get<PredictionsModel>(uri)
+      .catch((error: any) => {
+        return Observable.throw("OEI_OFFLINE");
+      });
+}
 
   public save(userId: number, prediction: PredictionCommand): Observable<Object> {    
     let uri = this.settings.PouleApiEndpoint + '/deelnemer/' + userId + '/voorspellingen';
@@ -33,7 +36,7 @@ export class PredictionsService {
         catchError(this.handleError)
       );
   }
-
+  
   private handleError(error: HttpErrorResponse) {
     if (error.error instanceof ErrorEvent) {
       // A client-side or network error occurred. Handle it accordingly.

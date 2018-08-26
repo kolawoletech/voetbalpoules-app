@@ -4,8 +4,8 @@ import { GoogleAnalytics } from '@ionic-native/google-analytics';
 import { ToernooivoorspellingenService } from './toernooivoorspellingen.service';
 import { ToernooiverloopService } from './toernooiverloop.service';
 import { Toernooiverloop, VoorspelType } from './toernooiverloop.model';
-import { ToernooiverloopVoorspellingen, VoorspellingEindstand, VoorspellingEindstandDto, FinaleWedstrijd, FinaleRonde, FinaleTeam, TopscorerDto } from './toernooivoorspellingen.model';
-import { AuthService, User } from "../../providers/auth/auth.service";
+import { ToernooiverloopVoorspellingen, VoorspellingEindstandDto, FinaleWedstrijd, FinaleRonde, FinaleTeam, TopscorerDto } from './toernooivoorspellingen.model';
+import { AuthService } from "../../providers/auth/auth.service";
 import { Competition, Team } from '../predictions/predictions.model';
 
 /**

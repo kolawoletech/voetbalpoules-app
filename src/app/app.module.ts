@@ -5,6 +5,7 @@ import { TranslateModule, TranslateLoader, TranslateService } from '@ngx-transla
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { Http, HttpModule } from '@angular/http';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { IsDebug } from '@ionic-native/is-debug';
 
 import { PredictionsPage } from '../pages/predictions/predictions';
 import { ExtraPage } from '../pages/extra/extra';
@@ -46,7 +47,6 @@ import { Facebook } from '@ionic-native/facebook';
 import { Keyboard } from '@ionic-native/keyboard';
 import { AppRate } from '@ionic-native/app-rate';
 import { AdMobPro } from '@ionic-native/admob-pro';
-import { IsDebug } from '@ionic-native/is-debug';
 
 // Functionalities
 import { ValidatorsModule } from '../components/validators/validators.module';
@@ -141,6 +141,7 @@ export function jwtOptionsFactory(inj: Injector) {
     TabsNavigationPage
   ],
   providers: [
+    IsDebug,
     ToernooiverloopService,
     ToernooivoorspellingenService,
     PoulesService,
@@ -163,7 +164,6 @@ export function jwtOptionsFactory(inj: Injector) {
     Keyboard,
     AdMobPro,
     GoogleAnalytics,
-    IsDebug,
     File,
     { 
       provide: HTTP_INTERCEPTORS,

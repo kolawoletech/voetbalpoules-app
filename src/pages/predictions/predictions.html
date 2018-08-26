@@ -5,6 +5,13 @@
 </ion-header>
 
 <ion-content id="predictions">
+  <div class="validation-errors" *ngIf="error">
+    <ng-container>
+      <div class="error-message">
+        {{ error | translate }}
+      </div>
+    </ng-container>
+  </div>  
   <form [formGroup]="slideForm">
     <ion-slides #slider (ionSlideNextEnd)="loadNext()" (ionSlidePrevEnd)="loadPrev()" [initialSlide]="0" pager="true">
       <ion-slide *ngFor="let dag of speelData">

@@ -151,5 +151,6 @@
   "WEDSTRIJD_KIES_DOELPUNTENMAKER": "Choose the first scorer.",
   "JOUW": "(yours)",
   "NIET_AANGEMELD": "Sorry, sign up wasn't successful. Please contact us on info@voetbalpoules.nl so we can help you.",
-  "OEI": "Oops, something went wrong. Please contact us on info@voetbalpoules.nl so we can help you."
+  "OEI": "Oops, something went wrong. Please contact us on info@voetbalpoules.nl so we can help you.",
+  "OEI_OFFLINE": "Oops, can't connect to Voetbalpoules. Make sure that you're online. If so, then Voetbalpoules is probably temporary offline. Please try again later."
 }

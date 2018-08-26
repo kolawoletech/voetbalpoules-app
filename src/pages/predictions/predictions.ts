@@ -5,7 +5,7 @@ import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms'
 import { AuthService, User } from "../../providers/auth/auth.service";
 import { PredictionsModel, ValidationResult, WeekPositie } from './predictions.model';
 import { PredictionsService } from './predictions.service';
-import { Team, Prediction, Match, PredictionCommand } from './predictions.model';
+import { Prediction, Match, PredictionCommand } from './predictions.model';
 import { Observable } from 'rxjs';
 import { Subscription } from 'rxjs/Subscription';
 import { TabsService } from '../../providers/tabs.service';
@@ -34,24 +34,23 @@ export class PredictionsPage {
   keyboardHeader: string;
   thuisdoelpunten: string = '';
   refreshTime: Date; 
+  error: string = null;
 
-  constructor(
-    public predictionsService: PredictionsService,
-    public loadingCtrl: LoadingController,
-    public authService: AuthService,
-    public formBuilder: FormBuilder,
-    public tabsService: TabsService,
-    public navCtrl: NavController, 
-    public navParams: NavParams,
-    private events: Events,
-    private translate: TranslateService,
-    private platform: Platform,
-    private ga: GoogleAnalytics,
-    private admob: AdMobPro
-    ) {
-      this.ga.trackView('predictions');
+  constructor(public predictionsService: PredictionsService,
+      public loadingCtrl: LoadingController,
+      public authService: AuthService,
+      public formBuilder: FormBuilder,
+      public tabsService: TabsService,
+      public navCtrl: NavController, 
+      public navParams: NavParams,
+      private events: Events,
+      private translate: TranslateService,
+      private platform: Platform,
+      private ga: GoogleAnalytics,
+      private admob: AdMobPro) {
+    this.ga.trackView('predictions');
     this.auth = authService;
-    platform.ready().then(()=>{
+    this.platform.ready().then(()=>{
       platform.registerBackButtonAction(()=> {
         if(this.keyboard.visible)
           this.hideKeyboard();
@@ -227,8 +226,10 @@ export class PredictionsPage {
           this.speelData.push(new PredictionsModel(data.volgendeDag));
           console.log("pushed morgen");
         }
-      });  
-  }
+      }, (error: string) => {
+        this.error = error;
+      });
+}
 
   private mapVoorspellingen(voorspellingen: Prediction[])
   {
@@ -346,8 +347,10 @@ export class PredictionsPage {
         
         refresher.complete();
         this.refreshTime = new Date(); 
+      }, (error: string) => {
+        this.error = error;
       });
-  }
+}
 
   save(prediction: any) : Observable<Object> {
     this.ga.trackEvent("predictions", "save");
@@ -403,6 +406,8 @@ export class PredictionsPage {
             console.log("zet slider in loadSlide")
             this.slider.slideTo(currentIndex, 0, false);
           }
+        }, (error: string) => {
+          this.error = error;
         });
       });
   }
