@@ -16,7 +16,7 @@
     <preference name="UIWebViewBounce" value="false" />
     <preference name="DisallowOverscroll" value="true" />
     <preference name="android-minSdkVersion" value="19" />
-    <preference name="android-targetSdkVersion" value="25" />
+    <preference name="android-targetSdkVersion" value="26" />
     <preference name="BackupWebStorage" value="none" />
     <preference name="SplashMaintainAspectRatio" value="true" />
     <preference name="FadeSplashScreenDuration" value="300" />
@@ -115,8 +115,8 @@
     <allow-navigation href="http://192.168.178.32:8100" />
     <plugin name="cordova-plugin-admobpro" spec="^2.31.6" />
     <plugin name="cordova-plugin-file" spec="^6.0.1" />
+    <plugin name="cordova-plugin-is-debug" spec="^1.0.0" />
     <engine name="ios" spec="4.4.0" />
     <engine name="browser" spec="5.0.3" />
     <engine name="android" spec="7.1.0" />
-    <plugin name="cordova-plugin-is-debug" spec="^1.0.0" />
 </widget>
