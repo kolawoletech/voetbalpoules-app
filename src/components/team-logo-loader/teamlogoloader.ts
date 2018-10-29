@@ -1,5 +1,5 @@
 // An image directive based on http://blog.teamtreehouse.com/learn-asynchronous-image-loading-javascript
-import {Directive, Input, OnInit} from '@angular/core';
+import { Directive, Input, OnInit } from '@angular/core';
 import { Team, Competition } from '../../pages/predictions/predictions.model';
 import { SettingsService } from '../../providers/settings.service';
 //import { File } from '@ionic-native/file';

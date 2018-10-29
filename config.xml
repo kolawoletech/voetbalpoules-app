@@ -117,5 +117,5 @@
     <plugin name="cordova-plugin-is-debug" spec="^1.0.0" />
     <engine name="ios" spec="4.4.0" />
     <engine name="browser" spec="5.0.3" />
-    <engine name="android" spec="7.1.0" />
+    <engine name="android" spec="~7.1.0" />
 </widget>
