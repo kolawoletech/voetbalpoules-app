@@ -12,7 +12,7 @@ import { TabsService } from '../../providers/tabs.service';
 import { PredictionValidations } from './predictions.validations';
 import { TranslateService } from '@ngx-translate/core';
 import { GoogleAnalytics } from '@ionic-native/google-analytics';
-import { AdMobPro } from '@ionic-native/admob-pro';
+// import { AdMobPro } from '@ionic-native/admob-pro';
 
 @Component({
   selector: 'predictions-page',
@@ -46,8 +46,8 @@ export class PredictionsPage {
       private events: Events,
       private translate: TranslateService,
       private platform: Platform,
-      private ga: GoogleAnalytics,
-      private admob: AdMobPro) {
+      private ga: GoogleAnalytics) {
+      // private admob: AdMobPro) {
     this.ga.trackView('predictions');
     this.auth = authService;
     this.platform.ready().then(()=>{
@@ -57,18 +57,18 @@ export class PredictionsPage {
         else
           platform.exitApp();
       });
-      var admobid;
-      if(platform.is("ios"))
-        admobid = "ca-app-pub-9993035719622406/3453786823";
-      else
-        admobid = "ca-app-pub-9993035719622406/1274222330";
+      // var admobid;
+      // if(platform.is("ios"))
+      //   admobid = "ca-app-pub-9993035719622406/3453786823";
+      // else
+      //   admobid = "ca-app-pub-9993035719622406/1274222330";
       
-      this.admob.createBanner({
-        adId: admobid,
-        autoShow: true,
-        overlap: false,
-        position: this.admob.AD_POSITION.BOTTOM_CENTER
-      });            
+      // this.admob.createBanner({
+      //   adId: admobid,
+      //   autoShow: true,
+      //   overlap: false,
+      //   position: this.admob.AD_POSITION.BOTTOM_CENTER
+      // });            
     });
   }
 

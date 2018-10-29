@@ -8,6 +8,10 @@ ion-slide.swiper-slide {
 ion-slide {
     overflow-y: auto;
     display: block;
+    ion-content {
+        position: static;
+        display: inline;
+    }
 }
 ion-content .has-refresher {
     position: static; //ion-content element voor de refresher.

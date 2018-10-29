@@ -113,7 +113,6 @@
         <variable name="MAX_STORE" value="2" />
     </plugin>
     <allow-navigation href="http://192.168.178.32:8100" />
-    <plugin name="cordova-plugin-admobpro" spec="^2.31.6" />
     <plugin name="cordova-plugin-file" spec="^6.0.1" />
     <plugin name="cordova-plugin-is-debug" spec="^1.0.0" />
     <engine name="ios" spec="4.4.0" />
