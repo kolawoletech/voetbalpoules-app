@@ -3,9 +3,9 @@ import { Injectable } from '@angular/core';
 
 @Injectable()
 export class SettingsService {
-    public AuthorizationApiEndpoint: string = 'https://localhost:44366';
-    public PouleApiEndpoint: string = 'https://localhost:44396';
-    public LogoEndpoint: string = 'https://localhost:44300/foto';
+    public AuthorizationApiEndpoint: string = 'https://auth.voetbalpoules.nl'; //https://localhost:44366';
+    public PouleApiEndpoint: string = 'https://api.voetbalpoules.nl'; //https://localhost:44396';
+    public LogoEndpoint: string = 'https://vp-logos.azureedge.net'; //https://localhost:44300/foto';
 
     constructor(private isDebug: IsDebug) { 
         this.isDebug.getIsDebug()
