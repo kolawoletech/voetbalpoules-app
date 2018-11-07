@@ -1,41 +1,27 @@
 import { Component } from '@angular/core';
-import { LoadingController, NavController, NavParams } from 'ionic-angular';
+import { LoadingController, NavController, NavParams, Select } from 'ionic-angular';
 import { GoogleAnalytics } from '@ionic-native/google-analytics';
-import { ToernooivoorspellingenService } from './toernooivoorspellingen.service';
-import { ToernooiverloopService } from './toernooiverloop.service';
-import { Toernooiverloop, VoorspelType } from './toernooiverloop.model';
-import { ToernooiverloopVoorspellingen, VoorspellingEindstandDto, FinaleWedstrijd, FinaleRonde, FinaleTeam, TopscorerDto } from './toernooivoorspellingen.model';
+import { VoorspellingEindstandDto, TopscorerDto, VoorspellingEindstand } from '../toernooiverloop/toernooivoorspellingen.model';
 import { AuthService } from "../../providers/auth/auth.service";
-import { Competition, Team } from '../predictions/predictions.model';
-
-/**
- * Generated class for the ExtraPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
+import { Competition } from '../predictions/predictions.model';
+import { ExtraVoorspellingenService } from './extravoorspellingen.service';
+import { ExtraVoorspellingen, TeamRanglijst } from './extravoorspellingen.model';
 
 @Component({
   selector: 'page-extra',
   templateUrl: 'extra.html',
 })
 export class ExtraPage {
-
   userId: number;
-  toernooischema: Toernooiverloop = new Toernooiverloop();
-  voorspellingen: ToernooiverloopVoorspellingen;
+  userCompetities: Competition[];
+  selectedCompetitie: Competition;
   groepen: Competition[];
-  segment: string = "finales";
-
-  arraytje(n: number): number[] {
-    return Array.from(Array(n).keys()).map(i => i + 1);
-  }
+  voorspellingen: ExtraVoorspellingen;
   
   constructor(public navCtrl: NavController, public navParams: NavParams, private ga: GoogleAnalytics, 
     public loadingCtrl: LoadingController,
     public authService: AuthService,    
-    public voorspellingenService: ToernooivoorspellingenService,
-    public toernooischemaService: ToernooiverloopService) {
+    public extraVoorspellingenService: ExtraVoorspellingenService) {
     this.ga.trackView('extra');
     this.userId = navParams.get("userId");
     if(!this.userId)
@@ -46,35 +32,49 @@ export class ExtraPage {
   ionViewWillEnter() {
     let loading = this.loadingCtrl.create();
     loading.present();
-    return this.toernooischemaService
-      .get()
+    return this.extraVoorspellingenService
+      .getCompetities(this.userId)
       .finally(() => {
         console.log("dismiss loading");
         loading.dismiss();
         console.log("dismiss loading klaar");
       })
       .subscribe(data => {
-        this.toernooischema = data;
+        this.userCompetities = data;
+        this.selectedCompetitie = this.userCompetities[0];
 
-        return this.voorspellingenService.get(this.userId)
-           .subscribe(data => {
-             console.log("voorspellingen binnen!");
-             this.voorspellingen = data;
-             console.log("voorspellingen " + data);
-             this.groepen = this.toernooischema.competitieRondes.filter(x => x.type == 40);
-             console.log("groepen " + this.groepen);
-            },
-          error => {
-            console.log("voorspellingen foutje " + error);
-          })
-      });  
+        return this.getUserVoorspellingen(this.userId, this.selectedCompetitie.id);
+    });  
   }
-  
+
+  getUserVoorspellingen(userId: number, competitieId: number) {
+    return this.extraVoorspellingenService.get(userId, competitieId)
+    .subscribe(data => {
+      console.log("voorspellingen binnen!");
+      //jaja: haal de competitieid uit de voorspellingen en filter deze op unieke waarde.
+      //this.groepen = data.competities Array.from(data.voorspellingenEindstand, p => p.competitieGroepId).filter((v, i, a) => a.indexOf(v) === i);
+      this.voorspellingen = data;
+      //als een competitie geen groepen heeft, gebruiken we de hoofdcompetitie
+      this.groepen = (data.competities && data.competities.length > 0) ? data.competities : Array.of(this.userCompetities.find(x => x.id == competitieId));
+      debugger;
+      console.log("voorspellingen " + data);
+     },
+   error => {
+     console.log("voorspellingen foutje " + error);
+   });      
+  }  
+
+  competitieChanged(competitie: Competition) {
+    console.log(competitie.id);
+    return this.getUserVoorspellingen(this.userId, competitie.id);
+  }
+
   getVoorspellingen(groep: Competition): VoorspellingEindstandDto[]
   {
+    debugger;
     let voorspellingen: VoorspellingEindstandDto[] = new Array<VoorspellingEindstandDto>();
 
-    for (let index = 1; index <= 4; index++) {
+    for (let index = 1; index <= this.voorspellingen.teams.filter(t => t.competitieId == groep.id).length; index++) {
       let positie = new VoorspellingEindstandDto();
 
       positie.eindpositie = index;
@@ -86,60 +86,11 @@ export class ExtraPage {
         positie.team = this.getTeam(voorspelling.teamId);
       }
       else {
-        positie.team = new Team();
+        positie.team = new TeamRanglijst();
       }
       voorspellingen.push(positie);
     }
     return voorspellingen;
-  }
-
-  getVoorspellingenFinales(): FinaleRonde[]
-  {    
-    //let finales: FinaleWedstrijd[] = new Array<FinaleWedstrijd>();
-
-    let rondes: FinaleRonde[] = new Array<FinaleRonde>();
-
-    //competitie: Competition;
-    //finales: FinaleWedstrijd[];
-    let voorspelType: VoorspelType;
-    let ronde: FinaleRonde;
-    if(!this.toernooischema || !this.toernooischema.schema) return rondes;
-    this.toernooischema.schema.forEach(finaleWedstrijd => {
-      if(voorspelType != finaleWedstrijd.voorspelType)
-      {
-          ronde = new FinaleRonde();
-          ronde.competitie = this.toernooischema.competitieRondes.find(x => x.id == finaleWedstrijd.competitieRondeId);
-          ronde.finales = new Array<FinaleWedstrijd>();
-          voorspelType = finaleWedstrijd.voorspelType;
-          rondes.push(ronde);
-      }
-      let finale: FinaleWedstrijd = new FinaleWedstrijd();
-      finale.wedstrijdNummer = finaleWedstrijd.wedstrijdNummer;
-
-      let voorspelling = this.voorspellingen.voorspellingenKnockout.finales.find(x => x.wedstrijdNummer == finaleWedstrijd.wedstrijdNummer);
-
-      if(voorspelling)
-      {
-        finale.thuisTeam = voorspelling.thuisTeam;
-        finale.uitTeam = voorspelling.uitTeam;
-      }
-      ronde.finales.push(finale);
-    });
-    return rondes;
-  }
-
-  getNummer3() : FinaleTeam
-  {
-    if(this.voorspellingen && this.voorspellingen.voorspellingenKnockout)    
-      return this.voorspellingen.voorspellingenKnockout.nummer3;
-    return new FinaleTeam();
-  }
-
-  getWinnaar() : FinaleTeam
-  {
-    if(this.voorspellingen && this.voorspellingen.voorspellingenKnockout)    
-      return this.voorspellingen.voorspellingenKnockout.winnaar;
-    return new FinaleTeam();
   }
 
   getTopscorer() : TopscorerDto
@@ -149,10 +100,10 @@ export class ExtraPage {
     return new TopscorerDto();
   }
 
-  getTeam(teamId: number): Team
+  getTeam(teamId: number): TeamRanglijst
   {
-    if(this.toernooischema && this.toernooischema.teams)
-      return this.toernooischema.teams.find(x => x.id == teamId);
-    return new Team();
+    if(this.voorspellingen && this.voorspellingen.teams)
+      return this.voorspellingen.teams.find(x => x.id == teamId);
+    return new TeamRanglijst();
   }
 }

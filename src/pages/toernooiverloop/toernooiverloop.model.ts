@@ -1,8 +1,9 @@
 import { Competition, Team } from '../predictions/predictions.model';
+import { TeamRanglijst } from '../extra/extravoorspellingen.model';
 
 export class Toernooiverloop {
     competitieRondes: Competition[];
-    teams: Team[];
+    teams: TeamRanglijst[];
     schema: Finale[];
 }
 

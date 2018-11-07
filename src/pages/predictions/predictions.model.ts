@@ -87,6 +87,7 @@ export class Competition {
   aantalTeams: number;
   logoId: number;
   selected: boolean;
+  voorspelTopscorer: boolean;
 }
 
 export class WeekPositie {

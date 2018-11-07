@@ -1,0 +1,29 @@
+page-extra {
+    .groen {
+        color: green;
+    }
+    .rood {
+        color: red;
+    }
+    .punten {
+        font-weight: bold;
+        font-size: 5vw;
+    }
+    .team {
+        font-size: 16px;        
+    }
+    #toolbar div.toolbar-background {
+        background-color: white;
+    }
+    ion-slide.swiper-slide {
+        align-items: flex-start;
+    }
+    ion-slide {
+        overflow-y: auto;
+        display: block;
+    }
+    span.logo img {
+        height: 30px;
+    }
+            
+}

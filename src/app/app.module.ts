@@ -59,8 +59,9 @@ import { UnauthorizedInterceptor } from '../interceptors/unauthorized.intercepto
 import { IonDigitKeyboard } from '../components/ion-digit-keyboard/ion-digit-keyboard.module';
 import { SignupService } from '../pages/signup/signup.service';
 import { GoogleAnalytics } from '@ionic-native/google-analytics';
-import { ToernooivoorspellingenService } from '../pages/extra/toernooivoorspellingen.service';
-import { ToernooiverloopService } from '../pages/extra/toernooiverloop.service';
+import { ExtraVoorspellingenService } from '../pages/extra/extravoorspellingen.service';
+import { ToernooivoorspellingenService } from '../pages/toernooiverloop/toernooivoorspellingen.service';
+import { ToernooiverloopService } from '../pages/toernooiverloop/toernooiverloop.service';
 import { TeamLogoLoader } from '../components/team-logo-loader/teamlogoloader';
 
 export function createTranslateLoader(http: Http) {
@@ -140,6 +141,7 @@ export function jwtOptionsFactory(inj: Injector) {
   ],
   providers: [
     IsDebug,
+    ExtraVoorspellingenService,
     ToernooiverloopService,
     ToernooivoorspellingenService,
     PoulesService,

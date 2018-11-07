@@ -1,4 +1,5 @@
 import { Competition, Team } from '../predictions/predictions.model';
+import { TeamRanglijst } from '../extra/extravoorspellingen.model';
 
 export class ToernooiverloopVoorspellingen
 {
@@ -27,7 +28,7 @@ export class VoorspellingEindstand
 
 export class VoorspellingEindstandDto
 {
-    team: Team;
+    team: TeamRanglijst;
     eindpositie: number;
     punten: number;
 }

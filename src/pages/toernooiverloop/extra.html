@@ -1,0 +1,86 @@
+<!--
+  Generated template for the ExtraPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>{{'EXTRA' | translate }}</ion-title>
+  </ion-navbar>
+  <ion-toolbar no-border-top id="toolbar">
+    <ion-segment [(ngModel)]="segment">
+      <ion-segment-button value="groepen">
+        Groepen
+      </ion-segment-button>
+      <ion-segment-button value="finales">
+        Finales
+      </ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>  
+</ion-header>
+
+<ion-content>
+  <div *ngIf="segment == 'groepen'">
+      <div *ngFor="let competitie of groepen">
+        <h2 text-center>{{competitie.naam}}</h2>
+        <ion-list>
+          <ion-item style="vertical-align: middle" *ngFor="let voorspelling of getVoorspellingen(competitie)" [ngClass]="{'groen': voorspelling.punten === 5, 'rood': voorspelling.punten === 0}">
+            {{voorspelling.eindpositie}}. 
+            <span class="logo" *ngIf="voorspelling.team.naam">
+              <img [team-logo]="voorspelling.team"/>
+            </span>
+            <span style="height:30px;vertical-align: middle" *ngIf="voorspelling.team.naam">
+              {{voorspelling.team.naam}}
+            </span>
+            <span *ngIf="voorspelling" class="punten" item-end>{{voorspelling.punten}}</span>    
+            <span *ngIf="!voorspelling.team.naam">-</span>
+          </ion-item>
+        </ion-list>    
+      </div>
+    </div>
+  <ion-grid *ngIf="segment=='finales'">
+      <div *ngFor="let ronde of getVoorspellingenFinales()">
+        <h2 text-center>{{ronde.competitie.naam}}</h2>
+        <ion-card>          
+            <ion-row row-no-padding *ngFor="let finale of ronde.finales">
+              <ion-col col-2 text-left class="punten">{{finale.thuisTeam.punten}}</ion-col>
+              <ion-col col-3 text-right class="team" [ngClass]="{'groen': finale.thuisTeam.punten > 0, 'rood': finale.thuisTeam.punten === 0}">
+                {{getTeam(finale.thuisTeam.teamId).naam}}</ion-col>
+              <ion-col col-2 text-center>-</ion-col>
+              <ion-col col-3 text-left class="team" [ngClass]="{'groen': finale.uitTeam.punten > 0, 'rood': finale.uitTeam.punten === 0}">
+                {{getTeam(finale.uitTeam.teamId).naam}}</ion-col>
+              <ion-col col-2 text-right class="punten">{{finale.uitTeam.punten}}</ion-col>
+            </ion-row>     
+          </ion-card>
+          </div>
+      <div>
+        <h2 text-center>Nummer 3</h2>
+        <ion-card>
+            <ion-item *ngIf="getNummer3()" [ngClass]="{'groen': getNummer3()?.punten > 0, 'rood': getNummer3()?.punten === 0}">
+                {{getTeam(getNummer3().teamId).naam}}
+                <span class="punten" item-end>{{getNummer3().punten}}</span>                  
+              </ion-item>
+        </ion-card>
+      </div>
+      <div>
+          <h2 text-center>Winnaar</h2>
+          <ion-card>
+            <ion-item *ngIf="getWinnaar()" [ngClass]="{'groen': getWinnaar()?.punten > 0, 'rood': getWinnaar()?.punten === 0}">
+                {{getTeam(getWinnaar().teamId).naam}}
+                <span class="punten" item-end>{{getWinnaar().punten}}</span>                  
+              </ion-item>
+          </ion-card>
+        </div>
+      <div>
+          <h2 text-center>Topscorer</h2>
+          <ion-card>
+            <ion-item *ngIf="getTopscorer()" [ngClass]="{'groen': getTopscorer()?.punten > 0, 'rood': getTopscorer()?.punten === 0}">
+                {{getTopscorer().speler?.naam}}
+                <span class="punten" item-end>{{getTopscorer().punten}}</span>                  
+              </ion-item>
+          </ion-card>
+        </div>
+    </ion-grid>      
+  </ion-content>
